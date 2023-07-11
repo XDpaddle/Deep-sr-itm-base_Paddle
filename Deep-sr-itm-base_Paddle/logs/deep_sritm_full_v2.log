@@ -1,0 +1,1017 @@
+WARNING: OMP_NUM_THREADS set to 14, not 1. The computation speed will not be optimized if you use data parallel. It will fail if this PaddlePaddle binary is compiled with OpenBlas since OpenBlas does not support multi-threads.
+PLEASE USE OMP_NUM_THREADS WISELY.
+23-05-03 14:49:24.260 - INFO:   name: deep_sritm_full_v2
+  use_tb_logger: True
+  model: sr
+  distortion: sr
+  scale: 1
+  gpu_ids: [0]
+  network_G:[
+    which_model_G: deep_sritm_full
+    channels: 64
+    scale: 1
+  ]
+  datasets:[
+    train:[
+      name: HDRTV1K_train
+      mode: LQGT_rcan
+      dataroot_GT: ../hyconditm-master/datasets/HDRTV1K/train/train_hdr_sub
+      dataroot_LQ: ../hyconditm-master/datasets/HDRTV1K/train/train_sdr_sub
+      dataroot_cond: ../hyconditm-master/datasets/HDRTV1K/train_cond
+      cond_scale: 4
+      use_shuffle: True
+      n_workers: 0
+      batch_size: 4
+      GT_size: False
+      use_flip: False
+      use_rot: False
+      color: RGB
+      phase: train
+      scale: 1
+      data_type: img
+    ]
+    val:[
+      name: HDRTV1K_test
+      mode: LQGT_rcan
+      dataroot_GT: /root/autodl-tmp/hyconditm-master/datasets/HDRTV1K/test/test_hdr_1080p
+      dataroot_LQ: /root/autodl-tmp/hyconditm-master/datasets/HDRTV1K/test/test_sdr_1080p
+      dataroot_cond: ../hyconditm-master/datasets/HDRTV1K/cond
+      use_shared_memory: False
+      cond_scale: 4
+      phase: val
+      scale: 1
+      data_type: img
+    ]
+  ]
+  path:[
+    pretrain_model_G: None
+    strict_load: True
+    resume_state: None
+    root: /root/autodl-tmp/ClassSR_paddle-main
+    experiments_root: /root/autodl-tmp/ClassSR_paddle-main/experiments/deep_sritm_full_v2
+    models: /root/autodl-tmp/ClassSR_paddle-main/experiments/deep_sritm_full_v2/models
+    training_state: /root/autodl-tmp/ClassSR_paddle-main/experiments/deep_sritm_full_v2/training_state
+    log: /root/autodl-tmp/ClassSR_paddle-main/experiments/deep_sritm_full_v2
+    val_images: /root/autodl-tmp/ClassSR_paddle-main/experiments/deep_sritm_full_v2/val_images
+  ]
+  train:[
+    lr_G: 1e-07
+    weight_decay_G: 0.0005
+    lr_scheme: CosineAnnealingLR_Restart
+    beta1: 0.9
+    beta2: 0.99
+    niter: 800000
+    warmup_iter: -1
+    T_period: [500000]
+    restarts: [500000]
+    restart_weights: [1]
+    eta_min: 1e-07
+    lr_gamma: 0.5
+    clear_state: 1000000
+    pixel_criterion: l1
+    pixel_weight: 1.0
+    manual_seed: 10
+    val_freq: 10000
+  ]
+  logger:[
+    print_freq: 100
+    save_checkpoint_freq: 20000
+  ]
+  is_train: True
+  dist: False
+
+23-05-03 14:49:24.402 - INFO: Random seed: 10
+23-05-03 14:49:24.896 - INFO: Dataset [LQGTDataset_rcan - HDRTV1K_train] is created.
+23-05-03 14:49:24.896 - INFO: Number of train images: 49,400, iters: 12,350
+23-05-03 14:49:24.897 - INFO: Total epochs needed: 65 for iters 800,000
+23-05-03 14:49:24.898 - INFO: Dataset [LQGTDataset_rcan - HDRTV1K_test] is created.
+23-05-03 14:49:24.898 - INFO: Number of val images in [HDRTV1K_test]: 117
+W0503 14:49:25.393591 268053 gpu_resources.cc:61] Please NOTE: device: 0, GPU Compute Capability: 8.6, Driver API Version: 11.6, Runtime API Version: 11.6
+W0503 14:49:25.402547 268053 gpu_resources.cc:91] device: 0, cuDNN Version: 8.4.
+23-05-03 14:49:26.363 - INFO: Network G structure: SR_ITM_full_net, with parameters: 2,391,811
+23-05-03 14:49:26.363 - INFO: SR_ITM_full_net(
+  (conv_base_shared_1): Conv2D(6, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (conv_base_shared_2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (conv_base_shared_3): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (conv_detail_shared_1): Conv2D(6, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (conv_detail_shared_2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (conv_detail_shared_3): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (conv_base_1): Conv2D(6, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (conv_detail_1): Conv2D(6, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (relu): ReLU()
+  (rb_base_1): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rmb_base_1): ResModBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+    (conv_smf_1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+    (conv_smf_2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+    (relu): ReLU()
+  )
+  (rb_base_2): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rmb_base_2): ResModBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+    (conv_smf_1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+    (conv_smf_2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+    (relu): ReLU()
+  )
+  (rb_base_3): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rmb_base_3): ResModBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+    (conv_smf_1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+    (conv_smf_2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+    (relu): ReLU()
+  )
+  (rb_detail_1): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rsmb_detail_1): ResSkipModBlock(
+    (skipblock): SkipBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+      (dr): Conv2D(128, 64, kernel_size=[1, 1], data_format=NCHW)
+    )
+    (conv_smf_1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+    (conv_smf_2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+    (relu): ReLU()
+  )
+  (rsb_detail_1): ResSkipBlock(
+    (skipblock): SkipBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+      (dr): Conv2D(128, 64, kernel_size=[1, 1], data_format=NCHW)
+    )
+  )
+  (rsmb_detail_2): ResSkipModBlock(
+    (skipblock): SkipBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+      (dr): Conv2D(128, 64, kernel_size=[1, 1], data_format=NCHW)
+    )
+    (conv_smf_1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+    (conv_smf_2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+    (relu): ReLU()
+  )
+  (rsb_detail_2): ResSkipBlock(
+    (skipblock): SkipBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+      (dr): Conv2D(128, 64, kernel_size=[1, 1], data_format=NCHW)
+    )
+  )
+  (rsmb_detail_3): ResSkipModBlock(
+    (skipblock): SkipBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+      (dr): Conv2D(128, 64, kernel_size=[1, 1], data_format=NCHW)
+    )
+    (conv_smf_1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+    (conv_smf_2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+    (relu): ReLU()
+  )
+  (dr1): Conv2D(128, 64, kernel_size=[1, 1], data_format=NCHW)
+  (conv_fusion_1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (rb_fusion_1): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_2): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_3): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_4): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_5): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_6): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_7): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_8): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_9): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_10): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (conv_fusion_2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (conv_fusion_3): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (ps): PixelShuffle(upscale_factor=1)
+  (conv_fusion_4): Conv2D(64, 3, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (bicubic): Upsample(scale_factor=1, mode=bicubic, align_corners=False, align_mode=0, data_format=NCHW)
+)
+23-05-03 14:49:26.365 - INFO: Model [SRModel] is created.
+23-05-03 14:49:26.365 - INFO: Start training from epoch: 0, iter: 0
+23-05-03 14:51:15.589 - INFO: [epoch:  0, iter:     100, lr:(1.000e-07,)] l_pix: 2.2883e+06 
+23-05-03 14:53:02.292 - INFO: [epoch:  0, iter:     200, lr:(1.000e-07,)] l_pix: 8.9403e+04 
+23-05-03 14:54:49.754 - INFO: [epoch:  0, iter:     300, lr:(1.000e-07,)] l_pix: 3.9582e+02 
+23-05-03 14:56:36.545 - INFO: [epoch:  0, iter:     400, lr:(1.000e-07,)] l_pix: 1.6445e+09 
+23-05-03 14:58:22.955 - INFO: [epoch:  0, iter:     500, lr:(1.000e-07,)] l_pix: 2.8890e+03 
+23-05-03 15:00:09.845 - INFO: [epoch:  0, iter:     600, lr:(1.000e-07,)] l_pix: 1.2659e+09 
+23-05-03 15:01:56.387 - INFO: [epoch:  0, iter:     700, lr:(1.000e-07,)] l_pix: 1.9161e+03 
+23-05-03 15:03:43.366 - INFO: [epoch:  0, iter:     800, lr:(1.000e-07,)] l_pix: 4.2177e+02 
+23-05-03 15:05:29.910 - INFO: [epoch:  0, iter:     900, lr:(1.000e-07,)] l_pix: 8.2435e+02 
+23-05-03 15:07:16.842 - INFO: [epoch:  0, iter:   1,000, lr:(1.000e-07,)] l_pix: 2.6723e+08 
+23-05-03 15:09:04.433 - INFO: [epoch:  0, iter:   1,100, lr:(1.000e-07,)] l_pix: 6.0391e+07 
+23-05-03 15:10:51.023 - INFO: [epoch:  0, iter:   1,200, lr:(1.000e-07,)] l_pix: 1.0149e+03 
+23-05-03 15:12:37.512 - INFO: [epoch:  0, iter:   1,300, lr:(1.000e-07,)] l_pix: 4.1016e+03 
+23-05-03 15:14:23.796 - INFO: [epoch:  0, iter:   1,400, lr:(1.000e-07,)] l_pix: 2.0616e+02 
+23-05-03 15:16:10.112 - INFO: [epoch:  0, iter:   1,500, lr:(1.000e-07,)] l_pix: 3.4312e+08 
+23-05-03 15:17:56.411 - INFO: [epoch:  0, iter:   1,600, lr:(1.000e-07,)] l_pix: 3.5450e+02 
+23-05-03 15:19:43.217 - INFO: [epoch:  0, iter:   1,700, lr:(1.000e-07,)] l_pix: 6.1871e+02 
+23-05-03 15:21:30.012 - INFO: [epoch:  0, iter:   1,800, lr:(1.000e-07,)] l_pix: 6.2092e+02 
+23-05-03 15:23:16.836 - INFO: [epoch:  0, iter:   1,900, lr:(1.000e-07,)] l_pix: 5.5342e+02 
+23-05-03 15:25:03.285 - INFO: [epoch:  0, iter:   2,000, lr:(1.000e-07,)] l_pix: 2.4629e+02 
+23-05-03 15:26:49.566 - INFO: [epoch:  0, iter:   2,100, lr:(1.000e-07,)] l_pix: 3.6307e+04 
+23-05-03 15:28:36.812 - INFO: [epoch:  0, iter:   2,200, lr:(1.000e-07,)] l_pix: 5.2226e+02 
+23-05-03 15:30:23.669 - INFO: [epoch:  0, iter:   2,300, lr:(1.000e-07,)] l_pix: 3.2169e+06 
+23-05-03 15:32:11.100 - INFO: [epoch:  0, iter:   2,400, lr:(1.000e-07,)] l_pix: 1.7692e+06 
+23-05-03 15:33:58.078 - INFO: [epoch:  0, iter:   2,500, lr:(1.000e-07,)] l_pix: 2.9664e+02 
+23-05-03 15:35:44.414 - INFO: [epoch:  0, iter:   2,600, lr:(1.000e-07,)] l_pix: 7.3055e+06 
+23-05-03 15:37:32.255 - INFO: [epoch:  0, iter:   2,700, lr:(1.000e-07,)] l_pix: 2.9440e+05 
+23-05-03 15:39:18.996 - INFO: [epoch:  0, iter:   2,800, lr:(1.000e-07,)] l_pix: 6.0616e+02 
+23-05-03 15:41:06.233 - INFO: [epoch:  0, iter:   2,900, lr:(1.000e-07,)] l_pix: 1.8444e+03 
+23-05-03 15:42:52.480 - INFO: [epoch:  0, iter:   3,000, lr:(1.000e-07,)] l_pix: 6.1544e+02 
+23-05-03 15:44:39.144 - INFO: [epoch:  0, iter:   3,100, lr:(1.000e-07,)] l_pix: 3.1324e+02 
+23-05-03 15:46:25.480 - INFO: [epoch:  0, iter:   3,200, lr:(1.000e-07,)] l_pix: 1.2241e+08 
+23-05-03 15:48:11.961 - INFO: [epoch:  0, iter:   3,300, lr:(1.000e-07,)] l_pix: 2.5123e+03 
+23-05-03 15:49:58.384 - INFO: [epoch:  0, iter:   3,400, lr:(1.000e-07,)] l_pix: 4.4581e+06 
+23-05-03 15:51:45.420 - INFO: [epoch:  0, iter:   3,500, lr:(1.000e-07,)] l_pix: 8.4074e+04 
+23-05-03 15:53:32.701 - INFO: [epoch:  0, iter:   3,600, lr:(1.000e-07,)] l_pix: 1.9418e+08 
+23-05-03 15:55:19.357 - INFO: [epoch:  0, iter:   3,700, lr:(1.000e-07,)] l_pix: 1.9694e+02 
+23-05-03 15:57:06.328 - INFO: [epoch:  0, iter:   3,800, lr:(1.000e-07,)] l_pix: 3.0136e+02 
+23-05-03 15:58:53.280 - INFO: [epoch:  0, iter:   3,900, lr:(1.000e-07,)] l_pix: 1.1130e+03 
+23-05-03 16:00:40.432 - INFO: [epoch:  0, iter:   4,000, lr:(1.000e-07,)] l_pix: 2.9251e+02 
+23-05-03 16:02:27.379 - INFO: [epoch:  0, iter:   4,100, lr:(1.000e-07,)] l_pix: 2.5406e+03 
+23-05-03 16:04:12.434 - INFO: [epoch:  0, iter:   4,200, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:05:55.365 - INFO: [epoch:  0, iter:   4,300, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:07:38.259 - INFO: [epoch:  0, iter:   4,400, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:09:21.136 - INFO: [epoch:  0, iter:   4,500, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:11:05.692 - INFO: [epoch:  0, iter:   4,600, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:12:48.524 - INFO: [epoch:  0, iter:   4,700, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:14:30.845 - INFO: [epoch:  0, iter:   4,800, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:16:13.295 - INFO: [epoch:  0, iter:   4,900, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:17:56.624 - INFO: [epoch:  0, iter:   5,000, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:19:39.305 - INFO: [epoch:  0, iter:   5,100, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:21:22.619 - INFO: [epoch:  0, iter:   5,200, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:23:05.924 - INFO: [epoch:  0, iter:   5,300, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:24:48.917 - INFO: [epoch:  0, iter:   5,400, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:26:31.463 - INFO: [epoch:  0, iter:   5,500, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:28:14.988 - INFO: [epoch:  0, iter:   5,600, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:29:57.649 - INFO: [epoch:  0, iter:   5,700, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:31:40.264 - INFO: [epoch:  0, iter:   5,800, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:33:22.772 - INFO: [epoch:  0, iter:   5,900, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:35:04.911 - INFO: [epoch:  0, iter:   6,000, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:36:47.379 - INFO: [epoch:  0, iter:   6,100, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:38:30.649 - INFO: [epoch:  0, iter:   6,200, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:40:12.641 - INFO: [epoch:  0, iter:   6,300, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:41:55.127 - INFO: [epoch:  0, iter:   6,400, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:43:37.959 - INFO: [epoch:  0, iter:   6,500, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:45:20.859 - INFO: [epoch:  0, iter:   6,600, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:47:03.691 - INFO: [epoch:  0, iter:   6,700, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:48:46.556 - INFO: [epoch:  0, iter:   6,800, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:50:29.213 - INFO: [epoch:  0, iter:   6,900, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:52:12.442 - INFO: [epoch:  0, iter:   7,000, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:53:55.950 - INFO: [epoch:  0, iter:   7,100, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:55:39.553 - INFO: [epoch:  0, iter:   7,200, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:57:22.467 - INFO: [epoch:  0, iter:   7,300, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 16:59:05.816 - INFO: [epoch:  0, iter:   7,400, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:00:48.742 - INFO: [epoch:  0, iter:   7,500, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:02:32.132 - INFO: [epoch:  0, iter:   7,600, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:04:14.942 - INFO: [epoch:  0, iter:   7,700, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:05:57.782 - INFO: [epoch:  0, iter:   7,800, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:07:40.885 - INFO: [epoch:  0, iter:   7,900, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:09:23.721 - INFO: [epoch:  0, iter:   8,000, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:11:06.761 - INFO: [epoch:  0, iter:   8,100, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:12:49.424 - INFO: [epoch:  0, iter:   8,200, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:14:32.956 - INFO: [epoch:  0, iter:   8,300, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:16:16.097 - INFO: [epoch:  0, iter:   8,400, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:17:59.472 - INFO: [epoch:  0, iter:   8,500, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:19:43.101 - INFO: [epoch:  0, iter:   8,600, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:21:25.607 - INFO: [epoch:  0, iter:   8,700, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:23:08.480 - INFO: [epoch:  0, iter:   8,800, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:24:50.934 - INFO: [epoch:  0, iter:   8,900, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:26:33.436 - INFO: [epoch:  0, iter:   9,000, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:28:16.766 - INFO: [epoch:  0, iter:   9,100, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:29:59.564 - INFO: [epoch:  0, iter:   9,200, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:31:42.722 - INFO: [epoch:  0, iter:   9,300, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:33:25.111 - INFO: [epoch:  0, iter:   9,400, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:35:08.949 - INFO: [epoch:  0, iter:   9,500, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:36:51.686 - INFO: [epoch:  0, iter:   9,600, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:38:35.150 - INFO: [epoch:  0, iter:   9,700, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:40:18.404 - INFO: [epoch:  0, iter:   9,800, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:42:01.803 - INFO: [epoch:  0, iter:   9,900, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:43:45.227 - INFO: [epoch:  0, iter:  10,000, lr:(1.000e-07,)] l_pix: nan 
+export CUDA_VISIBLE_DEVICES=0
+Disabled distributed training.
+Path already exists. Rename it to [/root/autodl-tmp/ClassSR_paddle-main/experiments/deep_sritm_full_v2_archived_230503-144924]
+[                              ] 0/117, elapsed: 0s, ETA:
+Start...
+[2F[J[------------------------------] 1/117, 0.4 task/s, elapsed: 3s, ETA:   331s
+Test 001_bicx2
+[2F[J[------------------------------] 2/117, 0.5 task/s, elapsed: 4s, ETA:   221s
+Test 002_bicx2
+[2F[J[------------------------------] 3/117, 0.6 task/s, elapsed: 5s, ETA:   184s
+Test 003_bicx2
+[2F[J[>-----------------------------] 4/117, 0.7 task/s, elapsed: 6s, ETA:   165s
+Test 004_bicx2
+[2F[J[>-----------------------------] 5/117, 0.7 task/s, elapsed: 7s, ETA:   153s
+Test 005_bicx2
+[2F[J[>-----------------------------] 6/117, 0.8 task/s, elapsed: 8s, ETA:   145s
+Test 006_bicx2
+[2F[J[>-----------------------------] 7/117, 0.8 task/s, elapsed: 9s, ETA:   139s
+Test 007_bicx2
+[2F[J[>>----------------------------] 8/117, 0.8 task/s, elapsed: 10s, ETA:   134s
+Test 008_bicx2
+[2F[J[>>----------------------------] 9/117, 0.8 task/s, elapsed: 11s, ETA:   130s
+Test 009_bicx2
+[2F[J[>>----------------------------] 10/117, 0.8 task/s, elapsed: 12s, ETA:   126s
+Test 010_bicx2
+[2F[J[>>----------------------------] 11/117, 0.9 task/s, elapsed: 13s, ETA:   123s
+Test 011_bicx2
+[2F[J[>>>---------------------------] 12/117, 0.9 task/s, elapsed: 14s, ETA:   121s
+Test 012_bicx2
+[2F[J[>>>---------------------------] 13/117, 0.9 task/s, elapsed: 15s, ETA:   118s
+Test 013_bicx2
+[2F[J[>>>---------------------------] 14/117, 0.9 task/s, elapsed: 16s, ETA:   116s
+Test 014_bicx2
+[2F[J[>>>---------------------------] 15/117, 0.9 task/s, elapsed: 17s, ETA:   114s
+Test 015_bicx2
+[2F[J[>>>>--------------------------] 16/117, 0.9 task/s, elapsed: 18s, ETA:   112s
+Test 016_bicx2
+[2F[J[>>>>--------------------------] 17/117, 0.9 task/s, elapsed: 19s, ETA:   110s
+Test 017_bicx2
+[2F[J[>>>>--------------------------] 18/117, 0.9 task/s, elapsed: 20s, ETA:   109s
+Test 018_bicx2
+[2F[J[>>>>--------------------------] 19/117, 0.9 task/s, elapsed: 21s, ETA:   107s
+Test 019_bicx2
+[2F[J[>>>>>-------------------------] 20/117, 0.9 task/s, elapsed: 22s, ETA:   106s
+Test 020_bicx2
+[2F[J[>>>>>-------------------------] 21/117, 0.9 task/s, elapsed: 23s, ETA:   104s
+Test 021_bicx2
+[2F[J[>>>>>-------------------------] 22/117, 0.9 task/s, elapsed: 24s, ETA:   103s
+Test 022_bicx2
+[2F[J[>>>>>-------------------------] 23/117, 0.9 task/s, elapsed: 25s, ETA:   102s
+Test 023_bicx2
+[2F[J[>>>>>>------------------------] 24/117, 0.9 task/s, elapsed: 26s, ETA:   100s
+Test 024_bicx2
+[2F[J[>>>>>>------------------------] 25/117, 0.9 task/s, elapsed: 27s, ETA:    99s
+Test 025_bicx2
+[2F[J[>>>>>>------------------------] 26/117, 0.9 task/s, elapsed: 28s, ETA:    98s
+Test 026_bicx2
+[2F[J[>>>>>>------------------------] 27/117, 0.9 task/s, elapsed: 29s, ETA:    96s
+Test 027_bicx2
+[2F[J[>>>>>>>-----------------------] 28/117, 0.9 task/s, elapsed: 30s, ETA:    95s
+Test 028_bicx2
+[2F[J[>>>>>>>-----------------------] 29/117, 0.9 task/s, elapsed: 31s, ETA:    94s
+Test 029_bicx2
+[2F[J[>>>>>>>-----------------------] 30/117, 0.9 task/s, elapsed: 32s, ETA:    92s
+Test 030_bicx2
+[2F[J[>>>>>>>-----------------------] 31/117, 0.9 task/s, elapsed: 33s, ETA:    91s
+Test 031_bicx2
+[2F[J[>>>>>>>>----------------------] 32/117, 0.9 task/s, elapsed: 34s, ETA:    90s
+Test 032_bicx2
+[2F[J[>>>>>>>>----------------------] 33/117, 0.9 task/s, elapsed: 35s, ETA:    89s
+Test 033_bicx2
+[2F[J[>>>>>>>>----------------------] 34/117, 0.9 task/s, elapsed: 36s, ETA:    88s
+Test 034_bicx2
+[2F[J[>>>>>>>>----------------------] 35/117, 0.9 task/s, elapsed: 37s, ETA:    86s
+Test 035_bicx2
+[2F[J[>>>>>>>>>---------------------] 36/117, 1.0 task/s, elapsed: 38s, ETA:    85s
+Test 036_bicx2
+[2F[J[>>>>>>>>>---------------------] 37/117, 1.0 task/s, elapsed: 39s, ETA:    84s
+Test 037_bicx2
+[2F[J[>>>>>>>>>---------------------] 38/117, 1.0 task/s, elapsed: 40s, ETA:    83s
+Test 038_bicx2
+[2F[J[>>>>>>>>>>--------------------] 39/117, 1.0 task/s, elapsed: 41s, ETA:    82s
+Test 039_bicx2
+[2F[J[>>>>>>>>>>--------------------] 40/117, 1.0 task/s, elapsed: 42s, ETA:    81s
+Test 040_bicx2
+[2F[J[>>>>>>>>>>--------------------] 41/117, 1.0 task/s, elapsed: 43s, ETA:    79s
+Test 041_bicx2
+[2F[J[>>>>>>>>>>--------------------] 42/117, 1.0 task/s, elapsed: 44s, ETA:    78s
+Test 042_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 43/117, 1.0 task/s, elapsed: 45s, ETA:    77s
+Test 043_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 44/117, 1.0 task/s, elapsed: 46s, ETA:    76s
+Test 044_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 45/117, 1.0 task/s, elapsed: 47s, ETA:    75s
+Test 045_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 46/117, 1.0 task/s, elapsed: 48s, ETA:    74s
+Test 046_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 47/117, 1.0 task/s, elapsed: 49s, ETA:    73s
+Test 047_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 48/117, 1.0 task/s, elapsed: 50s, ETA:    72s
+Test 048_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 49/117, 1.0 task/s, elapsed: 51s, ETA:    71s
+Test 049_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 50/117, 1.0 task/s, elapsed: 52s, ETA:    69s
+Test 050_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 51/117, 1.0 task/s, elapsed: 53s, ETA:    68s
+Test 051_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 52/117, 1.0 task/s, elapsed: 54s, ETA:    67s
+Test 052_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 53/117, 1.0 task/s, elapsed: 55s, ETA:    66s
+Test 053_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 54/117, 1.0 task/s, elapsed: 56s, ETA:    65s
+Test 054_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 55/117, 1.0 task/s, elapsed: 57s, ETA:    64s
+Test 055_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 56/117, 1.0 task/s, elapsed: 58s, ETA:    63s
+Test 056_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 57/117, 1.0 task/s, elapsed: 59s, ETA:    62s
+Test 057_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 58/117, 1.0 task/s, elapsed: 60s, ETA:    61s
+Test 058_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 59/117, 1.0 task/s, elapsed: 61s, ETA:    60s
+Test 059_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 60/117, 1.0 task/s, elapsed: 62s, ETA:    59s
+Test 060_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 61/117, 1.0 task/s, elapsed: 63s, ETA:    58s
+Test 061_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 62/117, 1.0 task/s, elapsed: 64s, ETA:    57s
+Test 062_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 63/117, 1.0 task/s, elapsed: 65s, ETA:    56s
+Test 063_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 64/117, 1.0 task/s, elapsed: 66s, ETA:    54s
+Test 064_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 65/117, 1.0 task/s, elapsed: 67s, ETA:    53s
+Test 065_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 66/117, 1.0 task/s, elapsed: 68s, ETA:    52s
+Test 066_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 67/117, 1.0 task/s, elapsed: 69s, ETA:    51s
+Test 067_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 68/117, 1.0 task/s, elapsed: 70s, ETA:    50s
+Test 068_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 69/117, 1.0 task/s, elapsed: 71s, ETA:    49s
+Test 069_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 70/117, 1.0 task/s, elapsed: 72s, ETA:    48s
+Test 070_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 71/117, 1.0 task/s, elapsed: 73s, ETA:    47s
+Test 071_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 72/117, 1.0 task/s, elapsed: 74s, ETA:    46s
+Test 072_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 73/117, 1.0 task/s, elapsed: 75s, ETA:    45s
+Test 073_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 74/117, 1.0 task/s, elapsed: 76s, ETA:    44s
+Test 074_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 75/117, 1.0 task/s, elapsed: 77s, ETA:    43s
+Test 075_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 76/117, 1.0 task/s, elapsed: 78s, ETA:    42s
+Test 076_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 77/117, 1.0 task/s, elapsed: 79s, ETA:    41s
+Test 077_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 78/117, 1.0 task/s, elapsed: 80s, ETA:    40s
+Test 078_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 79/117, 1.0 task/s, elapsed: 81s, ETA:    39s
+Test 079_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 80/117, 1.0 task/s, elapsed: 82s, ETA:    38s
+Test 080_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 81/117, 1.0 task/s, elapsed: 83s, ETA:    37s
+Test 081_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 82/117, 1.0 task/s, elapsed: 84s, ETA:    36s
+Test 082_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 83/117, 1.0 task/s, elapsed: 85s, ETA:    35s
+Test 083_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 84/117, 1.0 task/s, elapsed: 86s, ETA:    34s
+Test 084_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 85/117, 1.0 task/s, elapsed: 87s, ETA:    33s
+Test 085_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 86/117, 1.0 task/s, elapsed: 88s, ETA:    32s
+Test 086_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 87/117, 1.0 task/s, elapsed: 89s, ETA:    31s
+Test 087_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 88/117, 1.0 task/s, elapsed: 90s, ETA:    30s
+Test 088_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 89/117, 1.0 task/s, elapsed: 91s, ETA:    29s
+Test 089_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 90/117, 1.0 task/s, elapsed: 92s, ETA:    28s
+Test 090_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 91/117, 1.0 task/s, elapsed: 93s, ETA:    26s
+Test 091_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 92/117, 1.0 task/s, elapsed: 94s, ETA:    25s
+Test 092_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 93/117, 1.0 task/s, elapsed: 95s, ETA:    24s
+Test 093_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 94/117, 1.0 task/s, elapsed: 96s, ETA:    23s
+Test 094_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 95/117, 1.0 task/s, elapsed: 97s, ETA:    22s
+Test 095_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 96/117, 1.0 task/s, elapsed: 98s, ETA:    21s
+Test 096_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 97/117, 1.0 task/s, elapsed: 99s, ETA:    20s
+Test 097_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 98/117, 1.0 task/s, elapsed: 100s, ETA:    19s
+Test 098_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 99/117, 1.0 task/s, elapsed: 101s, ETA:    18s
+Test 099_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 100/117, 1.0 task/s, elapsed: 102s, ETA:    17s
+Test 100_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 101/117, 1.0 task/s, elapsed: 103s, ETA:    16s
+Test 101_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 102/117, 1.0 task/s, elapsed: 104s, ETA:    15s
+Test 102_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 103/117, 1.0 task/s, elapsed: 105s, ETA:    14s
+Test 103_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 104/117, 1.0 task/s, elapsed: 106s, ETA:    13s
+Test 104_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 105/117, 1.0 task/s, elapsed: 107s, ETA:    12s
+Test 105_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 106/117, 1.0 task/s, elapsed: 108s, ETA:    11s
+Test 106_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 107/117, 1.0 task/s, elapsed: 109s, ETA:    10s
+Test 107_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 108/117, 1.0 task/s, elapsed: 110s, ETA:     9s
+Test 108_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 109/117, 1.0 task/s, elapsed: 111s, ETA:     8s
+Test 109_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 110/117, 1.0 task/s, elapsed: 112s, ETA:     7s
+Test 110_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 111/117, 1.0 task/s, elapsed: 113s, ETA:     6s
+Test 111_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 112/117, 1.0 task/s, elapsed: 114s, ETA:     5s
+Test 112_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 113/117, 1.0 task/s, elapsed: 115s, ETA:     4s
+Test 113_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 114/117, 1.0 task/s, elapsed: 116s, ETA:     3s
+Test 114_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 115/117, 1.0 task/s, elapsed: 117s, ETA:     2s
+Test 115_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 116/117, 1.0 task/s, elapsed: 118s, ETA:     1s
+Test 116_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>] 117/117, 1.0 task/s, elapsed: 119s, ETA:     0s
+Test 117_bicx2
+23-05-03 17:45:43.940 - INFO: # Validation # PSNR: 8.9103e+00
+23-05-03 17:47:26.130 - INFO: [epoch:  0, iter:  10,100, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:49:08.514 - INFO: [epoch:  0, iter:  10,200, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:50:51.133 - INFO: [epoch:  0, iter:  10,300, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:52:33.983 - INFO: [epoch:  0, iter:  10,400, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:54:17.278 - INFO: [epoch:  0, iter:  10,500, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:56:00.216 - INFO: [epoch:  0, iter:  10,600, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:57:43.792 - INFO: [epoch:  0, iter:  10,700, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 17:59:27.606 - INFO: [epoch:  0, iter:  10,800, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:01:10.845 - INFO: [epoch:  0, iter:  10,900, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:02:54.020 - INFO: [epoch:  0, iter:  11,000, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:04:36.526 - INFO: [epoch:  0, iter:  11,100, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:06:19.482 - INFO: [epoch:  0, iter:  11,200, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:08:02.821 - INFO: [epoch:  0, iter:  11,300, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:09:45.843 - INFO: [epoch:  0, iter:  11,400, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:11:29.305 - INFO: [epoch:  0, iter:  11,500, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:13:11.823 - INFO: [epoch:  0, iter:  11,600, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:14:54.364 - INFO: [epoch:  0, iter:  11,700, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:16:37.783 - INFO: [epoch:  0, iter:  11,800, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:18:21.107 - INFO: [epoch:  0, iter:  11,900, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:20:04.187 - INFO: [epoch:  0, iter:  12,000, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:21:47.107 - INFO: [epoch:  0, iter:  12,100, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:23:29.933 - INFO: [epoch:  0, iter:  12,200, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:25:13.346 - INFO: [epoch:  0, iter:  12,300, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:26:56.661 - INFO: [epoch:  1, iter:  12,400, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:28:39.348 - INFO: [epoch:  1, iter:  12,500, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:30:22.407 - INFO: [epoch:  1, iter:  12,600, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:32:04.986 - INFO: [epoch:  1, iter:  12,700, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:33:47.879 - INFO: [epoch:  1, iter:  12,800, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:35:30.552 - INFO: [epoch:  1, iter:  12,900, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:37:13.666 - INFO: [epoch:  1, iter:  13,000, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:38:56.795 - INFO: [epoch:  1, iter:  13,100, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:40:39.492 - INFO: [epoch:  1, iter:  13,200, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:42:21.695 - INFO: [epoch:  1, iter:  13,300, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:44:04.093 - INFO: [epoch:  1, iter:  13,400, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:45:46.832 - INFO: [epoch:  1, iter:  13,500, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:47:30.150 - INFO: [epoch:  1, iter:  13,600, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:49:12.954 - INFO: [epoch:  1, iter:  13,700, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:50:55.340 - INFO: [epoch:  1, iter:  13,800, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:52:37.704 - INFO: [epoch:  1, iter:  13,900, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:54:20.534 - INFO: [epoch:  1, iter:  14,000, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:56:03.315 - INFO: [epoch:  1, iter:  14,100, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:57:46.230 - INFO: [epoch:  1, iter:  14,200, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 18:59:29.128 - INFO: [epoch:  1, iter:  14,300, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:01:12.343 - INFO: [epoch:  1, iter:  14,400, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:02:55.650 - INFO: [epoch:  1, iter:  14,500, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:04:38.307 - INFO: [epoch:  1, iter:  14,600, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:06:22.100 - INFO: [epoch:  1, iter:  14,700, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:08:05.355 - INFO: [epoch:  1, iter:  14,800, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:09:47.711 - INFO: [epoch:  1, iter:  14,900, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:11:30.898 - INFO: [epoch:  1, iter:  15,000, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:13:13.702 - INFO: [epoch:  1, iter:  15,100, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:14:56.960 - INFO: [epoch:  1, iter:  15,200, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:16:39.654 - INFO: [epoch:  1, iter:  15,300, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:18:22.922 - INFO: [epoch:  1, iter:  15,400, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:20:05.922 - INFO: [epoch:  1, iter:  15,500, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:21:48.393 - INFO: [epoch:  1, iter:  15,600, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:23:30.776 - INFO: [epoch:  1, iter:  15,700, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:25:13.334 - INFO: [epoch:  1, iter:  15,800, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:26:56.183 - INFO: [epoch:  1, iter:  15,900, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:28:39.629 - INFO: [epoch:  1, iter:  16,000, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:30:23.002 - INFO: [epoch:  1, iter:  16,100, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:32:06.511 - INFO: [epoch:  1, iter:  16,200, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:33:49.299 - INFO: [epoch:  1, iter:  16,300, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:35:32.204 - INFO: [epoch:  1, iter:  16,400, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:37:15.305 - INFO: [epoch:  1, iter:  16,500, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:38:58.415 - INFO: [epoch:  1, iter:  16,600, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:40:41.957 - INFO: [epoch:  1, iter:  16,700, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:42:24.915 - INFO: [epoch:  1, iter:  16,800, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:44:07.518 - INFO: [epoch:  1, iter:  16,900, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:45:50.962 - INFO: [epoch:  1, iter:  17,000, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:47:34.061 - INFO: [epoch:  1, iter:  17,100, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:49:16.912 - INFO: [epoch:  1, iter:  17,200, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:51:00.304 - INFO: [epoch:  1, iter:  17,300, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:52:43.640 - INFO: [epoch:  1, iter:  17,400, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:54:26.556 - INFO: [epoch:  1, iter:  17,500, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:56:09.754 - INFO: [epoch:  1, iter:  17,600, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:57:52.579 - INFO: [epoch:  1, iter:  17,700, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 19:59:36.335 - INFO: [epoch:  1, iter:  17,800, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:01:19.122 - INFO: [epoch:  1, iter:  17,900, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:03:01.744 - INFO: [epoch:  1, iter:  18,000, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:04:45.296 - INFO: [epoch:  1, iter:  18,100, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:06:28.268 - INFO: [epoch:  1, iter:  18,200, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:08:11.397 - INFO: [epoch:  1, iter:  18,300, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:09:54.045 - INFO: [epoch:  1, iter:  18,400, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:11:36.645 - INFO: [epoch:  1, iter:  18,500, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:13:19.535 - INFO: [epoch:  1, iter:  18,600, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:15:03.203 - INFO: [epoch:  1, iter:  18,700, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:16:46.479 - INFO: [epoch:  1, iter:  18,800, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:18:29.794 - INFO: [epoch:  1, iter:  18,900, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:20:13.344 - INFO: [epoch:  1, iter:  19,000, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:21:55.561 - INFO: [epoch:  1, iter:  19,100, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:23:38.366 - INFO: [epoch:  1, iter:  19,200, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:25:21.623 - INFO: [epoch:  1, iter:  19,300, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:27:04.112 - INFO: [epoch:  1, iter:  19,400, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:28:46.288 - INFO: [epoch:  1, iter:  19,500, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:30:28.587 - INFO: [epoch:  1, iter:  19,600, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:32:11.246 - INFO: [epoch:  1, iter:  19,700, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:33:53.968 - INFO: [epoch:  1, iter:  19,800, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:35:37.914 - INFO: [epoch:  1, iter:  19,900, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:37:21.989 - INFO: [epoch:  1, iter:  20,000, lr:(1.000e-07,)] l_pix: nan 
+[                              ] 0/117, elapsed: 0s, ETA:
+Start...
+[2F[J[------------------------------] 1/117, 0.4 task/s, elapsed: 3s, ETA:   295s
+Test 001_bicx2
+[2F[J[------------------------------] 2/117, 0.6 task/s, elapsed: 4s, ETA:   206s
+Test 002_bicx2
+[2F[J[------------------------------] 3/117, 0.7 task/s, elapsed: 5s, ETA:   175s
+Test 003_bicx2
+[2F[J[>-----------------------------] 4/117, 0.7 task/s, elapsed: 6s, ETA:   158s
+Test 004_bicx2
+[2F[J[>-----------------------------] 5/117, 0.8 task/s, elapsed: 7s, ETA:   148s
+Test 005_bicx2
+[2F[J[>-----------------------------] 6/117, 0.8 task/s, elapsed: 8s, ETA:   141s
+Test 006_bicx2
+[2F[J[>-----------------------------] 7/117, 0.8 task/s, elapsed: 9s, ETA:   136s
+Test 007_bicx2
+[2F[J[>>----------------------------] 8/117, 0.8 task/s, elapsed: 10s, ETA:   132s
+Test 008_bicx2
+[2F[J[>>----------------------------] 9/117, 0.8 task/s, elapsed: 11s, ETA:   128s
+Test 009_bicx2
+[2F[J[>>----------------------------] 10/117, 0.9 task/s, elapsed: 12s, ETA:   125s
+Test 010_bicx2
+[2F[J[>>----------------------------] 11/117, 0.9 task/s, elapsed: 13s, ETA:   122s
+Test 011_bicx2
+[2F[J[>>>---------------------------] 12/117, 0.9 task/s, elapsed: 14s, ETA:   120s
+Test 012_bicx2
+[2F[J[>>>---------------------------] 13/117, 0.9 task/s, elapsed: 15s, ETA:   118s
+Test 013_bicx2
+[2F[J[>>>---------------------------] 14/117, 0.9 task/s, elapsed: 16s, ETA:   115s
+Test 014_bicx2
+[2F[J[>>>---------------------------] 15/117, 0.9 task/s, elapsed: 17s, ETA:   114s
+Test 015_bicx2
+[2F[J[>>>>--------------------------] 16/117, 0.9 task/s, elapsed: 18s, ETA:   112s
+Test 016_bicx2
+[2F[J[>>>>--------------------------] 17/117, 0.9 task/s, elapsed: 19s, ETA:   110s
+Test 017_bicx2
+[2F[J[>>>>--------------------------] 18/117, 0.9 task/s, elapsed: 20s, ETA:   108s
+Test 018_bicx2
+[2F[J[>>>>--------------------------] 19/117, 0.9 task/s, elapsed: 21s, ETA:   107s
+Test 019_bicx2
+[2F[J[>>>>>-------------------------] 20/117, 0.9 task/s, elapsed: 22s, ETA:   105s
+Test 020_bicx2
+[2F[J[>>>>>-------------------------] 21/117, 0.9 task/s, elapsed: 23s, ETA:   104s
+Test 021_bicx2
+[2F[J[>>>>>-------------------------] 22/117, 0.9 task/s, elapsed: 24s, ETA:   103s
+Test 022_bicx2
+[2F[J[>>>>>-------------------------] 23/117, 0.9 task/s, elapsed: 25s, ETA:   102s
+Test 023_bicx2
+[2F[J[>>>>>>------------------------] 24/117, 0.9 task/s, elapsed: 26s, ETA:   100s
+Test 024_bicx2
+[2F[J[>>>>>>------------------------] 25/117, 0.9 task/s, elapsed: 27s, ETA:    99s
+Test 025_bicx2
+[2F[J[>>>>>>------------------------] 26/117, 0.9 task/s, elapsed: 28s, ETA:    98s
+Test 026_bicx2
+[2F[J[>>>>>>------------------------] 27/117, 0.9 task/s, elapsed: 29s, ETA:    96s
+Test 027_bicx2
+[2F[J[>>>>>>>-----------------------] 28/117, 0.9 task/s, elapsed: 30s, ETA:    95s
+Test 028_bicx2
+[2F[J[>>>>>>>-----------------------] 29/117, 0.9 task/s, elapsed: 31s, ETA:    94s
+Test 029_bicx2
+[2F[J[>>>>>>>-----------------------] 30/117, 0.9 task/s, elapsed: 32s, ETA:    93s
+Test 030_bicx2
+[2F[J[>>>>>>>-----------------------] 31/117, 0.9 task/s, elapsed: 33s, ETA:    91s
+Test 031_bicx2
+[2F[J[>>>>>>>>----------------------] 32/117, 0.9 task/s, elapsed: 34s, ETA:    90s
+Test 032_bicx2
+[2F[J[>>>>>>>>----------------------] 33/117, 0.9 task/s, elapsed: 35s, ETA:    89s
+Test 033_bicx2
+[2F[J[>>>>>>>>----------------------] 34/117, 0.9 task/s, elapsed: 36s, ETA:    88s
+Test 034_bicx2
+[2F[J[>>>>>>>>----------------------] 35/117, 0.9 task/s, elapsed: 37s, ETA:    87s
+Test 035_bicx2
+[2F[J[>>>>>>>>>---------------------] 36/117, 0.9 task/s, elapsed: 38s, ETA:    85s
+Test 036_bicx2
+[2F[J[>>>>>>>>>---------------------] 37/117, 0.9 task/s, elapsed: 39s, ETA:    84s
+Test 037_bicx2
+[2F[J[>>>>>>>>>---------------------] 38/117, 1.0 task/s, elapsed: 40s, ETA:    83s
+Test 038_bicx2
+[2F[J[>>>>>>>>>>--------------------] 39/117, 1.0 task/s, elapsed: 41s, ETA:    82s
+Test 039_bicx2
+[2F[J[>>>>>>>>>>--------------------] 40/117, 1.0 task/s, elapsed: 42s, ETA:    81s
+Test 040_bicx2
+[2F[J[>>>>>>>>>>--------------------] 41/117, 1.0 task/s, elapsed: 43s, ETA:    80s
+Test 041_bicx2
+[2F[J[>>>>>>>>>>--------------------] 42/117, 1.0 task/s, elapsed: 44s, ETA:    79s
+Test 042_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 43/117, 1.0 task/s, elapsed: 45s, ETA:    77s
+Test 043_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 44/117, 1.0 task/s, elapsed: 46s, ETA:    76s
+Test 044_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 45/117, 1.0 task/s, elapsed: 47s, ETA:    75s
+Test 045_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 46/117, 1.0 task/s, elapsed: 48s, ETA:    74s
+Test 046_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 47/117, 1.0 task/s, elapsed: 49s, ETA:    73s
+Test 047_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 48/117, 1.0 task/s, elapsed: 50s, ETA:    72s
+Test 048_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 49/117, 1.0 task/s, elapsed: 51s, ETA:    71s
+Test 049_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 50/117, 1.0 task/s, elapsed: 52s, ETA:    70s
+Test 050_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 51/117, 1.0 task/s, elapsed: 53s, ETA:    69s
+Test 051_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 52/117, 1.0 task/s, elapsed: 54s, ETA:    68s
+Test 052_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 53/117, 1.0 task/s, elapsed: 55s, ETA:    66s
+Test 053_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 54/117, 1.0 task/s, elapsed: 56s, ETA:    65s
+Test 054_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 55/117, 1.0 task/s, elapsed: 57s, ETA:    64s
+Test 055_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 56/117, 1.0 task/s, elapsed: 58s, ETA:    63s
+Test 056_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 57/117, 1.0 task/s, elapsed: 59s, ETA:    62s
+Test 057_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 58/117, 1.0 task/s, elapsed: 60s, ETA:    61s
+Test 058_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 59/117, 1.0 task/s, elapsed: 61s, ETA:    60s
+Test 059_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 60/117, 1.0 task/s, elapsed: 62s, ETA:    59s
+Test 060_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 61/117, 1.0 task/s, elapsed: 63s, ETA:    58s
+Test 061_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 62/117, 1.0 task/s, elapsed: 64s, ETA:    57s
+Test 062_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 63/117, 1.0 task/s, elapsed: 65s, ETA:    56s
+Test 063_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 64/117, 1.0 task/s, elapsed: 66s, ETA:    55s
+Test 064_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 65/117, 1.0 task/s, elapsed: 67s, ETA:    54s
+Test 065_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 66/117, 1.0 task/s, elapsed: 68s, ETA:    53s
+Test 066_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 67/117, 1.0 task/s, elapsed: 69s, ETA:    52s
+Test 067_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 68/117, 1.0 task/s, elapsed: 70s, ETA:    50s
+Test 068_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 69/117, 1.0 task/s, elapsed: 71s, ETA:    49s
+Test 069_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 70/117, 1.0 task/s, elapsed: 72s, ETA:    48s
+Test 070_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 71/117, 1.0 task/s, elapsed: 73s, ETA:    47s
+Test 071_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 72/117, 1.0 task/s, elapsed: 74s, ETA:    46s
+Test 072_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 73/117, 1.0 task/s, elapsed: 75s, ETA:    45s
+Test 073_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 74/117, 1.0 task/s, elapsed: 76s, ETA:    44s
+Test 074_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 75/117, 1.0 task/s, elapsed: 77s, ETA:    43s
+Test 075_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 76/117, 1.0 task/s, elapsed: 78s, ETA:    42s
+Test 076_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 77/117, 1.0 task/s, elapsed: 79s, ETA:    41s
+Test 077_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 78/117, 1.0 task/s, elapsed: 80s, ETA:    40s
+Test 078_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 79/117, 1.0 task/s, elapsed: 81s, ETA:    39s
+Test 079_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 80/117, 1.0 task/s, elapsed: 82s, ETA:    38s
+Test 080_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 81/117, 1.0 task/s, elapsed: 83s, ETA:    37s
+Test 081_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 82/117, 1.0 task/s, elapsed: 84s, ETA:    36s
+Test 082_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 83/117, 1.0 task/s, elapsed: 85s, ETA:    35s
+Test 083_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 84/117, 1.0 task/s, elapsed: 86s, ETA:    34s
+Test 084_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 85/117, 1.0 task/s, elapsed: 87s, ETA:    33s
+Test 085_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 86/117, 1.0 task/s, elapsed: 88s, ETA:    32s
+Test 086_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 87/117, 1.0 task/s, elapsed: 89s, ETA:    31s
+Test 087_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 88/117, 1.0 task/s, elapsed: 90s, ETA:    30s
+Test 088_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 89/117, 1.0 task/s, elapsed: 91s, ETA:    29s
+Test 089_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 90/117, 1.0 task/s, elapsed: 92s, ETA:    28s
+Test 090_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 91/117, 1.0 task/s, elapsed: 93s, ETA:    27s
+Test 091_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 92/117, 1.0 task/s, elapsed: 94s, ETA:    26s
+Test 092_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 93/117, 1.0 task/s, elapsed: 95s, ETA:    25s
+Test 093_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 94/117, 1.0 task/s, elapsed: 96s, ETA:    24s
+Test 094_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 95/117, 1.0 task/s, elapsed: 97s, ETA:    23s
+Test 095_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 96/117, 1.0 task/s, elapsed: 98s, ETA:    21s
+Test 096_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 97/117, 1.0 task/s, elapsed: 99s, ETA:    20s
+Test 097_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 98/117, 1.0 task/s, elapsed: 100s, ETA:    19s
+Test 098_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 99/117, 1.0 task/s, elapsed: 101s, ETA:    18s
+Test 099_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 100/117, 1.0 task/s, elapsed: 102s, ETA:    17s
+Test 100_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 101/117, 1.0 task/s, elapsed: 103s, ETA:    16s
+Test 101_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 102/117, 1.0 task/s, elapsed: 104s, ETA:    15s
+Test 102_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 103/117, 1.0 task/s, elapsed: 105s, ETA:    14s
+Test 103_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 104/117, 1.0 task/s, elapsed: 106s, ETA:    13s
+Test 104_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 105/117, 1.0 task/s, elapsed: 107s, ETA:    12s
+Test 105_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 106/117, 1.0 task/s, elapsed: 108s, ETA:    11s
+Test 106_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 107/117, 1.0 task/s, elapsed: 109s, ETA:    10s
+Test 107_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 108/117, 1.0 task/s, elapsed: 110s, ETA:     9s
+Test 108_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 109/117, 1.0 task/s, elapsed: 111s, ETA:     8s
+Test 109_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 110/117, 1.0 task/s, elapsed: 112s, ETA:     7s
+Test 110_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 111/117, 1.0 task/s, elapsed: 113s, ETA:     6s
+Test 111_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 112/117, 1.0 task/s, elapsed: 114s, ETA:     5s
+Test 112_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 113/117, 1.0 task/s, elapsed: 115s, ETA:     4s
+Test 113_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 114/117, 1.0 task/s, elapsed: 116s, ETA:     3s
+Test 114_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 115/117, 1.0 task/s, elapsed: 117s, ETA:     2s
+Test 115_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 116/117, 1.0 task/s, elapsed: 118s, ETA:     1s
+Test 116_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>] 117/117, 1.0 task/s, elapsed: 119s, ETA:     0s
+Test 117_bicx2
+23-05-03 20:39:21.554 - INFO: # Validation # PSNR: 8.9103e+00
+23-05-03 20:39:21.555 - INFO: Saving models and training states.
+23-05-03 20:41:04.026 - INFO: [epoch:  1, iter:  20,100, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:42:47.465 - INFO: [epoch:  1, iter:  20,200, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:44:30.387 - INFO: [epoch:  1, iter:  20,300, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:46:12.913 - INFO: [epoch:  1, iter:  20,400, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:47:56.932 - INFO: [epoch:  1, iter:  20,500, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:49:39.632 - INFO: [epoch:  1, iter:  20,600, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:51:22.734 - INFO: [epoch:  1, iter:  20,700, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:53:05.260 - INFO: [epoch:  1, iter:  20,800, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:54:47.684 - INFO: [epoch:  1, iter:  20,900, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:56:32.365 - INFO: [epoch:  1, iter:  21,000, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:58:15.183 - INFO: [epoch:  1, iter:  21,100, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 20:59:58.354 - INFO: [epoch:  1, iter:  21,200, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:01:41.585 - INFO: [epoch:  1, iter:  21,300, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:03:24.775 - INFO: [epoch:  1, iter:  21,400, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:05:07.624 - INFO: [epoch:  1, iter:  21,500, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:06:50.226 - INFO: [epoch:  1, iter:  21,600, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:08:33.268 - INFO: [epoch:  1, iter:  21,700, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:10:16.989 - INFO: [epoch:  1, iter:  21,800, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:12:00.577 - INFO: [epoch:  1, iter:  21,900, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:13:42.899 - INFO: [epoch:  1, iter:  22,000, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:15:25.574 - INFO: [epoch:  1, iter:  22,100, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:17:08.939 - INFO: [epoch:  1, iter:  22,200, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:18:52.349 - INFO: [epoch:  1, iter:  22,300, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:20:36.043 - INFO: [epoch:  1, iter:  22,400, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:22:18.586 - INFO: [epoch:  1, iter:  22,500, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:24:01.138 - INFO: [epoch:  1, iter:  22,600, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:25:44.055 - INFO: [epoch:  1, iter:  22,700, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:27:27.173 - INFO: [epoch:  1, iter:  22,800, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:29:09.704 - INFO: [epoch:  1, iter:  22,900, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:30:53.414 - INFO: [epoch:  1, iter:  23,000, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:32:35.925 - INFO: [epoch:  1, iter:  23,100, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:34:19.193 - INFO: [epoch:  1, iter:  23,200, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:36:02.402 - INFO: [epoch:  1, iter:  23,300, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:37:46.611 - INFO: [epoch:  1, iter:  23,400, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:39:30.749 - INFO: [epoch:  1, iter:  23,500, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:41:15.686 - INFO: [epoch:  1, iter:  23,600, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:42:59.322 - INFO: [epoch:  1, iter:  23,700, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:44:44.173 - INFO: [epoch:  1, iter:  23,800, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:46:29.098 - INFO: [epoch:  1, iter:  23,900, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:48:15.073 - INFO: [epoch:  1, iter:  24,000, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:50:00.618 - INFO: [epoch:  1, iter:  24,100, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:51:46.136 - INFO: [epoch:  1, iter:  24,200, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:53:31.735 - INFO: [epoch:  1, iter:  24,300, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:55:17.400 - INFO: [epoch:  1, iter:  24,400, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:57:02.713 - INFO: [epoch:  1, iter:  24,500, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 21:58:48.197 - INFO: [epoch:  1, iter:  24,600, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 22:00:33.519 - INFO: [epoch:  1, iter:  24,700, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 22:02:18.690 - INFO: [epoch:  2, iter:  24,800, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 22:04:03.974 - INFO: [epoch:  2, iter:  24,900, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 22:05:49.763 - INFO: [epoch:  2, iter:  25,000, lr:(1.000e-07,)] l_pix: nan 
+23-05-03 22:07:34.325 - INFO: [epoch:  2, iter:  25,100, lr:(1.000e-07,)] l_pix: nan 

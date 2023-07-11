@@ -1,0 +1,2656 @@
+WARNING: OMP_NUM_THREADS set to 14, not 1. The computation speed will not be optimized if you use data parallel. It will fail if this PaddlePaddle binary is compiled with OpenBlas since OpenBlas does not support multi-threads.
+PLEASE USE OMP_NUM_THREADS WISELY.
+23-05-03 22:22:07.627 - INFO:   name: deep_sritm_full_v3
+  use_tb_logger: True
+  model: sr
+  distortion: sr
+  scale: 1
+  gpu_ids: [0]
+  network_G:[
+    which_model_G: deep_sritm_full
+    channels: 64
+    scale: 1
+  ]
+  datasets:[
+    train:[
+      name: HDRTV1K_train
+      mode: LQGT_rcan
+      dataroot_GT: ../hyconditm-master/datasets/HDRTV1K/train/train_hdr_sub
+      dataroot_LQ: ../hyconditm-master/datasets/HDRTV1K/train/train_sdr_sub
+      dataroot_cond: ../hyconditm-master/datasets/HDRTV1K/train_cond
+      cond_scale: 4
+      use_shuffle: True
+      n_workers: 0
+      batch_size: 4
+      GT_size: False
+      use_flip: False
+      use_rot: False
+      color: RGB
+      phase: train
+      scale: 1
+      data_type: img
+    ]
+    val:[
+      name: HDRTV1K_test
+      mode: LQGT_rcan
+      dataroot_GT: /root/autodl-tmp/hyconditm-master/datasets/HDRTV1K/test/test_hdr_1080p
+      dataroot_LQ: /root/autodl-tmp/hyconditm-master/datasets/HDRTV1K/test/test_sdr_1080p
+      dataroot_cond: ../hyconditm-master/datasets/HDRTV1K/cond
+      use_shared_memory: False
+      cond_scale: 4
+      phase: val
+      scale: 1
+      data_type: img
+    ]
+  ]
+  path:[
+    pretrain_model_G: None
+    strict_load: True
+    resume_state: None
+    root: /root/autodl-tmp/ClassSR_paddle-main
+    experiments_root: /root/autodl-tmp/ClassSR_paddle-main/experiments/deep_sritm_full_v3
+    models: /root/autodl-tmp/ClassSR_paddle-main/experiments/deep_sritm_full_v3/models
+    training_state: /root/autodl-tmp/ClassSR_paddle-main/experiments/deep_sritm_full_v3/training_state
+    log: /root/autodl-tmp/ClassSR_paddle-main/experiments/deep_sritm_full_v3
+    val_images: /root/autodl-tmp/ClassSR_paddle-main/experiments/deep_sritm_full_v3/val_images
+  ]
+  train:[
+    lr_G: 0.0002
+    lr_scheme: CosineAnnealingLR_Restart
+    beta1: 0.9
+    beta2: 0.99
+    niter: 800000
+    warmup_iter: -1
+    T_period: [500000]
+    restarts: [500000]
+    restart_weights: [1]
+    eta_min: 1e-07
+    lr_gamma: 0.5
+    clear_state: 1000000
+    pixel_criterion: l1
+    pixel_weight: 1.0
+    manual_seed: 10
+    val_freq: 10000
+  ]
+  logger:[
+    print_freq: 100
+    save_checkpoint_freq: 20000
+  ]
+  is_train: True
+  dist: False
+
+23-05-03 22:22:07.722 - INFO: Random seed: 10
+23-05-03 22:22:08.056 - INFO: Dataset [LQGTDataset_rcan - HDRTV1K_train] is created.
+23-05-03 22:22:08.056 - INFO: Number of train images: 49,400, iters: 12,350
+23-05-03 22:22:08.056 - INFO: Total epochs needed: 65 for iters 800,000
+23-05-03 22:22:08.057 - INFO: Dataset [LQGTDataset_rcan - HDRTV1K_test] is created.
+23-05-03 22:22:08.057 - INFO: Number of val images in [HDRTV1K_test]: 117
+W0503 22:22:08.451297 275108 gpu_resources.cc:61] Please NOTE: device: 0, GPU Compute Capability: 8.6, Driver API Version: 11.6, Runtime API Version: 11.6
+W0503 22:22:08.459136 275108 gpu_resources.cc:91] device: 0, cuDNN Version: 8.4.
+23-05-03 22:22:09.378 - INFO: Network G structure: SR_ITM_full_net, with parameters: 2,391,811
+23-05-03 22:22:09.378 - INFO: SR_ITM_full_net(
+  (conv_base_shared_1): Conv2D(6, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (conv_base_shared_2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (conv_base_shared_3): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (conv_detail_shared_1): Conv2D(6, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (conv_detail_shared_2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (conv_detail_shared_3): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (conv_base_1): Conv2D(6, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (conv_detail_1): Conv2D(6, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (relu): ReLU()
+  (rb_base_1): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rmb_base_1): ResModBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+    (conv_smf_1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+    (conv_smf_2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+    (relu): ReLU()
+  )
+  (rb_base_2): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rmb_base_2): ResModBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+    (conv_smf_1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+    (conv_smf_2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+    (relu): ReLU()
+  )
+  (rb_base_3): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rmb_base_3): ResModBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+    (conv_smf_1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+    (conv_smf_2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+    (relu): ReLU()
+  )
+  (rb_detail_1): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rsmb_detail_1): ResSkipModBlock(
+    (skipblock): SkipBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+      (dr): Conv2D(128, 64, kernel_size=[1, 1], data_format=NCHW)
+    )
+    (conv_smf_1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+    (conv_smf_2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+    (relu): ReLU()
+  )
+  (rsb_detail_1): ResSkipBlock(
+    (skipblock): SkipBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+      (dr): Conv2D(128, 64, kernel_size=[1, 1], data_format=NCHW)
+    )
+  )
+  (rsmb_detail_2): ResSkipModBlock(
+    (skipblock): SkipBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+      (dr): Conv2D(128, 64, kernel_size=[1, 1], data_format=NCHW)
+    )
+    (conv_smf_1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+    (conv_smf_2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+    (relu): ReLU()
+  )
+  (rsb_detail_2): ResSkipBlock(
+    (skipblock): SkipBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+      (dr): Conv2D(128, 64, kernel_size=[1, 1], data_format=NCHW)
+    )
+  )
+  (rsmb_detail_3): ResSkipModBlock(
+    (skipblock): SkipBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+      (dr): Conv2D(128, 64, kernel_size=[1, 1], data_format=NCHW)
+    )
+    (conv_smf_1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+    (conv_smf_2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+    (relu): ReLU()
+  )
+  (dr1): Conv2D(128, 64, kernel_size=[1, 1], data_format=NCHW)
+  (conv_fusion_1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (rb_fusion_1): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_2): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_3): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_4): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_5): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_6): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_7): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_8): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_9): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_10): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (conv_fusion_2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (conv_fusion_3): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (ps): PixelShuffle(upscale_factor=1)
+  (conv_fusion_4): Conv2D(64, 3, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (bicubic): Upsample(scale_factor=1, mode=bicubic, align_corners=False, align_mode=0, data_format=NCHW)
+)
+23-05-03 22:22:09.379 - INFO: Model [SRModel] is created.
+23-05-03 22:22:09.380 - INFO: Start training from epoch: 0, iter: 0
+23-05-03 22:23:59.706 - INFO: [epoch:  0, iter:     100, lr:(2.000e-04,)] l_pix: 4.7068e+02 
+23-05-03 22:25:48.398 - INFO: [epoch:  0, iter:     200, lr:(2.000e-04,)] l_pix: 8.7980e+00 
+23-05-03 22:27:37.190 - INFO: [epoch:  0, iter:     300, lr:(2.000e-04,)] l_pix: 6.2977e-01 
+23-05-03 22:29:26.000 - INFO: [epoch:  0, iter:     400, lr:(2.000e-04,)] l_pix: 9.1722e+05 
+23-05-03 22:31:14.930 - INFO: [epoch:  0, iter:     500, lr:(2.000e-04,)] l_pix: 3.8104e+00 
+23-05-03 22:33:02.900 - INFO: [epoch:  0, iter:     600, lr:(2.000e-04,)] l_pix: 4.8740e+05 
+23-05-03 22:34:51.539 - INFO: [epoch:  0, iter:     700, lr:(2.000e-04,)] l_pix: 2.3578e+02 
+23-05-03 22:36:40.268 - INFO: [epoch:  0, iter:     800, lr:(2.000e-04,)] l_pix: 3.3712e+02 
+23-05-03 22:38:28.593 - INFO: [epoch:  0, iter:     900, lr:(2.000e-04,)] l_pix: 1.0242e+03 
+23-05-03 22:40:16.634 - INFO: [epoch:  0, iter:   1,000, lr:(2.000e-04,)] l_pix: 1.7900e+05 
+23-05-03 22:42:05.317 - INFO: [epoch:  0, iter:   1,100, lr:(2.000e-04,)] l_pix: 5.5918e+05 
+23-05-03 22:43:53.695 - INFO: [epoch:  0, iter:   1,200, lr:(2.000e-04,)] l_pix: 6.9724e+04 
+23-05-03 22:45:42.080 - INFO: [epoch:  0, iter:   1,300, lr:(2.000e-04,)] l_pix: 1.6004e+05 
+23-05-03 22:47:30.223 - INFO: [epoch:  0, iter:   1,400, lr:(2.000e-04,)] l_pix: 5.6579e+03 
+23-05-03 22:49:18.962 - INFO: [epoch:  0, iter:   1,500, lr:(2.000e-04,)] l_pix: 5.0510e+04 
+23-05-03 22:51:07.003 - INFO: [epoch:  0, iter:   1,600, lr:(2.000e-04,)] l_pix: 1.1435e+04 
+23-05-03 22:52:54.614 - INFO: [epoch:  0, iter:   1,700, lr:(2.000e-04,)] l_pix: 1.5670e+04 
+23-05-03 22:54:42.045 - INFO: [epoch:  0, iter:   1,800, lr:(2.000e-04,)] l_pix: 6.8759e+04 
+23-05-03 22:56:29.544 - INFO: [epoch:  0, iter:   1,900, lr:(2.000e-04,)] l_pix: 4.0014e+03 
+23-05-03 22:58:16.879 - INFO: [epoch:  0, iter:   2,000, lr:(2.000e-04,)] l_pix: 3.3836e+04 
+23-05-03 23:00:05.258 - INFO: [epoch:  0, iter:   2,100, lr:(2.000e-04,)] l_pix: 2.5545e+04 
+23-05-03 23:01:52.462 - INFO: [epoch:  0, iter:   2,200, lr:(2.000e-04,)] l_pix: 2.5359e+04 
+23-05-03 23:03:39.616 - INFO: [epoch:  0, iter:   2,300, lr:(2.000e-04,)] l_pix: 5.8970e+04 
+23-05-03 23:05:26.883 - INFO: [epoch:  0, iter:   2,400, lr:(2.000e-04,)] l_pix: 1.0779e+05 
+23-05-03 23:07:13.808 - INFO: [epoch:  0, iter:   2,500, lr:(2.000e-04,)] l_pix: 6.4864e+03 
+23-05-03 23:09:01.102 - INFO: [epoch:  0, iter:   2,600, lr:(2.000e-04,)] l_pix: 2.0622e+04 
+23-05-03 23:10:48.722 - INFO: [epoch:  0, iter:   2,700, lr:(2.000e-04,)] l_pix: 4.4763e+03 
+23-05-03 23:12:36.105 - INFO: [epoch:  0, iter:   2,800, lr:(2.000e-04,)] l_pix: 6.8154e+01 
+23-05-03 23:14:23.283 - INFO: [epoch:  0, iter:   2,900, lr:(2.000e-04,)] l_pix: 2.5920e+01 
+23-05-03 23:16:10.177 - INFO: [epoch:  0, iter:   3,000, lr:(2.000e-04,)] l_pix: 4.9467e+01 
+23-05-03 23:17:57.250 - INFO: [epoch:  0, iter:   3,100, lr:(2.000e-04,)] l_pix: 2.3181e+02 
+23-05-03 23:19:44.146 - INFO: [epoch:  0, iter:   3,200, lr:(2.000e-04,)] l_pix: 1.7451e+03 
+23-05-03 23:21:30.960 - INFO: [epoch:  0, iter:   3,300, lr:(2.000e-04,)] l_pix: 1.3950e+03 
+23-05-03 23:23:17.949 - INFO: [epoch:  0, iter:   3,400, lr:(2.000e-04,)] l_pix: 4.8616e+03 
+23-05-03 23:25:05.517 - INFO: [epoch:  0, iter:   3,500, lr:(2.000e-04,)] l_pix: 5.5040e+02 
+23-05-03 23:26:53.027 - INFO: [epoch:  0, iter:   3,600, lr:(2.000e-04,)] l_pix: 6.6418e+03 
+23-05-03 23:28:39.970 - INFO: [epoch:  0, iter:   3,700, lr:(2.000e-04,)] l_pix: 8.4457e+01 
+23-05-03 23:30:27.282 - INFO: [epoch:  0, iter:   3,800, lr:(2.000e-04,)] l_pix: 3.5504e+03 
+23-05-03 23:32:14.035 - INFO: [epoch:  0, iter:   3,900, lr:(2.000e-04,)] l_pix: 2.2141e+02 
+23-05-03 23:34:01.397 - INFO: [epoch:  0, iter:   4,000, lr:(2.000e-04,)] l_pix: 7.4968e-02 
+23-05-03 23:35:48.580 - INFO: [epoch:  0, iter:   4,100, lr:(2.000e-04,)] l_pix: 1.2255e-01 
+23-05-03 23:37:34.627 - INFO: [epoch:  0, iter:   4,200, lr:(2.000e-04,)] l_pix: 1.0351e-01 
+23-05-03 23:39:20.486 - INFO: [epoch:  0, iter:   4,300, lr:(2.000e-04,)] l_pix: 8.5951e-02 
+23-05-03 23:41:06.039 - INFO: [epoch:  0, iter:   4,400, lr:(2.000e-04,)] l_pix: 1.1903e-01 
+23-05-03 23:42:51.519 - INFO: [epoch:  0, iter:   4,500, lr:(2.000e-04,)] l_pix: 1.3556e-01 
+23-05-03 23:44:37.461 - INFO: [epoch:  0, iter:   4,600, lr:(2.000e-04,)] l_pix: 9.9481e-02 
+23-05-03 23:46:22.673 - INFO: [epoch:  0, iter:   4,700, lr:(2.000e-04,)] l_pix: 3.9731e-02 
+23-05-03 23:48:08.203 - INFO: [epoch:  0, iter:   4,800, lr:(2.000e-04,)] l_pix: 9.0282e-02 
+23-05-03 23:49:54.046 - INFO: [epoch:  0, iter:   4,900, lr:(2.000e-04,)] l_pix: 1.0070e-01 
+23-05-03 23:51:40.170 - INFO: [epoch:  0, iter:   5,000, lr:(2.000e-04,)] l_pix: 4.8731e-02 
+23-05-03 23:53:26.286 - INFO: [epoch:  0, iter:   5,100, lr:(1.999e-04,)] l_pix: 9.3332e-02 
+23-05-03 23:55:11.989 - INFO: [epoch:  0, iter:   5,200, lr:(1.999e-04,)] l_pix: 1.2915e-01 
+23-05-03 23:56:57.914 - INFO: [epoch:  0, iter:   5,300, lr:(1.999e-04,)] l_pix: 1.0188e-01 
+23-05-03 23:58:43.683 - INFO: [epoch:  0, iter:   5,400, lr:(1.999e-04,)] l_pix: 3.6881e-02 
+23-05-04 00:00:28.987 - INFO: [epoch:  0, iter:   5,500, lr:(1.999e-04,)] l_pix: 1.0645e-01 
+23-05-04 00:02:14.473 - INFO: [epoch:  0, iter:   5,600, lr:(1.999e-04,)] l_pix: 1.1069e-01 
+23-05-04 00:03:59.481 - INFO: [epoch:  0, iter:   5,700, lr:(1.999e-04,)] l_pix: 6.0520e-02 
+23-05-04 00:05:45.233 - INFO: [epoch:  0, iter:   5,800, lr:(1.999e-04,)] l_pix: 7.2754e-02 
+23-05-04 00:07:30.385 - INFO: [epoch:  0, iter:   5,900, lr:(1.999e-04,)] l_pix: 1.1503e-01 
+23-05-04 00:09:15.761 - INFO: [epoch:  0, iter:   6,000, lr:(1.999e-04,)] l_pix: 6.9270e-02 
+23-05-04 00:11:01.499 - INFO: [epoch:  0, iter:   6,100, lr:(1.999e-04,)] l_pix: 6.3414e-02 
+23-05-04 00:12:47.249 - INFO: [epoch:  0, iter:   6,200, lr:(1.999e-04,)] l_pix: 1.6441e-01 
+23-05-04 00:14:32.774 - INFO: [epoch:  0, iter:   6,300, lr:(1.999e-04,)] l_pix: 1.0012e-01 
+23-05-04 00:16:18.143 - INFO: [epoch:  0, iter:   6,400, lr:(1.999e-04,)] l_pix: 1.0578e-01 
+23-05-04 00:18:04.057 - INFO: [epoch:  0, iter:   6,500, lr:(1.999e-04,)] l_pix: 3.9619e-02 
+23-05-04 00:19:49.787 - INFO: [epoch:  0, iter:   6,600, lr:(1.999e-04,)] l_pix: 3.6609e-02 
+23-05-04 00:21:34.993 - INFO: [epoch:  0, iter:   6,700, lr:(1.999e-04,)] l_pix: 3.4310e-02 
+23-05-04 00:23:20.545 - INFO: [epoch:  0, iter:   6,800, lr:(1.999e-04,)] l_pix: 1.5150e-01 
+23-05-04 00:25:06.382 - INFO: [epoch:  0, iter:   6,900, lr:(1.999e-04,)] l_pix: 5.0291e-02 
+23-05-04 00:26:52.712 - INFO: [epoch:  0, iter:   7,000, lr:(1.999e-04,)] l_pix: 3.9270e-02 
+23-05-04 00:28:38.390 - INFO: [epoch:  0, iter:   7,100, lr:(1.999e-04,)] l_pix: 4.5525e-02 
+23-05-04 00:30:23.807 - INFO: [epoch:  0, iter:   7,200, lr:(1.999e-04,)] l_pix: 1.3467e-01 
+23-05-04 00:32:09.542 - INFO: [epoch:  0, iter:   7,300, lr:(1.999e-04,)] l_pix: 1.3399e-01 
+23-05-04 00:33:54.805 - INFO: [epoch:  0, iter:   7,400, lr:(1.999e-04,)] l_pix: 8.4898e-02 
+23-05-04 00:35:39.800 - INFO: [epoch:  0, iter:   7,500, lr:(1.999e-04,)] l_pix: 9.7605e-02 
+23-05-04 00:37:26.208 - INFO: [epoch:  0, iter:   7,600, lr:(1.999e-04,)] l_pix: 1.2982e-01 
+23-05-04 00:39:12.005 - INFO: [epoch:  0, iter:   7,700, lr:(1.999e-04,)] l_pix: 1.1506e-01 
+23-05-04 00:40:57.550 - INFO: [epoch:  0, iter:   7,800, lr:(1.999e-04,)] l_pix: 1.4035e-02 
+23-05-04 00:42:43.184 - INFO: [epoch:  0, iter:   7,900, lr:(1.999e-04,)] l_pix: 1.3329e-01 
+23-05-04 00:44:29.046 - INFO: [epoch:  0, iter:   8,000, lr:(1.999e-04,)] l_pix: 1.1823e-01 
+23-05-04 00:46:14.707 - INFO: [epoch:  0, iter:   8,100, lr:(1.999e-04,)] l_pix: 7.6051e-02 
+23-05-04 00:48:00.725 - INFO: [epoch:  0, iter:   8,200, lr:(1.999e-04,)] l_pix: 6.6094e-02 
+23-05-04 00:49:46.812 - INFO: [epoch:  0, iter:   8,300, lr:(1.999e-04,)] l_pix: 1.2191e-01 
+23-05-04 00:51:32.811 - INFO: [epoch:  0, iter:   8,400, lr:(1.999e-04,)] l_pix: 1.0256e-01 
+23-05-04 00:53:18.419 - INFO: [epoch:  0, iter:   8,500, lr:(1.999e-04,)] l_pix: 9.4725e-02 
+23-05-04 00:55:03.919 - INFO: [epoch:  0, iter:   8,600, lr:(1.999e-04,)] l_pix: 5.8891e-02 
+23-05-04 00:56:49.639 - INFO: [epoch:  0, iter:   8,700, lr:(1.999e-04,)] l_pix: 1.2428e-01 
+23-05-04 00:58:35.225 - INFO: [epoch:  0, iter:   8,800, lr:(1.998e-04,)] l_pix: 5.7056e-02 
+23-05-04 01:00:21.110 - INFO: [epoch:  0, iter:   8,900, lr:(1.998e-04,)] l_pix: 9.4626e-02 
+23-05-04 01:02:06.994 - INFO: [epoch:  0, iter:   9,000, lr:(1.998e-04,)] l_pix: 4.1685e-02 
+23-05-04 01:03:52.494 - INFO: [epoch:  0, iter:   9,100, lr:(1.998e-04,)] l_pix: 5.9845e-02 
+23-05-04 01:05:38.118 - INFO: [epoch:  0, iter:   9,200, lr:(1.998e-04,)] l_pix: 7.7798e-02 
+23-05-04 01:07:23.131 - INFO: [epoch:  0, iter:   9,300, lr:(1.998e-04,)] l_pix: 7.7321e-02 
+23-05-04 01:09:08.616 - INFO: [epoch:  0, iter:   9,400, lr:(1.998e-04,)] l_pix: 5.7284e-02 
+23-05-04 01:10:53.890 - INFO: [epoch:  0, iter:   9,500, lr:(1.998e-04,)] l_pix: 2.3574e-02 
+23-05-04 01:12:39.232 - INFO: [epoch:  0, iter:   9,600, lr:(1.998e-04,)] l_pix: 9.3306e-02 
+23-05-04 01:14:24.751 - INFO: [epoch:  0, iter:   9,700, lr:(1.998e-04,)] l_pix: 4.6833e-02 
+23-05-04 01:16:10.472 - INFO: [epoch:  0, iter:   9,800, lr:(1.998e-04,)] l_pix: 1.1542e-01 
+23-05-04 01:17:56.063 - INFO: [epoch:  0, iter:   9,900, lr:(1.998e-04,)] l_pix: 1.2595e-01 
+23-05-04 01:19:42.178 - INFO: [epoch:  0, iter:  10,000, lr:(1.998e-04,)] l_pix: 7.3577e-02 
+export CUDA_VISIBLE_DEVICES=0
+Disabled distributed training.
+Path already exists. Rename it to [/root/autodl-tmp/ClassSR_paddle-main/experiments/deep_sritm_full_v3_archived_230503-222207]
+[                              ] 0/117, elapsed: 0s, ETA:
+Start...
+[2F[J[------------------------------] 1/117, 0.4 task/s, elapsed: 2s, ETA:   290s
+Test 001_bicx2
+[2F[J[------------------------------] 2/117, 0.6 task/s, elapsed: 4s, ETA:   204s
+Test 002_bicx2
+[2F[J[------------------------------] 3/117, 0.7 task/s, elapsed: 5s, ETA:   174s
+Test 003_bicx2
+[2F[J[>-----------------------------] 4/117, 0.7 task/s, elapsed: 6s, ETA:   159s
+Test 004_bicx2
+[2F[J[>-----------------------------] 5/117, 0.8 task/s, elapsed: 7s, ETA:   149s
+Test 005_bicx2
+[2F[J[>-----------------------------] 6/117, 0.8 task/s, elapsed: 8s, ETA:   142s
+Test 006_bicx2
+[2F[J[>-----------------------------] 7/117, 0.8 task/s, elapsed: 9s, ETA:   137s
+Test 007_bicx2
+[2F[J[>>----------------------------] 8/117, 0.8 task/s, elapsed: 10s, ETA:   133s
+Test 008_bicx2
+[2F[J[>>----------------------------] 9/117, 0.8 task/s, elapsed: 11s, ETA:   129s
+Test 009_bicx2
+[2F[J[>>----------------------------] 10/117, 0.8 task/s, elapsed: 12s, ETA:   127s
+Test 010_bicx2
+[2F[J[>>----------------------------] 11/117, 0.9 task/s, elapsed: 13s, ETA:   125s
+Test 011_bicx2
+[2F[J[>>>---------------------------] 12/117, 0.9 task/s, elapsed: 14s, ETA:   122s
+Test 012_bicx2
+[2F[J[>>>---------------------------] 13/117, 0.9 task/s, elapsed: 15s, ETA:   120s
+Test 013_bicx2
+[2F[J[>>>---------------------------] 14/117, 0.9 task/s, elapsed: 16s, ETA:   118s
+Test 014_bicx2
+[2F[J[>>>---------------------------] 15/117, 0.9 task/s, elapsed: 17s, ETA:   116s
+Test 015_bicx2
+[2F[J[>>>>--------------------------] 16/117, 0.9 task/s, elapsed: 18s, ETA:   114s
+Test 016_bicx2
+[2F[J[>>>>--------------------------] 17/117, 0.9 task/s, elapsed: 19s, ETA:   113s
+Test 017_bicx2
+[2F[J[>>>>--------------------------] 18/117, 0.9 task/s, elapsed: 20s, ETA:   111s
+Test 018_bicx2
+[2F[J[>>>>--------------------------] 19/117, 0.9 task/s, elapsed: 21s, ETA:   110s
+Test 019_bicx2
+[2F[J[>>>>>-------------------------] 20/117, 0.9 task/s, elapsed: 22s, ETA:   108s
+Test 020_bicx2
+[2F[J[>>>>>-------------------------] 21/117, 0.9 task/s, elapsed: 23s, ETA:   106s
+Test 021_bicx2
+[2F[J[>>>>>-------------------------] 22/117, 0.9 task/s, elapsed: 24s, ETA:   105s
+Test 022_bicx2
+[2F[J[>>>>>-------------------------] 23/117, 0.9 task/s, elapsed: 25s, ETA:   104s
+Test 023_bicx2
+[2F[J[>>>>>>------------------------] 24/117, 0.9 task/s, elapsed: 26s, ETA:   102s
+Test 024_bicx2
+[2F[J[>>>>>>------------------------] 25/117, 0.9 task/s, elapsed: 27s, ETA:   101s
+Test 025_bicx2
+[2F[J[>>>>>>------------------------] 26/117, 0.9 task/s, elapsed: 28s, ETA:    99s
+Test 026_bicx2
+[2F[J[>>>>>>------------------------] 27/117, 0.9 task/s, elapsed: 29s, ETA:    98s
+Test 027_bicx2
+[2F[J[>>>>>>>-----------------------] 28/117, 0.9 task/s, elapsed: 31s, ETA:    97s
+Test 028_bicx2
+[2F[J[>>>>>>>-----------------------] 29/117, 0.9 task/s, elapsed: 32s, ETA:    96s
+Test 029_bicx2
+[2F[J[>>>>>>>-----------------------] 30/117, 0.9 task/s, elapsed: 33s, ETA:    94s
+Test 030_bicx2
+[2F[J[>>>>>>>-----------------------] 31/117, 0.9 task/s, elapsed: 34s, ETA:    93s
+Test 031_bicx2
+[2F[J[>>>>>>>>----------------------] 32/117, 0.9 task/s, elapsed: 35s, ETA:    92s
+Test 032_bicx2
+[2F[J[>>>>>>>>----------------------] 33/117, 0.9 task/s, elapsed: 36s, ETA:    91s
+Test 033_bicx2
+[2F[J[>>>>>>>>----------------------] 34/117, 0.9 task/s, elapsed: 37s, ETA:    90s
+Test 034_bicx2
+[2F[J[>>>>>>>>----------------------] 35/117, 0.9 task/s, elapsed: 38s, ETA:    89s
+Test 035_bicx2
+[2F[J[>>>>>>>>>---------------------] 36/117, 0.9 task/s, elapsed: 39s, ETA:    87s
+Test 036_bicx2
+[2F[J[>>>>>>>>>---------------------] 37/117, 0.9 task/s, elapsed: 40s, ETA:    86s
+Test 037_bicx2
+[2F[J[>>>>>>>>>---------------------] 38/117, 0.9 task/s, elapsed: 41s, ETA:    85s
+Test 038_bicx2
+[2F[J[>>>>>>>>>>--------------------] 39/117, 0.9 task/s, elapsed: 42s, ETA:    84s
+Test 039_bicx2
+[2F[J[>>>>>>>>>>--------------------] 40/117, 0.9 task/s, elapsed: 43s, ETA:    83s
+Test 040_bicx2
+[2F[J[>>>>>>>>>>--------------------] 41/117, 0.9 task/s, elapsed: 44s, ETA:    82s
+Test 041_bicx2
+[2F[J[>>>>>>>>>>--------------------] 42/117, 0.9 task/s, elapsed: 45s, ETA:    80s
+Test 042_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 43/117, 0.9 task/s, elapsed: 46s, ETA:    79s
+Test 043_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 44/117, 0.9 task/s, elapsed: 47s, ETA:    78s
+Test 044_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 45/117, 0.9 task/s, elapsed: 48s, ETA:    77s
+Test 045_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 46/117, 0.9 task/s, elapsed: 49s, ETA:    76s
+Test 046_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 47/117, 0.9 task/s, elapsed: 50s, ETA:    75s
+Test 047_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 48/117, 0.9 task/s, elapsed: 51s, ETA:    74s
+Test 048_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 49/117, 0.9 task/s, elapsed: 52s, ETA:    73s
+Test 049_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 50/117, 0.9 task/s, elapsed: 53s, ETA:    72s
+Test 050_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 51/117, 0.9 task/s, elapsed: 54s, ETA:    70s
+Test 051_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 52/117, 0.9 task/s, elapsed: 55s, ETA:    69s
+Test 052_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 53/117, 0.9 task/s, elapsed: 56s, ETA:    68s
+Test 053_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 54/117, 0.9 task/s, elapsed: 58s, ETA:    67s
+Test 054_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 55/117, 0.9 task/s, elapsed: 59s, ETA:    66s
+Test 055_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 56/117, 0.9 task/s, elapsed: 60s, ETA:    65s
+Test 056_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 57/117, 0.9 task/s, elapsed: 61s, ETA:    64s
+Test 057_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 58/117, 0.9 task/s, elapsed: 62s, ETA:    63s
+Test 058_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 59/117, 0.9 task/s, elapsed: 63s, ETA:    62s
+Test 059_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 60/117, 0.9 task/s, elapsed: 64s, ETA:    60s
+Test 060_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 61/117, 0.9 task/s, elapsed: 65s, ETA:    59s
+Test 061_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 62/117, 0.9 task/s, elapsed: 66s, ETA:    58s
+Test 062_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 63/117, 0.9 task/s, elapsed: 67s, ETA:    57s
+Test 063_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 64/117, 0.9 task/s, elapsed: 68s, ETA:    56s
+Test 064_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 65/117, 0.9 task/s, elapsed: 69s, ETA:    55s
+Test 065_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 66/117, 0.9 task/s, elapsed: 70s, ETA:    54s
+Test 066_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 67/117, 0.9 task/s, elapsed: 71s, ETA:    53s
+Test 067_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 68/117, 0.9 task/s, elapsed: 72s, ETA:    52s
+Test 068_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 69/117, 0.9 task/s, elapsed: 73s, ETA:    51s
+Test 069_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 70/117, 0.9 task/s, elapsed: 74s, ETA:    50s
+Test 070_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 71/117, 0.9 task/s, elapsed: 75s, ETA:    49s
+Test 071_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 72/117, 0.9 task/s, elapsed: 76s, ETA:    48s
+Test 072_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 73/117, 0.9 task/s, elapsed: 77s, ETA:    46s
+Test 073_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 74/117, 0.9 task/s, elapsed: 78s, ETA:    45s
+Test 074_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 75/117, 0.9 task/s, elapsed: 79s, ETA:    44s
+Test 075_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 76/117, 0.9 task/s, elapsed: 80s, ETA:    43s
+Test 076_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 77/117, 0.9 task/s, elapsed: 81s, ETA:    42s
+Test 077_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 78/117, 0.9 task/s, elapsed: 82s, ETA:    41s
+Test 078_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 79/117, 0.9 task/s, elapsed: 83s, ETA:    40s
+Test 079_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 80/117, 0.9 task/s, elapsed: 84s, ETA:    39s
+Test 080_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 81/117, 0.9 task/s, elapsed: 85s, ETA:    38s
+Test 081_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 82/117, 0.9 task/s, elapsed: 86s, ETA:    37s
+Test 082_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 83/117, 0.9 task/s, elapsed: 87s, ETA:    36s
+Test 083_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 84/117, 0.9 task/s, elapsed: 89s, ETA:    35s
+Test 084_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 85/117, 0.9 task/s, elapsed: 90s, ETA:    34s
+Test 085_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 86/117, 0.9 task/s, elapsed: 91s, ETA:    33s
+Test 086_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 87/117, 0.9 task/s, elapsed: 92s, ETA:    32s
+Test 087_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 88/117, 0.9 task/s, elapsed: 93s, ETA:    31s
+Test 088_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 89/117, 0.9 task/s, elapsed: 94s, ETA:    29s
+Test 089_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 90/117, 0.9 task/s, elapsed: 95s, ETA:    28s
+Test 090_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 91/117, 0.9 task/s, elapsed: 96s, ETA:    27s
+Test 091_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 92/117, 1.0 task/s, elapsed: 97s, ETA:    26s
+Test 092_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 93/117, 1.0 task/s, elapsed: 98s, ETA:    25s
+Test 093_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 94/117, 1.0 task/s, elapsed: 99s, ETA:    24s
+Test 094_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 95/117, 1.0 task/s, elapsed: 100s, ETA:    23s
+Test 095_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 96/117, 1.0 task/s, elapsed: 101s, ETA:    22s
+Test 096_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 97/117, 1.0 task/s, elapsed: 102s, ETA:    21s
+Test 097_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 98/117, 1.0 task/s, elapsed: 103s, ETA:    20s
+Test 098_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 99/117, 1.0 task/s, elapsed: 104s, ETA:    19s
+Test 099_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 100/117, 1.0 task/s, elapsed: 105s, ETA:    18s
+Test 100_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 101/117, 1.0 task/s, elapsed: 106s, ETA:    17s
+Test 101_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 102/117, 1.0 task/s, elapsed: 107s, ETA:    16s
+Test 102_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 103/117, 1.0 task/s, elapsed: 108s, ETA:    15s
+Test 103_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 104/117, 1.0 task/s, elapsed: 109s, ETA:    14s
+Test 104_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 105/117, 1.0 task/s, elapsed: 110s, ETA:    13s
+Test 105_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 106/117, 1.0 task/s, elapsed: 111s, ETA:    12s
+Test 106_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 107/117, 1.0 task/s, elapsed: 112s, ETA:    10s
+Test 107_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 108/117, 1.0 task/s, elapsed: 113s, ETA:     9s
+Test 108_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 109/117, 1.0 task/s, elapsed: 114s, ETA:     8s
+Test 109_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 110/117, 1.0 task/s, elapsed: 115s, ETA:     7s
+Test 110_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 111/117, 1.0 task/s, elapsed: 116s, ETA:     6s
+Test 111_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 112/117, 1.0 task/s, elapsed: 117s, ETA:     5s
+Test 112_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 113/117, 1.0 task/s, elapsed: 119s, ETA:     4s
+Test 113_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 114/117, 1.0 task/s, elapsed: 120s, ETA:     3s
+Test 114_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 115/117, 1.0 task/s, elapsed: 121s, ETA:     2s
+Test 115_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 116/117, 1.0 task/s, elapsed: 122s, ETA:     1s
+Test 116_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>] 117/117, 1.0 task/s, elapsed: 123s, ETA:     0s
+Test 117_bicx2
+23-05-04 01:21:44.948 - INFO: # Validation # PSNR: 1.8797e+01
+23-05-04 01:23:29.627 - INFO: [epoch:  0, iter:  10,100, lr:(1.998e-04,)] l_pix: 5.5123e-02 
+23-05-04 01:25:14.788 - INFO: [epoch:  0, iter:  10,200, lr:(1.998e-04,)] l_pix: 8.7190e-02 
+23-05-04 01:27:00.390 - INFO: [epoch:  0, iter:  10,300, lr:(1.998e-04,)] l_pix: 9.0067e-02 
+23-05-04 01:28:46.755 - INFO: [epoch:  0, iter:  10,400, lr:(1.998e-04,)] l_pix: 7.5209e-02 
+23-05-04 01:30:32.797 - INFO: [epoch:  0, iter:  10,500, lr:(1.998e-04,)] l_pix: 1.0549e-01 
+23-05-04 01:32:17.717 - INFO: [epoch:  0, iter:  10,600, lr:(1.998e-04,)] l_pix: 1.3965e-01 
+23-05-04 01:34:03.473 - INFO: [epoch:  0, iter:  10,700, lr:(1.998e-04,)] l_pix: 1.6480e-01 
+23-05-04 01:35:49.500 - INFO: [epoch:  0, iter:  10,800, lr:(1.998e-04,)] l_pix: 6.8238e-02 
+23-05-04 01:37:35.428 - INFO: [epoch:  0, iter:  10,900, lr:(1.998e-04,)] l_pix: 1.2761e-01 
+23-05-04 01:39:21.391 - INFO: [epoch:  0, iter:  11,000, lr:(1.998e-04,)] l_pix: 9.0984e-02 
+23-05-04 01:41:06.916 - INFO: [epoch:  0, iter:  11,100, lr:(1.998e-04,)] l_pix: 9.9525e-02 
+23-05-04 01:42:52.656 - INFO: [epoch:  0, iter:  11,200, lr:(1.998e-04,)] l_pix: 1.3115e-01 
+23-05-04 01:44:37.878 - INFO: [epoch:  0, iter:  11,300, lr:(1.997e-04,)] l_pix: 5.8837e-02 
+23-05-04 01:46:24.256 - INFO: [epoch:  0, iter:  11,400, lr:(1.997e-04,)] l_pix: 3.5613e-02 
+23-05-04 01:48:09.924 - INFO: [epoch:  0, iter:  11,500, lr:(1.997e-04,)] l_pix: 5.3240e-02 
+23-05-04 01:49:54.929 - INFO: [epoch:  0, iter:  11,600, lr:(1.997e-04,)] l_pix: 1.5505e-01 
+23-05-04 01:51:40.443 - INFO: [epoch:  0, iter:  11,700, lr:(1.997e-04,)] l_pix: 9.1129e-02 
+23-05-04 01:53:26.339 - INFO: [epoch:  0, iter:  11,800, lr:(1.997e-04,)] l_pix: 4.2153e-02 
+23-05-04 01:55:12.424 - INFO: [epoch:  0, iter:  11,900, lr:(1.997e-04,)] l_pix: 1.1188e-01 
+23-05-04 01:56:58.830 - INFO: [epoch:  0, iter:  12,000, lr:(1.997e-04,)] l_pix: 1.4002e-01 
+23-05-04 01:58:44.637 - INFO: [epoch:  0, iter:  12,100, lr:(1.997e-04,)] l_pix: 1.0569e-01 
+23-05-04 02:00:29.681 - INFO: [epoch:  0, iter:  12,200, lr:(1.997e-04,)] l_pix: 6.0537e-02 
+23-05-04 02:02:14.995 - INFO: [epoch:  0, iter:  12,300, lr:(1.997e-04,)] l_pix: 9.1011e-02 
+23-05-04 02:04:00.704 - INFO: [epoch:  1, iter:  12,400, lr:(1.997e-04,)] l_pix: 1.2352e-01 
+23-05-04 02:05:46.235 - INFO: [epoch:  1, iter:  12,500, lr:(1.997e-04,)] l_pix: 6.8918e-02 
+23-05-04 02:07:31.649 - INFO: [epoch:  1, iter:  12,600, lr:(1.997e-04,)] l_pix: 1.1649e-01 
+23-05-04 02:09:17.518 - INFO: [epoch:  1, iter:  12,700, lr:(1.997e-04,)] l_pix: 1.1226e-01 
+23-05-04 02:11:03.365 - INFO: [epoch:  1, iter:  12,800, lr:(1.997e-04,)] l_pix: 8.0756e-02 
+23-05-04 02:12:48.688 - INFO: [epoch:  1, iter:  12,900, lr:(1.997e-04,)] l_pix: 7.0996e-02 
+23-05-04 02:14:34.555 - INFO: [epoch:  1, iter:  13,000, lr:(1.997e-04,)] l_pix: 7.9364e-02 
+23-05-04 02:16:19.854 - INFO: [epoch:  1, iter:  13,100, lr:(1.997e-04,)] l_pix: 4.9758e-02 
+23-05-04 02:18:05.433 - INFO: [epoch:  1, iter:  13,200, lr:(1.997e-04,)] l_pix: 8.2010e-02 
+23-05-04 02:19:51.567 - INFO: [epoch:  1, iter:  13,300, lr:(1.997e-04,)] l_pix: 7.5112e-02 
+23-05-04 02:21:36.777 - INFO: [epoch:  1, iter:  13,400, lr:(1.996e-04,)] l_pix: 7.4491e-02 
+23-05-04 02:23:22.173 - INFO: [epoch:  1, iter:  13,500, lr:(1.996e-04,)] l_pix: 1.0951e-01 
+23-05-04 02:25:07.673 - INFO: [epoch:  1, iter:  13,600, lr:(1.996e-04,)] l_pix: 9.6613e-02 
+23-05-04 02:26:53.030 - INFO: [epoch:  1, iter:  13,700, lr:(1.996e-04,)] l_pix: 4.1552e-02 
+23-05-04 02:28:38.618 - INFO: [epoch:  1, iter:  13,800, lr:(1.996e-04,)] l_pix: 1.0714e-01 
+23-05-04 02:30:24.388 - INFO: [epoch:  1, iter:  13,900, lr:(1.996e-04,)] l_pix: 5.8992e-02 
+23-05-04 02:32:09.882 - INFO: [epoch:  1, iter:  14,000, lr:(1.996e-04,)] l_pix: 1.1123e-01 
+23-05-04 02:33:55.841 - INFO: [epoch:  1, iter:  14,100, lr:(1.996e-04,)] l_pix: 1.0421e-01 
+23-05-04 02:35:41.688 - INFO: [epoch:  1, iter:  14,200, lr:(1.996e-04,)] l_pix: 2.4713e-02 
+23-05-04 02:37:27.564 - INFO: [epoch:  1, iter:  14,300, lr:(1.996e-04,)] l_pix: 2.9846e-02 
+23-05-04 02:39:13.511 - INFO: [epoch:  1, iter:  14,400, lr:(1.996e-04,)] l_pix: 1.1790e-01 
+23-05-04 02:40:59.530 - INFO: [epoch:  1, iter:  14,500, lr:(1.996e-04,)] l_pix: 1.0379e-01 
+23-05-04 02:42:45.174 - INFO: [epoch:  1, iter:  14,600, lr:(1.996e-04,)] l_pix: 5.6091e-02 
+23-05-04 02:44:30.710 - INFO: [epoch:  1, iter:  14,700, lr:(1.996e-04,)] l_pix: 7.7620e-02 
+23-05-04 02:46:15.991 - INFO: [epoch:  1, iter:  14,800, lr:(1.996e-04,)] l_pix: 5.2548e-02 
+23-05-04 02:48:01.301 - INFO: [epoch:  1, iter:  14,900, lr:(1.996e-04,)] l_pix: 1.6824e-01 
+23-05-04 02:49:46.494 - INFO: [epoch:  1, iter:  15,000, lr:(1.996e-04,)] l_pix: 1.3601e-01 
+23-05-04 02:51:32.225 - INFO: [epoch:  1, iter:  15,100, lr:(1.996e-04,)] l_pix: 6.7799e-02 
+23-05-04 02:53:17.744 - INFO: [epoch:  1, iter:  15,200, lr:(1.995e-04,)] l_pix: 2.7179e-02 
+23-05-04 02:55:03.587 - INFO: [epoch:  1, iter:  15,300, lr:(1.995e-04,)] l_pix: 4.1454e-02 
+23-05-04 02:56:49.985 - INFO: [epoch:  1, iter:  15,400, lr:(1.995e-04,)] l_pix: 1.5163e-01 
+23-05-04 02:58:36.091 - INFO: [epoch:  1, iter:  15,500, lr:(1.995e-04,)] l_pix: 8.9843e-02 
+23-05-04 03:00:21.489 - INFO: [epoch:  1, iter:  15,600, lr:(1.995e-04,)] l_pix: 1.1850e-01 
+23-05-04 03:02:06.977 - INFO: [epoch:  1, iter:  15,700, lr:(1.995e-04,)] l_pix: 7.9198e-02 
+23-05-04 03:03:52.265 - INFO: [epoch:  1, iter:  15,800, lr:(1.995e-04,)] l_pix: 7.2347e-02 
+23-05-04 03:05:37.914 - INFO: [epoch:  1, iter:  15,900, lr:(1.995e-04,)] l_pix: 6.8040e-02 
+23-05-04 03:07:23.356 - INFO: [epoch:  1, iter:  16,000, lr:(1.995e-04,)] l_pix: 4.1883e-02 
+23-05-04 03:09:08.747 - INFO: [epoch:  1, iter:  16,100, lr:(1.995e-04,)] l_pix: 5.4059e-02 
+23-05-04 03:10:55.041 - INFO: [epoch:  1, iter:  16,200, lr:(1.995e-04,)] l_pix: 6.3875e-02 
+23-05-04 03:12:40.897 - INFO: [epoch:  1, iter:  16,300, lr:(1.995e-04,)] l_pix: 6.9616e-02 
+23-05-04 03:14:26.496 - INFO: [epoch:  1, iter:  16,400, lr:(1.995e-04,)] l_pix: 4.4943e-02 
+23-05-04 03:16:11.555 - INFO: [epoch:  1, iter:  16,500, lr:(1.995e-04,)] l_pix: 7.4068e-02 
+23-05-04 03:17:57.171 - INFO: [epoch:  1, iter:  16,600, lr:(1.995e-04,)] l_pix: 4.6993e-02 
+23-05-04 03:19:42.857 - INFO: [epoch:  1, iter:  16,700, lr:(1.995e-04,)] l_pix: 1.4764e-01 
+23-05-04 03:21:28.702 - INFO: [epoch:  1, iter:  16,800, lr:(1.994e-04,)] l_pix: 3.8550e-02 
+23-05-04 03:23:14.360 - INFO: [epoch:  1, iter:  16,900, lr:(1.994e-04,)] l_pix: 7.4889e-02 
+23-05-04 03:25:00.100 - INFO: [epoch:  1, iter:  17,000, lr:(1.994e-04,)] l_pix: 5.1258e-02 
+23-05-04 03:26:46.101 - INFO: [epoch:  1, iter:  17,100, lr:(1.994e-04,)] l_pix: 1.0505e-01 
+23-05-04 03:28:31.976 - INFO: [epoch:  1, iter:  17,200, lr:(1.994e-04,)] l_pix: 3.0376e-02 
+23-05-04 03:30:17.963 - INFO: [epoch:  1, iter:  17,300, lr:(1.994e-04,)] l_pix: 8.5999e-02 
+23-05-04 03:32:03.491 - INFO: [epoch:  1, iter:  17,400, lr:(1.994e-04,)] l_pix: 8.3148e-02 
+23-05-04 03:33:48.960 - INFO: [epoch:  1, iter:  17,500, lr:(1.994e-04,)] l_pix: 3.5937e-02 
+23-05-04 03:35:34.774 - INFO: [epoch:  1, iter:  17,600, lr:(1.994e-04,)] l_pix: 1.1571e-01 
+23-05-04 03:37:19.823 - INFO: [epoch:  1, iter:  17,700, lr:(1.994e-04,)] l_pix: 1.4858e-01 
+23-05-04 03:39:05.201 - INFO: [epoch:  1, iter:  17,800, lr:(1.994e-04,)] l_pix: 1.1895e-01 
+23-05-04 03:40:50.574 - INFO: [epoch:  1, iter:  17,900, lr:(1.994e-04,)] l_pix: 9.9243e-02 
+23-05-04 03:42:35.792 - INFO: [epoch:  1, iter:  18,000, lr:(1.994e-04,)] l_pix: 8.8615e-02 
+23-05-04 03:44:21.492 - INFO: [epoch:  1, iter:  18,100, lr:(1.994e-04,)] l_pix: 6.8972e-02 
+23-05-04 03:46:07.359 - INFO: [epoch:  1, iter:  18,200, lr:(1.993e-04,)] l_pix: 8.4142e-02 
+23-05-04 03:47:52.388 - INFO: [epoch:  1, iter:  18,300, lr:(1.993e-04,)] l_pix: 1.0370e-01 
+23-05-04 03:49:38.026 - INFO: [epoch:  1, iter:  18,400, lr:(1.993e-04,)] l_pix: 8.3011e-02 
+23-05-04 03:51:23.218 - INFO: [epoch:  1, iter:  18,500, lr:(1.993e-04,)] l_pix: 5.2381e-02 
+23-05-04 03:53:08.776 - INFO: [epoch:  1, iter:  18,600, lr:(1.993e-04,)] l_pix: 9.4165e-02 
+23-05-04 03:54:54.732 - INFO: [epoch:  1, iter:  18,700, lr:(1.993e-04,)] l_pix: 1.0350e-01 
+23-05-04 03:56:40.455 - INFO: [epoch:  1, iter:  18,800, lr:(1.993e-04,)] l_pix: 8.9338e-02 
+23-05-04 03:58:25.825 - INFO: [epoch:  1, iter:  18,900, lr:(1.993e-04,)] l_pix: 9.4375e-02 
+23-05-04 04:00:11.753 - INFO: [epoch:  1, iter:  19,000, lr:(1.993e-04,)] l_pix: 2.7119e-02 
+23-05-04 04:01:57.170 - INFO: [epoch:  1, iter:  19,100, lr:(1.993e-04,)] l_pix: 5.7153e-02 
+23-05-04 04:03:42.907 - INFO: [epoch:  1, iter:  19,200, lr:(1.993e-04,)] l_pix: 3.8461e-02 
+23-05-04 04:05:28.225 - INFO: [epoch:  1, iter:  19,300, lr:(1.993e-04,)] l_pix: 1.0574e-01 
+23-05-04 04:07:13.241 - INFO: [epoch:  1, iter:  19,400, lr:(1.993e-04,)] l_pix: 4.5286e-02 
+23-05-04 04:08:58.677 - INFO: [epoch:  1, iter:  19,500, lr:(1.993e-04,)] l_pix: 1.3852e-01 
+23-05-04 04:10:44.076 - INFO: [epoch:  1, iter:  19,600, lr:(1.992e-04,)] l_pix: 1.0861e-01 
+23-05-04 04:12:29.465 - INFO: [epoch:  1, iter:  19,700, lr:(1.992e-04,)] l_pix: 1.0366e-01 
+23-05-04 04:14:14.812 - INFO: [epoch:  1, iter:  19,800, lr:(1.992e-04,)] l_pix: 1.4935e-01 
+23-05-04 04:16:00.204 - INFO: [epoch:  1, iter:  19,900, lr:(1.992e-04,)] l_pix: 6.9420e-02 
+23-05-04 04:17:45.884 - INFO: [epoch:  1, iter:  20,000, lr:(1.992e-04,)] l_pix: 4.2584e-02 
+[                              ] 0/117, elapsed: 0s, ETA:
+Start...
+[2F[J[------------------------------] 1/117, 0.4 task/s, elapsed: 2s, ETA:   269s
+Test 001_bicx2
+[2F[J[------------------------------] 2/117, 0.6 task/s, elapsed: 3s, ETA:   193s
+Test 002_bicx2
+[2F[J[------------------------------] 3/117, 0.7 task/s, elapsed: 4s, ETA:   167s
+Test 003_bicx2
+[2F[J[>-----------------------------] 4/117, 0.7 task/s, elapsed: 5s, ETA:   155s
+Test 004_bicx2
+[2F[J[>-----------------------------] 5/117, 0.8 task/s, elapsed: 6s, ETA:   145s
+Test 005_bicx2
+[2F[J[>-----------------------------] 6/117, 0.8 task/s, elapsed: 8s, ETA:   139s
+Test 006_bicx2
+[2F[J[>-----------------------------] 7/117, 0.8 task/s, elapsed: 9s, ETA:   135s
+Test 007_bicx2
+[2F[J[>>----------------------------] 8/117, 0.8 task/s, elapsed: 10s, ETA:   131s
+Test 008_bicx2
+[2F[J[>>----------------------------] 9/117, 0.8 task/s, elapsed: 11s, ETA:   128s
+Test 009_bicx2
+[2F[J[>>----------------------------] 10/117, 0.9 task/s, elapsed: 12s, ETA:   125s
+Test 010_bicx2
+[2F[J[>>----------------------------] 11/117, 0.9 task/s, elapsed: 13s, ETA:   122s
+Test 011_bicx2
+[2F[J[>>>---------------------------] 12/117, 0.9 task/s, elapsed: 14s, ETA:   120s
+Test 012_bicx2
+[2F[J[>>>---------------------------] 13/117, 0.9 task/s, elapsed: 15s, ETA:   118s
+Test 013_bicx2
+[2F[J[>>>---------------------------] 14/117, 0.9 task/s, elapsed: 16s, ETA:   116s
+Test 014_bicx2
+[2F[J[>>>---------------------------] 15/117, 0.9 task/s, elapsed: 17s, ETA:   115s
+Test 015_bicx2
+[2F[J[>>>>--------------------------] 16/117, 0.9 task/s, elapsed: 18s, ETA:   113s
+Test 016_bicx2
+[2F[J[>>>>--------------------------] 17/117, 0.9 task/s, elapsed: 19s, ETA:   111s
+Test 017_bicx2
+[2F[J[>>>>--------------------------] 18/117, 0.9 task/s, elapsed: 20s, ETA:   110s
+Test 018_bicx2
+[2F[J[>>>>--------------------------] 19/117, 0.9 task/s, elapsed: 21s, ETA:   108s
+Test 019_bicx2
+[2F[J[>>>>>-------------------------] 20/117, 0.9 task/s, elapsed: 22s, ETA:   107s
+Test 020_bicx2
+[2F[J[>>>>>-------------------------] 21/117, 0.9 task/s, elapsed: 23s, ETA:   105s
+Test 021_bicx2
+[2F[J[>>>>>-------------------------] 22/117, 0.9 task/s, elapsed: 24s, ETA:   104s
+Test 022_bicx2
+[2F[J[>>>>>-------------------------] 23/117, 0.9 task/s, elapsed: 25s, ETA:   103s
+Test 023_bicx2
+[2F[J[>>>>>>------------------------] 24/117, 0.9 task/s, elapsed: 26s, ETA:   101s
+Test 024_bicx2
+[2F[J[>>>>>>------------------------] 25/117, 0.9 task/s, elapsed: 27s, ETA:   100s
+Test 025_bicx2
+[2F[J[>>>>>>------------------------] 26/117, 0.9 task/s, elapsed: 28s, ETA:    99s
+Test 026_bicx2
+[2F[J[>>>>>>------------------------] 27/117, 0.9 task/s, elapsed: 29s, ETA:    98s
+Test 027_bicx2
+[2F[J[>>>>>>>-----------------------] 28/117, 0.9 task/s, elapsed: 30s, ETA:    96s
+Test 028_bicx2
+[2F[J[>>>>>>>-----------------------] 29/117, 0.9 task/s, elapsed: 31s, ETA:    95s
+Test 029_bicx2
+[2F[J[>>>>>>>-----------------------] 30/117, 0.9 task/s, elapsed: 32s, ETA:    94s
+Test 030_bicx2
+[2F[J[>>>>>>>-----------------------] 31/117, 0.9 task/s, elapsed: 33s, ETA:    93s
+Test 031_bicx2
+[2F[J[>>>>>>>>----------------------] 32/117, 0.9 task/s, elapsed: 34s, ETA:    92s
+Test 032_bicx2
+[2F[J[>>>>>>>>----------------------] 33/117, 0.9 task/s, elapsed: 35s, ETA:    90s
+Test 033_bicx2
+[2F[J[>>>>>>>>----------------------] 34/117, 0.9 task/s, elapsed: 36s, ETA:    89s
+Test 034_bicx2
+[2F[J[>>>>>>>>----------------------] 35/117, 0.9 task/s, elapsed: 38s, ETA:    88s
+Test 035_bicx2
+[2F[J[>>>>>>>>>---------------------] 36/117, 0.9 task/s, elapsed: 39s, ETA:    87s
+Test 036_bicx2
+[2F[J[>>>>>>>>>---------------------] 37/117, 0.9 task/s, elapsed: 40s, ETA:    86s
+Test 037_bicx2
+[2F[J[>>>>>>>>>---------------------] 38/117, 0.9 task/s, elapsed: 41s, ETA:    84s
+Test 038_bicx2
+[2F[J[>>>>>>>>>>--------------------] 39/117, 0.9 task/s, elapsed: 42s, ETA:    83s
+Test 039_bicx2
+[2F[J[>>>>>>>>>>--------------------] 40/117, 0.9 task/s, elapsed: 43s, ETA:    82s
+Test 040_bicx2
+[2F[J[>>>>>>>>>>--------------------] 41/117, 0.9 task/s, elapsed: 44s, ETA:    81s
+Test 041_bicx2
+[2F[J[>>>>>>>>>>--------------------] 42/117, 0.9 task/s, elapsed: 45s, ETA:    80s
+Test 042_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 43/117, 0.9 task/s, elapsed: 46s, ETA:    79s
+Test 043_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 44/117, 0.9 task/s, elapsed: 47s, ETA:    78s
+Test 044_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 45/117, 0.9 task/s, elapsed: 48s, ETA:    77s
+Test 045_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 46/117, 0.9 task/s, elapsed: 49s, ETA:    75s
+Test 046_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 47/117, 0.9 task/s, elapsed: 50s, ETA:    74s
+Test 047_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 48/117, 0.9 task/s, elapsed: 51s, ETA:    73s
+Test 048_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 49/117, 0.9 task/s, elapsed: 52s, ETA:    72s
+Test 049_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 50/117, 0.9 task/s, elapsed: 53s, ETA:    71s
+Test 050_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 51/117, 0.9 task/s, elapsed: 54s, ETA:    70s
+Test 051_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 52/117, 0.9 task/s, elapsed: 55s, ETA:    69s
+Test 052_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 53/117, 0.9 task/s, elapsed: 56s, ETA:    68s
+Test 053_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 54/117, 0.9 task/s, elapsed: 57s, ETA:    67s
+Test 054_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 55/117, 0.9 task/s, elapsed: 58s, ETA:    66s
+Test 055_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 56/117, 0.9 task/s, elapsed: 59s, ETA:    64s
+Test 056_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 57/117, 0.9 task/s, elapsed: 60s, ETA:    63s
+Test 057_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 58/117, 0.9 task/s, elapsed: 61s, ETA:    62s
+Test 058_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 59/117, 0.9 task/s, elapsed: 62s, ETA:    61s
+Test 059_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 60/117, 0.9 task/s, elapsed: 63s, ETA:    60s
+Test 060_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 61/117, 0.9 task/s, elapsed: 64s, ETA:    59s
+Test 061_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 62/117, 0.9 task/s, elapsed: 65s, ETA:    58s
+Test 062_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 63/117, 0.9 task/s, elapsed: 66s, ETA:    57s
+Test 063_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 64/117, 0.9 task/s, elapsed: 68s, ETA:    56s
+Test 064_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 65/117, 0.9 task/s, elapsed: 69s, ETA:    55s
+Test 065_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 66/117, 0.9 task/s, elapsed: 70s, ETA:    54s
+Test 066_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 67/117, 0.9 task/s, elapsed: 71s, ETA:    53s
+Test 067_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 68/117, 0.9 task/s, elapsed: 72s, ETA:    52s
+Test 068_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 69/117, 0.9 task/s, elapsed: 73s, ETA:    51s
+Test 069_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 70/117, 0.9 task/s, elapsed: 74s, ETA:    49s
+Test 070_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 71/117, 1.0 task/s, elapsed: 75s, ETA:    48s
+Test 071_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 72/117, 1.0 task/s, elapsed: 76s, ETA:    47s
+Test 072_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 73/117, 1.0 task/s, elapsed: 77s, ETA:    46s
+Test 073_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 74/117, 1.0 task/s, elapsed: 78s, ETA:    45s
+Test 074_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 75/117, 1.0 task/s, elapsed: 79s, ETA:    44s
+Test 075_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 76/117, 1.0 task/s, elapsed: 80s, ETA:    43s
+Test 076_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 77/117, 1.0 task/s, elapsed: 81s, ETA:    42s
+Test 077_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 78/117, 1.0 task/s, elapsed: 82s, ETA:    41s
+Test 078_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 79/117, 1.0 task/s, elapsed: 83s, ETA:    40s
+Test 079_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 80/117, 1.0 task/s, elapsed: 84s, ETA:    39s
+Test 080_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 81/117, 1.0 task/s, elapsed: 85s, ETA:    38s
+Test 081_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 82/117, 1.0 task/s, elapsed: 86s, ETA:    37s
+Test 082_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 83/117, 1.0 task/s, elapsed: 87s, ETA:    36s
+Test 083_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 84/117, 1.0 task/s, elapsed: 88s, ETA:    35s
+Test 084_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 85/117, 1.0 task/s, elapsed: 89s, ETA:    34s
+Test 085_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 86/117, 1.0 task/s, elapsed: 90s, ETA:    32s
+Test 086_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 87/117, 1.0 task/s, elapsed: 91s, ETA:    31s
+Test 087_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 88/117, 1.0 task/s, elapsed: 92s, ETA:    30s
+Test 088_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 89/117, 1.0 task/s, elapsed: 93s, ETA:    29s
+Test 089_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 90/117, 1.0 task/s, elapsed: 94s, ETA:    28s
+Test 090_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 91/117, 1.0 task/s, elapsed: 95s, ETA:    27s
+Test 091_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 92/117, 1.0 task/s, elapsed: 96s, ETA:    26s
+Test 092_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 93/117, 1.0 task/s, elapsed: 97s, ETA:    25s
+Test 093_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 94/117, 1.0 task/s, elapsed: 98s, ETA:    24s
+Test 094_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 95/117, 1.0 task/s, elapsed: 99s, ETA:    23s
+Test 095_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 96/117, 1.0 task/s, elapsed: 100s, ETA:    22s
+Test 096_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 97/117, 1.0 task/s, elapsed: 101s, ETA:    21s
+Test 097_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 98/117, 1.0 task/s, elapsed: 103s, ETA:    20s
+Test 098_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 99/117, 1.0 task/s, elapsed: 104s, ETA:    19s
+Test 099_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 100/117, 1.0 task/s, elapsed: 105s, ETA:    18s
+Test 100_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 101/117, 1.0 task/s, elapsed: 106s, ETA:    17s
+Test 101_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 102/117, 1.0 task/s, elapsed: 107s, ETA:    16s
+Test 102_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 103/117, 1.0 task/s, elapsed: 108s, ETA:    15s
+Test 103_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 104/117, 1.0 task/s, elapsed: 109s, ETA:    14s
+Test 104_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 105/117, 1.0 task/s, elapsed: 110s, ETA:    13s
+Test 105_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 106/117, 1.0 task/s, elapsed: 111s, ETA:    12s
+Test 106_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 107/117, 1.0 task/s, elapsed: 112s, ETA:    10s
+Test 107_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 108/117, 1.0 task/s, elapsed: 113s, ETA:     9s
+Test 108_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 109/117, 1.0 task/s, elapsed: 114s, ETA:     8s
+Test 109_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 110/117, 1.0 task/s, elapsed: 115s, ETA:     7s
+Test 110_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 111/117, 1.0 task/s, elapsed: 116s, ETA:     6s
+Test 111_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 112/117, 1.0 task/s, elapsed: 117s, ETA:     5s
+Test 112_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 113/117, 1.0 task/s, elapsed: 118s, ETA:     4s
+Test 113_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 114/117, 1.0 task/s, elapsed: 119s, ETA:     3s
+Test 114_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 115/117, 1.0 task/s, elapsed: 120s, ETA:     2s
+Test 115_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 116/117, 1.0 task/s, elapsed: 121s, ETA:     1s
+Test 116_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>] 117/117, 1.0 task/s, elapsed: 123s, ETA:     0s
+Test 117_bicx2
+23-05-04 04:19:48.523 - INFO: # Validation # PSNR: 1.8793e+01
+23-05-04 04:19:48.524 - INFO: Saving models and training states.
+23-05-04 04:21:32.978 - INFO: [epoch:  1, iter:  20,100, lr:(1.992e-04,)] l_pix: 7.3300e-02 
+23-05-04 04:23:18.251 - INFO: [epoch:  1, iter:  20,200, lr:(1.992e-04,)] l_pix: 9.2682e-02 
+23-05-04 04:25:03.883 - INFO: [epoch:  1, iter:  20,300, lr:(1.992e-04,)] l_pix: 4.9725e-02 
+23-05-04 04:26:49.077 - INFO: [epoch:  1, iter:  20,400, lr:(1.992e-04,)] l_pix: 9.1552e-02 
+23-05-04 04:28:34.977 - INFO: [epoch:  1, iter:  20,500, lr:(1.992e-04,)] l_pix: 9.0186e-02 
+23-05-04 04:30:20.799 - INFO: [epoch:  1, iter:  20,600, lr:(1.992e-04,)] l_pix: 7.5761e-02 
+23-05-04 04:32:06.409 - INFO: [epoch:  1, iter:  20,700, lr:(1.992e-04,)] l_pix: 4.2547e-02 
+23-05-04 04:33:52.499 - INFO: [epoch:  1, iter:  20,800, lr:(1.991e-04,)] l_pix: 7.3445e-02 
+23-05-04 04:35:37.817 - INFO: [epoch:  1, iter:  20,900, lr:(1.991e-04,)] l_pix: 7.6206e-02 
+23-05-04 04:37:24.034 - INFO: [epoch:  1, iter:  21,000, lr:(1.991e-04,)] l_pix: 1.2574e-01 
+23-05-04 04:39:09.819 - INFO: [epoch:  1, iter:  21,100, lr:(1.991e-04,)] l_pix: 1.0180e-01 
+23-05-04 04:40:55.525 - INFO: [epoch:  1, iter:  21,200, lr:(1.991e-04,)] l_pix: 1.2102e-01 
+23-05-04 04:42:40.931 - INFO: [epoch:  1, iter:  21,300, lr:(1.991e-04,)] l_pix: 5.4119e-02 
+23-05-04 04:44:27.044 - INFO: [epoch:  1, iter:  21,400, lr:(1.991e-04,)] l_pix: 5.9267e-02 
+23-05-04 04:46:12.696 - INFO: [epoch:  1, iter:  21,500, lr:(1.991e-04,)] l_pix: 3.4558e-02 
+23-05-04 04:47:58.107 - INFO: [epoch:  1, iter:  21,600, lr:(1.991e-04,)] l_pix: 8.6896e-02 
+23-05-04 04:49:44.221 - INFO: [epoch:  1, iter:  21,700, lr:(1.991e-04,)] l_pix: 3.9332e-02 
+23-05-04 04:51:29.961 - INFO: [epoch:  1, iter:  21,800, lr:(1.991e-04,)] l_pix: 7.2927e-02 
+23-05-04 04:53:15.189 - INFO: [epoch:  1, iter:  21,900, lr:(1.991e-04,)] l_pix: 7.2208e-02 
+23-05-04 04:55:00.834 - INFO: [epoch:  1, iter:  22,000, lr:(1.990e-04,)] l_pix: 1.2034e-01 
+23-05-04 04:56:46.621 - INFO: [epoch:  1, iter:  22,100, lr:(1.990e-04,)] l_pix: 5.2983e-02 
+23-05-04 04:58:32.310 - INFO: [epoch:  1, iter:  22,200, lr:(1.990e-04,)] l_pix: 7.1172e-02 
+23-05-04 05:00:18.237 - INFO: [epoch:  1, iter:  22,300, lr:(1.990e-04,)] l_pix: 7.4370e-02 
+23-05-04 05:02:04.145 - INFO: [epoch:  1, iter:  22,400, lr:(1.990e-04,)] l_pix: 1.0490e-01 
+23-05-04 05:03:49.591 - INFO: [epoch:  1, iter:  22,500, lr:(1.990e-04,)] l_pix: 7.8440e-02 
+23-05-04 05:05:35.026 - INFO: [epoch:  1, iter:  22,600, lr:(1.990e-04,)] l_pix: 1.2407e-01 
+23-05-04 05:07:20.744 - INFO: [epoch:  1, iter:  22,700, lr:(1.990e-04,)] l_pix: 1.1185e-01 
+23-05-04 05:09:06.382 - INFO: [epoch:  1, iter:  22,800, lr:(1.990e-04,)] l_pix: 2.7696e-02 
+23-05-04 05:10:52.045 - INFO: [epoch:  1, iter:  22,900, lr:(1.990e-04,)] l_pix: 6.3598e-02 
+23-05-04 05:12:37.724 - INFO: [epoch:  1, iter:  23,000, lr:(1.990e-04,)] l_pix: 3.4877e-02 
+23-05-04 05:14:23.141 - INFO: [epoch:  1, iter:  23,100, lr:(1.989e-04,)] l_pix: 1.1034e-01 
+23-05-04 05:16:08.590 - INFO: [epoch:  1, iter:  23,200, lr:(1.989e-04,)] l_pix: 1.3232e-01 
+23-05-04 05:17:53.702 - INFO: [epoch:  1, iter:  23,300, lr:(1.989e-04,)] l_pix: 1.4624e-01 
+23-05-04 05:19:39.202 - INFO: [epoch:  1, iter:  23,400, lr:(1.989e-04,)] l_pix: 7.3441e-02 
+23-05-04 05:21:25.142 - INFO: [epoch:  1, iter:  23,500, lr:(1.989e-04,)] l_pix: 1.3479e-01 
+23-05-04 05:23:11.102 - INFO: [epoch:  1, iter:  23,600, lr:(1.989e-04,)] l_pix: 6.6909e-02 
+23-05-04 05:24:56.871 - INFO: [epoch:  1, iter:  23,700, lr:(1.989e-04,)] l_pix: 1.1223e-01 
+23-05-04 05:26:42.290 - INFO: [epoch:  1, iter:  23,800, lr:(1.989e-04,)] l_pix: 6.4511e-02 
+23-05-04 05:28:27.379 - INFO: [epoch:  1, iter:  23,900, lr:(1.989e-04,)] l_pix: 2.3921e-02 
+23-05-04 05:30:13.051 - INFO: [epoch:  1, iter:  24,000, lr:(1.989e-04,)] l_pix: 9.7032e-02 
+23-05-04 05:31:59.138 - INFO: [epoch:  1, iter:  24,100, lr:(1.989e-04,)] l_pix: 1.3771e-01 
+23-05-04 05:33:44.490 - INFO: [epoch:  1, iter:  24,200, lr:(1.988e-04,)] l_pix: 8.6186e-02 
+23-05-04 05:35:30.122 - INFO: [epoch:  1, iter:  24,300, lr:(1.988e-04,)] l_pix: 6.3170e-02 
+23-05-04 05:37:15.974 - INFO: [epoch:  1, iter:  24,400, lr:(1.988e-04,)] l_pix: 1.1798e-01 
+23-05-04 05:39:01.345 - INFO: [epoch:  1, iter:  24,500, lr:(1.988e-04,)] l_pix: 7.7283e-02 
+23-05-04 05:40:47.131 - INFO: [epoch:  1, iter:  24,600, lr:(1.988e-04,)] l_pix: 7.6028e-02 
+23-05-04 05:42:32.798 - INFO: [epoch:  1, iter:  24,700, lr:(1.988e-04,)] l_pix: 1.3880e-01 
+23-05-04 05:44:18.641 - INFO: [epoch:  2, iter:  24,800, lr:(1.988e-04,)] l_pix: 6.8247e-02 
+23-05-04 05:46:04.169 - INFO: [epoch:  2, iter:  24,900, lr:(1.988e-04,)] l_pix: 7.5171e-02 
+23-05-04 05:47:49.814 - INFO: [epoch:  2, iter:  25,000, lr:(1.988e-04,)] l_pix: 1.5607e-01 
+23-05-04 05:49:35.200 - INFO: [epoch:  2, iter:  25,100, lr:(1.988e-04,)] l_pix: 8.5360e-02 
+23-05-04 05:51:20.468 - INFO: [epoch:  2, iter:  25,200, lr:(1.987e-04,)] l_pix: 9.4537e-02 
+23-05-04 05:53:05.970 - INFO: [epoch:  2, iter:  25,300, lr:(1.987e-04,)] l_pix: 5.2976e-02 
+23-05-04 05:54:51.509 - INFO: [epoch:  2, iter:  25,400, lr:(1.987e-04,)] l_pix: 7.5281e-02 
+23-05-04 05:56:36.742 - INFO: [epoch:  2, iter:  25,500, lr:(1.987e-04,)] l_pix: 1.7184e-01 
+23-05-04 05:58:22.755 - INFO: [epoch:  2, iter:  25,600, lr:(1.987e-04,)] l_pix: 1.1571e-01 
+23-05-04 06:00:08.755 - INFO: [epoch:  2, iter:  25,700, lr:(1.987e-04,)] l_pix: 1.2034e-01 
+23-05-04 06:01:54.453 - INFO: [epoch:  2, iter:  25,800, lr:(1.987e-04,)] l_pix: 1.0485e-01 
+23-05-04 06:03:40.007 - INFO: [epoch:  2, iter:  25,900, lr:(1.987e-04,)] l_pix: 7.8999e-02 
+23-05-04 06:05:25.437 - INFO: [epoch:  2, iter:  26,000, lr:(1.987e-04,)] l_pix: 1.3722e-01 
+23-05-04 06:07:10.884 - INFO: [epoch:  2, iter:  26,100, lr:(1.987e-04,)] l_pix: 8.1637e-02 
+23-05-04 06:08:56.854 - INFO: [epoch:  2, iter:  26,200, lr:(1.986e-04,)] l_pix: 1.1889e-01 
+23-05-04 06:10:42.904 - INFO: [epoch:  2, iter:  26,300, lr:(1.986e-04,)] l_pix: 2.8865e-02 
+23-05-04 06:12:28.343 - INFO: [epoch:  2, iter:  26,400, lr:(1.986e-04,)] l_pix: 1.1935e-01 
+23-05-04 06:14:13.627 - INFO: [epoch:  2, iter:  26,500, lr:(1.986e-04,)] l_pix: 7.7793e-02 
+23-05-04 06:15:59.371 - INFO: [epoch:  2, iter:  26,600, lr:(1.986e-04,)] l_pix: 9.2701e-02 
+23-05-04 06:17:44.342 - INFO: [epoch:  2, iter:  26,700, lr:(1.986e-04,)] l_pix: 9.1892e-02 
+23-05-04 06:19:29.859 - INFO: [epoch:  2, iter:  26,800, lr:(1.986e-04,)] l_pix: 8.7334e-02 
+23-05-04 06:21:15.468 - INFO: [epoch:  2, iter:  26,900, lr:(1.986e-04,)] l_pix: 8.5454e-02 
+23-05-04 06:23:01.153 - INFO: [epoch:  2, iter:  27,000, lr:(1.986e-04,)] l_pix: 7.2574e-02 
+23-05-04 06:24:46.853 - INFO: [epoch:  2, iter:  27,100, lr:(1.986e-04,)] l_pix: 2.2570e-01 
+23-05-04 06:26:32.767 - INFO: [epoch:  2, iter:  27,200, lr:(1.985e-04,)] l_pix: 1.7714e-01 
+23-05-04 06:28:18.180 - INFO: [epoch:  2, iter:  27,300, lr:(1.985e-04,)] l_pix: 9.2258e-02 
+23-05-04 06:30:03.917 - INFO: [epoch:  2, iter:  27,400, lr:(1.985e-04,)] l_pix: 7.1998e-02 
+23-05-04 06:31:49.712 - INFO: [epoch:  2, iter:  27,500, lr:(1.985e-04,)] l_pix: 9.8934e-02 
+23-05-04 06:33:35.996 - INFO: [epoch:  2, iter:  27,600, lr:(1.985e-04,)] l_pix: 1.1050e-01 
+23-05-04 06:35:21.497 - INFO: [epoch:  2, iter:  27,700, lr:(1.985e-04,)] l_pix: 7.7992e-02 
+23-05-04 06:37:06.731 - INFO: [epoch:  2, iter:  27,800, lr:(1.985e-04,)] l_pix: 1.7008e-01 
+23-05-04 06:38:52.169 - INFO: [epoch:  2, iter:  27,900, lr:(1.985e-04,)] l_pix: 6.2150e-02 
+23-05-04 06:40:38.085 - INFO: [epoch:  2, iter:  28,000, lr:(1.985e-04,)] l_pix: 1.0977e-01 
+23-05-04 06:42:23.048 - INFO: [epoch:  2, iter:  28,100, lr:(1.984e-04,)] l_pix: 7.6738e-02 
+23-05-04 06:44:08.802 - INFO: [epoch:  2, iter:  28,200, lr:(1.984e-04,)] l_pix: 7.4755e-02 
+23-05-04 06:45:54.327 - INFO: [epoch:  2, iter:  28,300, lr:(1.984e-04,)] l_pix: 1.4787e-01 
+23-05-04 06:47:40.021 - INFO: [epoch:  2, iter:  28,400, lr:(1.984e-04,)] l_pix: 1.7053e-02 
+23-05-04 06:49:25.411 - INFO: [epoch:  2, iter:  28,500, lr:(1.984e-04,)] l_pix: 1.2813e-01 
+23-05-04 06:51:10.475 - INFO: [epoch:  2, iter:  28,600, lr:(1.984e-04,)] l_pix: 9.6381e-02 
+23-05-04 06:52:55.541 - INFO: [epoch:  2, iter:  28,700, lr:(1.984e-04,)] l_pix: 1.0504e-01 
+23-05-04 06:54:40.990 - INFO: [epoch:  2, iter:  28,800, lr:(1.984e-04,)] l_pix: 8.7069e-02 
+23-05-04 06:56:26.356 - INFO: [epoch:  2, iter:  28,900, lr:(1.984e-04,)] l_pix: 7.9597e-02 
+23-05-04 06:58:11.437 - INFO: [epoch:  2, iter:  29,000, lr:(1.983e-04,)] l_pix: 1.0120e-01 
+23-05-04 06:59:57.176 - INFO: [epoch:  2, iter:  29,100, lr:(1.983e-04,)] l_pix: 7.7221e-02 
+23-05-04 07:01:42.818 - INFO: [epoch:  2, iter:  29,200, lr:(1.983e-04,)] l_pix: 1.2294e-01 
+23-05-04 07:03:28.102 - INFO: [epoch:  2, iter:  29,300, lr:(1.983e-04,)] l_pix: 8.2704e-02 
+23-05-04 07:05:13.611 - INFO: [epoch:  2, iter:  29,400, lr:(1.983e-04,)] l_pix: 1.5977e-01 
+23-05-04 07:06:59.193 - INFO: [epoch:  2, iter:  29,500, lr:(1.983e-04,)] l_pix: 8.5743e-02 
+23-05-04 07:08:44.835 - INFO: [epoch:  2, iter:  29,600, lr:(1.983e-04,)] l_pix: 6.3312e-02 
+23-05-04 07:10:30.092 - INFO: [epoch:  2, iter:  29,700, lr:(1.983e-04,)] l_pix: 7.1540e-02 
+23-05-04 07:12:15.688 - INFO: [epoch:  2, iter:  29,800, lr:(1.983e-04,)] l_pix: 7.3322e-02 
+23-05-04 07:14:01.111 - INFO: [epoch:  2, iter:  29,900, lr:(1.982e-04,)] l_pix: 1.0285e-01 
+23-05-04 07:15:46.754 - INFO: [epoch:  2, iter:  30,000, lr:(1.982e-04,)] l_pix: 1.5451e-01 
+[                              ] 0/117, elapsed: 0s, ETA:
+Start...
+[2F[J[------------------------------] 1/117, 0.5 task/s, elapsed: 2s, ETA:   250s
+Test 001_bicx2
+[2F[J[------------------------------] 2/117, 0.6 task/s, elapsed: 3s, ETA:   185s
+Test 002_bicx2
+[2F[J[------------------------------] 3/117, 0.7 task/s, elapsed: 4s, ETA:   162s
+Test 003_bicx2
+[2F[J[>-----------------------------] 4/117, 0.8 task/s, elapsed: 5s, ETA:   149s
+Test 004_bicx2
+[2F[J[>-----------------------------] 5/117, 0.8 task/s, elapsed: 6s, ETA:   141s
+Test 005_bicx2
+[2F[J[>-----------------------------] 6/117, 0.8 task/s, elapsed: 7s, ETA:   136s
+Test 006_bicx2
+[2F[J[>-----------------------------] 7/117, 0.8 task/s, elapsed: 8s, ETA:   131s
+Test 007_bicx2
+[2F[J[>>----------------------------] 8/117, 0.9 task/s, elapsed: 9s, ETA:   128s
+Test 008_bicx2
+[2F[J[>>----------------------------] 9/117, 0.9 task/s, elapsed: 10s, ETA:   125s
+Test 009_bicx2
+[2F[J[>>----------------------------] 10/117, 0.9 task/s, elapsed: 11s, ETA:   122s
+Test 010_bicx2
+[2F[J[>>----------------------------] 11/117, 0.9 task/s, elapsed: 12s, ETA:   120s
+Test 011_bicx2
+[2F[J[>>>---------------------------] 12/117, 0.9 task/s, elapsed: 13s, ETA:   118s
+Test 012_bicx2
+[2F[J[>>>---------------------------] 13/117, 0.9 task/s, elapsed: 15s, ETA:   116s
+Test 013_bicx2
+[2F[J[>>>---------------------------] 14/117, 0.9 task/s, elapsed: 16s, ETA:   114s
+Test 014_bicx2
+[2F[J[>>>---------------------------] 15/117, 0.9 task/s, elapsed: 17s, ETA:   113s
+Test 015_bicx2
+[2F[J[>>>>--------------------------] 16/117, 0.9 task/s, elapsed: 18s, ETA:   111s
+Test 016_bicx2
+[2F[J[>>>>--------------------------] 17/117, 0.9 task/s, elapsed: 19s, ETA:   110s
+Test 017_bicx2
+[2F[J[>>>>--------------------------] 18/117, 0.9 task/s, elapsed: 20s, ETA:   108s
+Test 018_bicx2
+[2F[J[>>>>--------------------------] 19/117, 0.9 task/s, elapsed: 21s, ETA:   107s
+Test 019_bicx2
+[2F[J[>>>>>-------------------------] 20/117, 0.9 task/s, elapsed: 22s, ETA:   105s
+Test 020_bicx2
+[2F[J[>>>>>-------------------------] 21/117, 0.9 task/s, elapsed: 23s, ETA:   104s
+Test 021_bicx2
+[2F[J[>>>>>-------------------------] 22/117, 0.9 task/s, elapsed: 24s, ETA:   103s
+Test 022_bicx2
+[2F[J[>>>>>-------------------------] 23/117, 0.9 task/s, elapsed: 25s, ETA:   101s
+Test 023_bicx2
+[2F[J[>>>>>>------------------------] 24/117, 0.9 task/s, elapsed: 26s, ETA:   100s
+Test 024_bicx2
+[2F[J[>>>>>>------------------------] 25/117, 0.9 task/s, elapsed: 27s, ETA:    99s
+Test 025_bicx2
+[2F[J[>>>>>>------------------------] 26/117, 0.9 task/s, elapsed: 28s, ETA:    98s
+Test 026_bicx2
+[2F[J[>>>>>>------------------------] 27/117, 0.9 task/s, elapsed: 29s, ETA:    96s
+Test 027_bicx2
+[2F[J[>>>>>>>-----------------------] 28/117, 0.9 task/s, elapsed: 30s, ETA:    95s
+Test 028_bicx2
+[2F[J[>>>>>>>-----------------------] 29/117, 0.9 task/s, elapsed: 31s, ETA:    94s
+Test 029_bicx2
+[2F[J[>>>>>>>-----------------------] 30/117, 0.9 task/s, elapsed: 32s, ETA:    93s
+Test 030_bicx2
+[2F[J[>>>>>>>-----------------------] 31/117, 0.9 task/s, elapsed: 33s, ETA:    92s
+Test 031_bicx2
+[2F[J[>>>>>>>>----------------------] 32/117, 0.9 task/s, elapsed: 34s, ETA:    90s
+Test 032_bicx2
+[2F[J[>>>>>>>>----------------------] 33/117, 0.9 task/s, elapsed: 35s, ETA:    89s
+Test 033_bicx2
+[2F[J[>>>>>>>>----------------------] 34/117, 0.9 task/s, elapsed: 36s, ETA:    88s
+Test 034_bicx2
+[2F[J[>>>>>>>>----------------------] 35/117, 0.9 task/s, elapsed: 37s, ETA:    87s
+Test 035_bicx2
+[2F[J[>>>>>>>>>---------------------] 36/117, 0.9 task/s, elapsed: 38s, ETA:    86s
+Test 036_bicx2
+[2F[J[>>>>>>>>>---------------------] 37/117, 0.9 task/s, elapsed: 39s, ETA:    85s
+Test 037_bicx2
+[2F[J[>>>>>>>>>---------------------] 38/117, 0.9 task/s, elapsed: 40s, ETA:    84s
+Test 038_bicx2
+[2F[J[>>>>>>>>>>--------------------] 39/117, 0.9 task/s, elapsed: 41s, ETA:    82s
+Test 039_bicx2
+[2F[J[>>>>>>>>>>--------------------] 40/117, 0.9 task/s, elapsed: 42s, ETA:    81s
+Test 040_bicx2
+[2F[J[>>>>>>>>>>--------------------] 41/117, 0.9 task/s, elapsed: 43s, ETA:    80s
+Test 041_bicx2
+[2F[J[>>>>>>>>>>--------------------] 42/117, 0.9 task/s, elapsed: 44s, ETA:    79s
+Test 042_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 43/117, 0.9 task/s, elapsed: 45s, ETA:    78s
+Test 043_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 44/117, 0.9 task/s, elapsed: 46s, ETA:    77s
+Test 044_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 45/117, 0.9 task/s, elapsed: 47s, ETA:    76s
+Test 045_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 46/117, 0.9 task/s, elapsed: 48s, ETA:    75s
+Test 046_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 47/117, 0.9 task/s, elapsed: 49s, ETA:    74s
+Test 047_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 48/117, 1.0 task/s, elapsed: 51s, ETA:    73s
+Test 048_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 49/117, 1.0 task/s, elapsed: 52s, ETA:    72s
+Test 049_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 50/117, 1.0 task/s, elapsed: 53s, ETA:    70s
+Test 050_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 51/117, 1.0 task/s, elapsed: 54s, ETA:    69s
+Test 051_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 52/117, 1.0 task/s, elapsed: 55s, ETA:    68s
+Test 052_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 53/117, 1.0 task/s, elapsed: 56s, ETA:    67s
+Test 053_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 54/117, 1.0 task/s, elapsed: 57s, ETA:    66s
+Test 054_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 55/117, 1.0 task/s, elapsed: 58s, ETA:    65s
+Test 055_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 56/117, 1.0 task/s, elapsed: 59s, ETA:    64s
+Test 056_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 57/117, 1.0 task/s, elapsed: 60s, ETA:    63s
+Test 057_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 58/117, 1.0 task/s, elapsed: 61s, ETA:    62s
+Test 058_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 59/117, 1.0 task/s, elapsed: 62s, ETA:    61s
+Test 059_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 60/117, 1.0 task/s, elapsed: 63s, ETA:    60s
+Test 060_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 61/117, 1.0 task/s, elapsed: 64s, ETA:    59s
+Test 061_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 62/117, 1.0 task/s, elapsed: 65s, ETA:    58s
+Test 062_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 63/117, 1.0 task/s, elapsed: 66s, ETA:    57s
+Test 063_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 64/117, 1.0 task/s, elapsed: 67s, ETA:    56s
+Test 064_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 65/117, 1.0 task/s, elapsed: 68s, ETA:    54s
+Test 065_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 66/117, 1.0 task/s, elapsed: 69s, ETA:    53s
+Test 066_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 67/117, 1.0 task/s, elapsed: 70s, ETA:    52s
+Test 067_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 68/117, 1.0 task/s, elapsed: 71s, ETA:    51s
+Test 068_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 69/117, 1.0 task/s, elapsed: 72s, ETA:    50s
+Test 069_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 70/117, 1.0 task/s, elapsed: 73s, ETA:    49s
+Test 070_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 71/117, 1.0 task/s, elapsed: 74s, ETA:    48s
+Test 071_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 72/117, 1.0 task/s, elapsed: 75s, ETA:    47s
+Test 072_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 73/117, 1.0 task/s, elapsed: 76s, ETA:    46s
+Test 073_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 74/117, 1.0 task/s, elapsed: 77s, ETA:    45s
+Test 074_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 75/117, 1.0 task/s, elapsed: 78s, ETA:    44s
+Test 075_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 76/117, 1.0 task/s, elapsed: 79s, ETA:    43s
+Test 076_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 77/117, 1.0 task/s, elapsed: 80s, ETA:    42s
+Test 077_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 78/117, 1.0 task/s, elapsed: 81s, ETA:    41s
+Test 078_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 79/117, 1.0 task/s, elapsed: 82s, ETA:    40s
+Test 079_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 80/117, 1.0 task/s, elapsed: 84s, ETA:    39s
+Test 080_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 81/117, 1.0 task/s, elapsed: 85s, ETA:    38s
+Test 081_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 82/117, 1.0 task/s, elapsed: 86s, ETA:    37s
+Test 082_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 83/117, 1.0 task/s, elapsed: 87s, ETA:    35s
+Test 083_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 84/117, 1.0 task/s, elapsed: 88s, ETA:    34s
+Test 084_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 85/117, 1.0 task/s, elapsed: 89s, ETA:    33s
+Test 085_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 86/117, 1.0 task/s, elapsed: 90s, ETA:    32s
+Test 086_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 87/117, 1.0 task/s, elapsed: 91s, ETA:    31s
+Test 087_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 88/117, 1.0 task/s, elapsed: 92s, ETA:    30s
+Test 088_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 89/117, 1.0 task/s, elapsed: 93s, ETA:    29s
+Test 089_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 90/117, 1.0 task/s, elapsed: 94s, ETA:    28s
+Test 090_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 91/117, 1.0 task/s, elapsed: 95s, ETA:    27s
+Test 091_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 92/117, 1.0 task/s, elapsed: 96s, ETA:    26s
+Test 092_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 93/117, 1.0 task/s, elapsed: 97s, ETA:    25s
+Test 093_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 94/117, 1.0 task/s, elapsed: 98s, ETA:    24s
+Test 094_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 95/117, 1.0 task/s, elapsed: 99s, ETA:    23s
+Test 095_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 96/117, 1.0 task/s, elapsed: 100s, ETA:    22s
+Test 096_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 97/117, 1.0 task/s, elapsed: 101s, ETA:    21s
+Test 097_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 98/117, 1.0 task/s, elapsed: 102s, ETA:    20s
+Test 098_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 99/117, 1.0 task/s, elapsed: 103s, ETA:    19s
+Test 099_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 100/117, 1.0 task/s, elapsed: 104s, ETA:    18s
+Test 100_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 101/117, 1.0 task/s, elapsed: 105s, ETA:    17s
+Test 101_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 102/117, 1.0 task/s, elapsed: 106s, ETA:    16s
+Test 102_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 103/117, 1.0 task/s, elapsed: 107s, ETA:    15s
+Test 103_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 104/117, 1.0 task/s, elapsed: 108s, ETA:    14s
+Test 104_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 105/117, 1.0 task/s, elapsed: 109s, ETA:    12s
+Test 105_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 106/117, 1.0 task/s, elapsed: 110s, ETA:    11s
+Test 106_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 107/117, 1.0 task/s, elapsed: 111s, ETA:    10s
+Test 107_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 108/117, 1.0 task/s, elapsed: 112s, ETA:     9s
+Test 108_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 109/117, 1.0 task/s, elapsed: 113s, ETA:     8s
+Test 109_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 110/117, 1.0 task/s, elapsed: 114s, ETA:     7s
+Test 110_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 111/117, 1.0 task/s, elapsed: 115s, ETA:     6s
+Test 111_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 112/117, 1.0 task/s, elapsed: 116s, ETA:     5s
+Test 112_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 113/117, 1.0 task/s, elapsed: 117s, ETA:     4s
+Test 113_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 114/117, 1.0 task/s, elapsed: 119s, ETA:     3s
+Test 114_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 115/117, 1.0 task/s, elapsed: 120s, ETA:     2s
+Test 115_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 116/117, 1.0 task/s, elapsed: 121s, ETA:     1s
+Test 116_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>] 117/117, 1.0 task/s, elapsed: 122s, ETA:     0s
+Test 117_bicx2
+23-05-04 07:17:48.449 - INFO: # Validation # PSNR: 1.8780e+01
+23-05-04 07:19:33.126 - INFO: [epoch:  2, iter:  30,100, lr:(1.982e-04,)] l_pix: 6.8567e-02 
+23-05-04 07:21:18.838 - INFO: [epoch:  2, iter:  30,200, lr:(1.982e-04,)] l_pix: 7.4431e-02 
+23-05-04 07:23:04.791 - INFO: [epoch:  2, iter:  30,300, lr:(1.982e-04,)] l_pix: 6.1822e-02 
+23-05-04 07:24:50.566 - INFO: [epoch:  2, iter:  30,400, lr:(1.982e-04,)] l_pix: 8.9602e-02 
+23-05-04 07:26:36.133 - INFO: [epoch:  2, iter:  30,500, lr:(1.982e-04,)] l_pix: 7.4285e-02 
+23-05-04 07:28:22.344 - INFO: [epoch:  2, iter:  30,600, lr:(1.982e-04,)] l_pix: 1.4375e-01 
+23-05-04 07:30:08.226 - INFO: [epoch:  2, iter:  30,700, lr:(1.981e-04,)] l_pix: 1.2748e-01 
+23-05-04 07:31:53.503 - INFO: [epoch:  2, iter:  30,800, lr:(1.981e-04,)] l_pix: 9.5628e-02 
+23-05-04 07:33:38.636 - INFO: [epoch:  2, iter:  30,900, lr:(1.981e-04,)] l_pix: 1.9738e-01 
+23-05-04 07:35:24.214 - INFO: [epoch:  2, iter:  31,000, lr:(1.981e-04,)] l_pix: 3.9893e-02 
+23-05-04 07:37:09.979 - INFO: [epoch:  2, iter:  31,100, lr:(1.981e-04,)] l_pix: 1.3591e-01 
+23-05-04 07:38:55.698 - INFO: [epoch:  2, iter:  31,200, lr:(1.981e-04,)] l_pix: 3.3977e-02 
+23-05-04 07:40:41.507 - INFO: [epoch:  2, iter:  31,300, lr:(1.981e-04,)] l_pix: 8.5405e-02 
+23-05-04 07:42:27.402 - INFO: [epoch:  2, iter:  31,400, lr:(1.981e-04,)] l_pix: 7.8426e-02 
+23-05-04 07:44:12.867 - INFO: [epoch:  2, iter:  31,500, lr:(1.980e-04,)] l_pix: 1.6796e-01 
+23-05-04 07:45:58.430 - INFO: [epoch:  2, iter:  31,600, lr:(1.980e-04,)] l_pix: 7.1342e-02 
+23-05-04 07:47:43.871 - INFO: [epoch:  2, iter:  31,700, lr:(1.980e-04,)] l_pix: 9.0929e-02 
+23-05-04 07:49:29.567 - INFO: [epoch:  2, iter:  31,800, lr:(1.980e-04,)] l_pix: 3.4396e-02 
+23-05-04 07:51:15.651 - INFO: [epoch:  2, iter:  31,900, lr:(1.980e-04,)] l_pix: 8.5590e-02 
+23-05-04 07:53:01.040 - INFO: [epoch:  2, iter:  32,000, lr:(1.980e-04,)] l_pix: 3.9780e-02 
+23-05-04 07:54:47.077 - INFO: [epoch:  2, iter:  32,100, lr:(1.980e-04,)] l_pix: 3.6237e-02 
+23-05-04 07:56:32.570 - INFO: [epoch:  2, iter:  32,200, lr:(1.980e-04,)] l_pix: 9.5355e-02 
+23-05-04 07:58:18.020 - INFO: [epoch:  2, iter:  32,300, lr:(1.979e-04,)] l_pix: 9.4785e-02 
+23-05-04 08:00:04.102 - INFO: [epoch:  2, iter:  32,400, lr:(1.979e-04,)] l_pix: 7.0436e-02 
+23-05-04 08:01:49.401 - INFO: [epoch:  2, iter:  32,500, lr:(1.979e-04,)] l_pix: 7.9126e-02 
+23-05-04 08:03:35.134 - INFO: [epoch:  2, iter:  32,600, lr:(1.979e-04,)] l_pix: 1.3115e-01 
+23-05-04 08:05:20.947 - INFO: [epoch:  2, iter:  32,700, lr:(1.979e-04,)] l_pix: 1.4142e-01 
+23-05-04 08:07:07.127 - INFO: [epoch:  2, iter:  32,800, lr:(1.979e-04,)] l_pix: 2.6111e-02 
+23-05-04 08:08:52.855 - INFO: [epoch:  2, iter:  32,900, lr:(1.979e-04,)] l_pix: 6.2375e-02 
+23-05-04 08:10:38.203 - INFO: [epoch:  2, iter:  33,000, lr:(1.979e-04,)] l_pix: 9.2492e-02 
+23-05-04 08:12:24.083 - INFO: [epoch:  2, iter:  33,100, lr:(1.978e-04,)] l_pix: 5.0715e-02 
+23-05-04 08:14:09.981 - INFO: [epoch:  2, iter:  33,200, lr:(1.978e-04,)] l_pix: 5.0163e-02 
+23-05-04 08:15:55.505 - INFO: [epoch:  2, iter:  33,300, lr:(1.978e-04,)] l_pix: 1.3450e-01 
+23-05-04 08:17:41.032 - INFO: [epoch:  2, iter:  33,400, lr:(1.978e-04,)] l_pix: 4.3098e-02 
+23-05-04 08:19:26.512 - INFO: [epoch:  2, iter:  33,500, lr:(1.978e-04,)] l_pix: 1.4135e-01 
+23-05-04 08:21:11.951 - INFO: [epoch:  2, iter:  33,600, lr:(1.978e-04,)] l_pix: 1.6262e-01 
+23-05-04 08:22:57.658 - INFO: [epoch:  2, iter:  33,700, lr:(1.978e-04,)] l_pix: 7.9250e-02 
+23-05-04 08:24:43.354 - INFO: [epoch:  2, iter:  33,800, lr:(1.978e-04,)] l_pix: 1.4019e-01 
+23-05-04 08:26:29.024 - INFO: [epoch:  2, iter:  33,900, lr:(1.977e-04,)] l_pix: 9.8587e-02 
+23-05-04 08:28:14.537 - INFO: [epoch:  2, iter:  34,000, lr:(1.977e-04,)] l_pix: 1.4881e-02 
+23-05-04 08:29:59.633 - INFO: [epoch:  2, iter:  34,100, lr:(1.977e-04,)] l_pix: 1.2173e-01 
+23-05-04 08:31:44.897 - INFO: [epoch:  2, iter:  34,200, lr:(1.977e-04,)] l_pix: 1.6130e-01 
+23-05-04 08:33:30.546 - INFO: [epoch:  2, iter:  34,300, lr:(1.977e-04,)] l_pix: 6.4715e-02 
+23-05-04 08:35:15.583 - INFO: [epoch:  2, iter:  34,400, lr:(1.977e-04,)] l_pix: 7.2802e-02 
+23-05-04 08:37:00.292 - INFO: [epoch:  2, iter:  34,500, lr:(1.977e-04,)] l_pix: 7.5376e-02 
+23-05-04 08:38:45.737 - INFO: [epoch:  2, iter:  34,600, lr:(1.976e-04,)] l_pix: 4.3258e-02 
+23-05-04 08:40:31.178 - INFO: [epoch:  2, iter:  34,700, lr:(1.976e-04,)] l_pix: 1.0572e-01 
+23-05-04 08:42:16.861 - INFO: [epoch:  2, iter:  34,800, lr:(1.976e-04,)] l_pix: 8.3896e-02 
+23-05-04 08:44:02.295 - INFO: [epoch:  2, iter:  34,900, lr:(1.976e-04,)] l_pix: 1.2939e-01 
+23-05-04 08:45:48.073 - INFO: [epoch:  2, iter:  35,000, lr:(1.976e-04,)] l_pix: 4.0598e-02 
+23-05-04 08:47:33.959 - INFO: [epoch:  2, iter:  35,100, lr:(1.976e-04,)] l_pix: 1.4145e-01 
+23-05-04 08:49:19.321 - INFO: [epoch:  2, iter:  35,200, lr:(1.976e-04,)] l_pix: 6.8972e-02 
+23-05-04 08:51:04.783 - INFO: [epoch:  2, iter:  35,300, lr:(1.976e-04,)] l_pix: 1.0493e-01 
+23-05-04 08:52:50.695 - INFO: [epoch:  2, iter:  35,400, lr:(1.975e-04,)] l_pix: 1.6730e-01 
+23-05-04 08:54:36.181 - INFO: [epoch:  2, iter:  35,500, lr:(1.975e-04,)] l_pix: 7.2570e-02 
+23-05-04 08:56:21.672 - INFO: [epoch:  2, iter:  35,600, lr:(1.975e-04,)] l_pix: 7.6229e-02 
+23-05-04 08:58:06.948 - INFO: [epoch:  2, iter:  35,700, lr:(1.975e-04,)] l_pix: 1.0152e-01 
+23-05-04 08:59:52.211 - INFO: [epoch:  2, iter:  35,800, lr:(1.975e-04,)] l_pix: 1.3374e-01 
+23-05-04 09:01:38.190 - INFO: [epoch:  2, iter:  35,900, lr:(1.975e-04,)] l_pix: 5.5619e-02 
+23-05-04 09:03:23.749 - INFO: [epoch:  2, iter:  36,000, lr:(1.975e-04,)] l_pix: 6.2684e-02 
+23-05-04 09:05:09.105 - INFO: [epoch:  2, iter:  36,100, lr:(1.974e-04,)] l_pix: 3.1042e-02 
+23-05-04 09:06:54.665 - INFO: [epoch:  2, iter:  36,200, lr:(1.974e-04,)] l_pix: 7.9265e-02 
+23-05-04 09:08:40.265 - INFO: [epoch:  2, iter:  36,300, lr:(1.974e-04,)] l_pix: 6.0100e-02 
+23-05-04 09:10:26.086 - INFO: [epoch:  2, iter:  36,400, lr:(1.974e-04,)] l_pix: 4.0579e-02 
+23-05-04 09:12:11.899 - INFO: [epoch:  2, iter:  36,500, lr:(1.974e-04,)] l_pix: 7.8193e-02 
+23-05-04 09:13:57.669 - INFO: [epoch:  2, iter:  36,600, lr:(1.974e-04,)] l_pix: 1.1276e-01 
+23-05-04 09:15:43.331 - INFO: [epoch:  2, iter:  36,700, lr:(1.974e-04,)] l_pix: 1.2951e-01 
+23-05-04 09:17:29.222 - INFO: [epoch:  2, iter:  36,800, lr:(1.973e-04,)] l_pix: 6.9018e-02 
+23-05-04 09:19:15.056 - INFO: [epoch:  2, iter:  36,900, lr:(1.973e-04,)] l_pix: 5.7610e-02 
+23-05-04 09:21:00.113 - INFO: [epoch:  2, iter:  37,000, lr:(1.973e-04,)] l_pix: 4.7525e-02 
+23-05-04 09:22:45.508 - INFO: [epoch:  3, iter:  37,100, lr:(1.973e-04,)] l_pix: 1.4986e-01 
+23-05-04 09:24:31.491 - INFO: [epoch:  3, iter:  37,200, lr:(1.973e-04,)] l_pix: 8.3644e-02 
+23-05-04 09:26:17.613 - INFO: [epoch:  3, iter:  37,300, lr:(1.973e-04,)] l_pix: 7.0203e-02 
+23-05-04 09:28:03.413 - INFO: [epoch:  3, iter:  37,400, lr:(1.973e-04,)] l_pix: 8.7656e-02 
+23-05-04 09:29:48.929 - INFO: [epoch:  3, iter:  37,500, lr:(1.972e-04,)] l_pix: 1.1645e-01 
+23-05-04 09:31:34.557 - INFO: [epoch:  3, iter:  37,600, lr:(1.972e-04,)] l_pix: 1.1737e-01 
+23-05-04 09:33:19.642 - INFO: [epoch:  3, iter:  37,700, lr:(1.972e-04,)] l_pix: 7.9006e-02 
+23-05-04 09:35:05.659 - INFO: [epoch:  3, iter:  37,800, lr:(1.972e-04,)] l_pix: 3.8116e-02 
+23-05-04 09:36:51.363 - INFO: [epoch:  3, iter:  37,900, lr:(1.972e-04,)] l_pix: 1.4016e-01 
+23-05-04 09:38:37.054 - INFO: [epoch:  3, iter:  38,000, lr:(1.972e-04,)] l_pix: 7.0147e-02 
+23-05-04 09:40:22.522 - INFO: [epoch:  3, iter:  38,100, lr:(1.971e-04,)] l_pix: 6.2527e-02 
+23-05-04 09:42:07.870 - INFO: [epoch:  3, iter:  38,200, lr:(1.971e-04,)] l_pix: 5.5887e-02 
+23-05-04 09:43:53.002 - INFO: [epoch:  3, iter:  38,300, lr:(1.971e-04,)] l_pix: 8.8567e-02 
+23-05-04 09:45:39.200 - INFO: [epoch:  3, iter:  38,400, lr:(1.971e-04,)] l_pix: 1.1201e-01 
+23-05-04 09:47:25.369 - INFO: [epoch:  3, iter:  38,500, lr:(1.971e-04,)] l_pix: 5.7132e-02 
+23-05-04 09:49:10.941 - INFO: [epoch:  3, iter:  38,600, lr:(1.971e-04,)] l_pix: 1.2863e-01 
+23-05-04 09:50:56.937 - INFO: [epoch:  3, iter:  38,700, lr:(1.971e-04,)] l_pix: 1.4654e-01 
+23-05-04 09:52:42.757 - INFO: [epoch:  3, iter:  38,800, lr:(1.970e-04,)] l_pix: 3.6901e-02 
+23-05-04 09:54:28.105 - INFO: [epoch:  3, iter:  38,900, lr:(1.970e-04,)] l_pix: 1.3748e-01 
+23-05-04 09:56:13.752 - INFO: [epoch:  3, iter:  39,000, lr:(1.970e-04,)] l_pix: 9.1436e-02 
+23-05-04 09:57:59.272 - INFO: [epoch:  3, iter:  39,100, lr:(1.970e-04,)] l_pix: 5.0075e-02 
+23-05-04 09:59:45.080 - INFO: [epoch:  3, iter:  39,200, lr:(1.970e-04,)] l_pix: 4.2325e-02 
+23-05-04 10:01:30.696 - INFO: [epoch:  3, iter:  39,300, lr:(1.970e-04,)] l_pix: 1.0124e-01 
+23-05-04 10:03:16.083 - INFO: [epoch:  3, iter:  39,400, lr:(1.970e-04,)] l_pix: 1.3088e-01 
+23-05-04 10:05:02.128 - INFO: [epoch:  3, iter:  39,500, lr:(1.969e-04,)] l_pix: 9.1692e-02 
+23-05-04 10:06:47.872 - INFO: [epoch:  3, iter:  39,600, lr:(1.969e-04,)] l_pix: 1.0906e-01 
+23-05-04 10:08:33.363 - INFO: [epoch:  3, iter:  39,700, lr:(1.969e-04,)] l_pix: 7.5380e-02 
+23-05-04 10:10:18.752 - INFO: [epoch:  3, iter:  39,800, lr:(1.969e-04,)] l_pix: 7.7814e-02 
+23-05-04 10:12:04.826 - INFO: [epoch:  3, iter:  39,900, lr:(1.969e-04,)] l_pix: 1.2949e-01 
+23-05-04 10:13:51.322 - INFO: [epoch:  3, iter:  40,000, lr:(1.969e-04,)] l_pix: 1.3293e-01 
+[                              ] 0/117, elapsed: 0s, ETA:
+Start...
+[2F[J[------------------------------] 1/117, 0.4 task/s, elapsed: 2s, ETA:   270s
+Test 001_bicx2
+[2F[J[------------------------------] 2/117, 0.6 task/s, elapsed: 3s, ETA:   195s
+Test 002_bicx2
+[2F[J[------------------------------] 3/117, 0.7 task/s, elapsed: 4s, ETA:   168s
+Test 003_bicx2
+[2F[J[>-----------------------------] 4/117, 0.7 task/s, elapsed: 5s, ETA:   154s
+Test 004_bicx2
+[2F[J[>-----------------------------] 5/117, 0.8 task/s, elapsed: 7s, ETA:   146s
+Test 005_bicx2
+[2F[J[>-----------------------------] 6/117, 0.8 task/s, elapsed: 8s, ETA:   140s
+Test 006_bicx2
+[2F[J[>-----------------------------] 7/117, 0.8 task/s, elapsed: 9s, ETA:   135s
+Test 007_bicx2
+[2F[J[>>----------------------------] 8/117, 0.8 task/s, elapsed: 10s, ETA:   131s
+Test 008_bicx2
+[2F[J[>>----------------------------] 9/117, 0.8 task/s, elapsed: 11s, ETA:   128s
+Test 009_bicx2
+[2F[J[>>----------------------------] 10/117, 0.9 task/s, elapsed: 12s, ETA:   125s
+Test 010_bicx2
+[2F[J[>>----------------------------] 11/117, 0.9 task/s, elapsed: 13s, ETA:   123s
+Test 011_bicx2
+[2F[J[>>>---------------------------] 12/117, 0.9 task/s, elapsed: 14s, ETA:   121s
+Test 012_bicx2
+[2F[J[>>>---------------------------] 13/117, 0.9 task/s, elapsed: 15s, ETA:   119s
+Test 013_bicx2
+[2F[J[>>>---------------------------] 14/117, 0.9 task/s, elapsed: 16s, ETA:   117s
+Test 014_bicx2
+[2F[J[>>>---------------------------] 15/117, 0.9 task/s, elapsed: 17s, ETA:   115s
+Test 015_bicx2
+[2F[J[>>>>--------------------------] 16/117, 0.9 task/s, elapsed: 18s, ETA:   113s
+Test 016_bicx2
+[2F[J[>>>>--------------------------] 17/117, 0.9 task/s, elapsed: 19s, ETA:   112s
+Test 017_bicx2
+[2F[J[>>>>--------------------------] 18/117, 0.9 task/s, elapsed: 20s, ETA:   110s
+Test 018_bicx2
+[2F[J[>>>>--------------------------] 19/117, 0.9 task/s, elapsed: 21s, ETA:   108s
+Test 019_bicx2
+[2F[J[>>>>>-------------------------] 20/117, 0.9 task/s, elapsed: 22s, ETA:   107s
+Test 020_bicx2
+[2F[J[>>>>>-------------------------] 21/117, 0.9 task/s, elapsed: 23s, ETA:   106s
+Test 021_bicx2
+[2F[J[>>>>>-------------------------] 22/117, 0.9 task/s, elapsed: 24s, ETA:   104s
+Test 022_bicx2
+[2F[J[>>>>>-------------------------] 23/117, 0.9 task/s, elapsed: 25s, ETA:   103s
+Test 023_bicx2
+[2F[J[>>>>>>------------------------] 24/117, 0.9 task/s, elapsed: 26s, ETA:   102s
+Test 024_bicx2
+[2F[J[>>>>>>------------------------] 25/117, 0.9 task/s, elapsed: 27s, ETA:   100s
+Test 025_bicx2
+[2F[J[>>>>>>------------------------] 26/117, 0.9 task/s, elapsed: 28s, ETA:    99s
+Test 026_bicx2
+[2F[J[>>>>>>------------------------] 27/117, 0.9 task/s, elapsed: 29s, ETA:    98s
+Test 027_bicx2
+[2F[J[>>>>>>>-----------------------] 28/117, 0.9 task/s, elapsed: 30s, ETA:    96s
+Test 028_bicx2
+[2F[J[>>>>>>>-----------------------] 29/117, 0.9 task/s, elapsed: 31s, ETA:    95s
+Test 029_bicx2
+[2F[J[>>>>>>>-----------------------] 30/117, 0.9 task/s, elapsed: 32s, ETA:    94s
+Test 030_bicx2
+[2F[J[>>>>>>>-----------------------] 31/117, 0.9 task/s, elapsed: 33s, ETA:    93s
+Test 031_bicx2
+[2F[J[>>>>>>>>----------------------] 32/117, 0.9 task/s, elapsed: 35s, ETA:    92s
+Test 032_bicx2
+[2F[J[>>>>>>>>----------------------] 33/117, 0.9 task/s, elapsed: 36s, ETA:    90s
+Test 033_bicx2
+[2F[J[>>>>>>>>----------------------] 34/117, 0.9 task/s, elapsed: 37s, ETA:    89s
+Test 034_bicx2
+[2F[J[>>>>>>>>----------------------] 35/117, 0.9 task/s, elapsed: 38s, ETA:    88s
+Test 035_bicx2
+[2F[J[>>>>>>>>>---------------------] 36/117, 0.9 task/s, elapsed: 39s, ETA:    87s
+Test 036_bicx2
+[2F[J[>>>>>>>>>---------------------] 37/117, 0.9 task/s, elapsed: 40s, ETA:    86s
+Test 037_bicx2
+[2F[J[>>>>>>>>>---------------------] 38/117, 0.9 task/s, elapsed: 41s, ETA:    85s
+Test 038_bicx2
+[2F[J[>>>>>>>>>>--------------------] 39/117, 0.9 task/s, elapsed: 42s, ETA:    83s
+Test 039_bicx2
+[2F[J[>>>>>>>>>>--------------------] 40/117, 0.9 task/s, elapsed: 43s, ETA:    82s
+Test 040_bicx2
+[2F[J[>>>>>>>>>>--------------------] 41/117, 0.9 task/s, elapsed: 44s, ETA:    81s
+Test 041_bicx2
+[2F[J[>>>>>>>>>>--------------------] 42/117, 0.9 task/s, elapsed: 45s, ETA:    80s
+Test 042_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 43/117, 0.9 task/s, elapsed: 46s, ETA:    79s
+Test 043_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 44/117, 0.9 task/s, elapsed: 47s, ETA:    78s
+Test 044_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 45/117, 0.9 task/s, elapsed: 48s, ETA:    77s
+Test 045_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 46/117, 0.9 task/s, elapsed: 49s, ETA:    76s
+Test 046_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 47/117, 0.9 task/s, elapsed: 50s, ETA:    74s
+Test 047_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 48/117, 0.9 task/s, elapsed: 51s, ETA:    73s
+Test 048_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 49/117, 0.9 task/s, elapsed: 52s, ETA:    72s
+Test 049_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 50/117, 0.9 task/s, elapsed: 53s, ETA:    71s
+Test 050_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 51/117, 0.9 task/s, elapsed: 54s, ETA:    70s
+Test 051_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 52/117, 0.9 task/s, elapsed: 55s, ETA:    69s
+Test 052_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 53/117, 0.9 task/s, elapsed: 56s, ETA:    68s
+Test 053_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 54/117, 0.9 task/s, elapsed: 57s, ETA:    67s
+Test 054_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 55/117, 0.9 task/s, elapsed: 58s, ETA:    66s
+Test 055_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 56/117, 0.9 task/s, elapsed: 59s, ETA:    65s
+Test 056_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 57/117, 0.9 task/s, elapsed: 60s, ETA:    63s
+Test 057_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 58/117, 0.9 task/s, elapsed: 61s, ETA:    62s
+Test 058_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 59/117, 0.9 task/s, elapsed: 62s, ETA:    61s
+Test 059_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 60/117, 0.9 task/s, elapsed: 63s, ETA:    60s
+Test 060_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 61/117, 0.9 task/s, elapsed: 64s, ETA:    59s
+Test 061_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 62/117, 0.9 task/s, elapsed: 65s, ETA:    58s
+Test 062_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 63/117, 0.9 task/s, elapsed: 67s, ETA:    57s
+Test 063_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 64/117, 0.9 task/s, elapsed: 68s, ETA:    56s
+Test 064_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 65/117, 0.9 task/s, elapsed: 69s, ETA:    55s
+Test 065_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 66/117, 0.9 task/s, elapsed: 70s, ETA:    54s
+Test 066_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 67/117, 0.9 task/s, elapsed: 71s, ETA:    53s
+Test 067_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 68/117, 0.9 task/s, elapsed: 72s, ETA:    52s
+Test 068_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 69/117, 0.9 task/s, elapsed: 73s, ETA:    51s
+Test 069_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 70/117, 0.9 task/s, elapsed: 74s, ETA:    50s
+Test 070_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 71/117, 0.9 task/s, elapsed: 75s, ETA:    48s
+Test 071_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 72/117, 0.9 task/s, elapsed: 76s, ETA:    47s
+Test 072_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 73/117, 0.9 task/s, elapsed: 77s, ETA:    46s
+Test 073_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 74/117, 1.0 task/s, elapsed: 78s, ETA:    45s
+Test 074_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 75/117, 1.0 task/s, elapsed: 79s, ETA:    44s
+Test 075_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 76/117, 1.0 task/s, elapsed: 80s, ETA:    43s
+Test 076_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 77/117, 1.0 task/s, elapsed: 81s, ETA:    42s
+Test 077_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 78/117, 1.0 task/s, elapsed: 82s, ETA:    41s
+Test 078_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 79/117, 1.0 task/s, elapsed: 83s, ETA:    40s
+Test 079_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 80/117, 1.0 task/s, elapsed: 84s, ETA:    39s
+Test 080_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 81/117, 1.0 task/s, elapsed: 85s, ETA:    38s
+Test 081_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 82/117, 1.0 task/s, elapsed: 86s, ETA:    37s
+Test 082_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 83/117, 1.0 task/s, elapsed: 87s, ETA:    36s
+Test 083_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 84/117, 1.0 task/s, elapsed: 88s, ETA:    35s
+Test 084_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 85/117, 1.0 task/s, elapsed: 89s, ETA:    34s
+Test 085_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 86/117, 1.0 task/s, elapsed: 90s, ETA:    33s
+Test 086_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 87/117, 1.0 task/s, elapsed: 91s, ETA:    31s
+Test 087_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 88/117, 1.0 task/s, elapsed: 92s, ETA:    30s
+Test 088_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 89/117, 1.0 task/s, elapsed: 93s, ETA:    29s
+Test 089_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 90/117, 1.0 task/s, elapsed: 94s, ETA:    28s
+Test 090_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 91/117, 1.0 task/s, elapsed: 95s, ETA:    27s
+Test 091_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 92/117, 1.0 task/s, elapsed: 96s, ETA:    26s
+Test 092_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 93/117, 1.0 task/s, elapsed: 97s, ETA:    25s
+Test 093_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 94/117, 1.0 task/s, elapsed: 98s, ETA:    24s
+Test 094_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 95/117, 1.0 task/s, elapsed: 99s, ETA:    23s
+Test 095_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 96/117, 1.0 task/s, elapsed: 101s, ETA:    22s
+Test 096_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 97/117, 1.0 task/s, elapsed: 102s, ETA:    21s
+Test 097_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 98/117, 1.0 task/s, elapsed: 103s, ETA:    20s
+Test 098_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 99/117, 1.0 task/s, elapsed: 104s, ETA:    19s
+Test 099_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 100/117, 1.0 task/s, elapsed: 105s, ETA:    18s
+Test 100_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 101/117, 1.0 task/s, elapsed: 106s, ETA:    17s
+Test 101_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 102/117, 1.0 task/s, elapsed: 107s, ETA:    16s
+Test 102_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 103/117, 1.0 task/s, elapsed: 108s, ETA:    15s
+Test 103_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 104/117, 1.0 task/s, elapsed: 109s, ETA:    14s
+Test 104_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 105/117, 1.0 task/s, elapsed: 110s, ETA:    13s
+Test 105_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 106/117, 1.0 task/s, elapsed: 111s, ETA:    11s
+Test 106_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 107/117, 1.0 task/s, elapsed: 112s, ETA:    10s
+Test 107_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 108/117, 1.0 task/s, elapsed: 113s, ETA:     9s
+Test 108_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 109/117, 1.0 task/s, elapsed: 114s, ETA:     8s
+Test 109_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 110/117, 1.0 task/s, elapsed: 115s, ETA:     7s
+Test 110_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 111/117, 1.0 task/s, elapsed: 116s, ETA:     6s
+Test 111_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 112/117, 1.0 task/s, elapsed: 117s, ETA:     5s
+Test 112_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 113/117, 1.0 task/s, elapsed: 118s, ETA:     4s
+Test 113_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 114/117, 1.0 task/s, elapsed: 119s, ETA:     3s
+Test 114_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 115/117, 1.0 task/s, elapsed: 120s, ETA:     2s
+Test 115_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 116/117, 1.0 task/s, elapsed: 121s, ETA:     1s
+Test 116_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>] 117/117, 1.0 task/s, elapsed: 122s, ETA:     0s
+Test 117_bicx2
+23-05-04 10:15:53.702 - INFO: # Validation # PSNR: 1.8788e+01
+23-05-04 10:15:53.702 - INFO: Saving models and training states.
+23-05-04 10:17:38.610 - INFO: [epoch:  3, iter:  40,100, lr:(1.968e-04,)] l_pix: 4.5021e-02 
+23-05-04 10:19:24.460 - INFO: [epoch:  3, iter:  40,200, lr:(1.968e-04,)] l_pix: 8.5404e-02 
+23-05-04 10:21:10.460 - INFO: [epoch:  3, iter:  40,300, lr:(1.968e-04,)] l_pix: 7.1338e-02 
+23-05-04 10:22:56.320 - INFO: [epoch:  3, iter:  40,400, lr:(1.968e-04,)] l_pix: 8.6697e-02 
+23-05-04 10:24:42.229 - INFO: [epoch:  3, iter:  40,500, lr:(1.968e-04,)] l_pix: 9.0048e-02 
+23-05-04 10:26:27.814 - INFO: [epoch:  3, iter:  40,600, lr:(1.968e-04,)] l_pix: 1.0331e-01 
+23-05-04 10:28:13.609 - INFO: [epoch:  3, iter:  40,700, lr:(1.967e-04,)] l_pix: 8.8083e-02 
+23-05-04 10:29:59.090 - INFO: [epoch:  3, iter:  40,800, lr:(1.967e-04,)] l_pix: 8.1234e-02 
+23-05-04 10:31:44.901 - INFO: [epoch:  3, iter:  40,900, lr:(1.967e-04,)] l_pix: 5.8793e-02 
+23-05-04 10:33:30.094 - INFO: [epoch:  3, iter:  41,000, lr:(1.967e-04,)] l_pix: 3.4182e-02 
+23-05-04 10:35:15.755 - INFO: [epoch:  3, iter:  41,100, lr:(1.967e-04,)] l_pix: 7.4565e-02 
+23-05-04 10:37:01.612 - INFO: [epoch:  3, iter:  41,200, lr:(1.967e-04,)] l_pix: 5.8926e-02 
+23-05-04 10:38:47.313 - INFO: [epoch:  3, iter:  41,300, lr:(1.967e-04,)] l_pix: 3.7245e-02 
+23-05-04 10:40:32.626 - INFO: [epoch:  3, iter:  41,400, lr:(1.966e-04,)] l_pix: 6.9282e-02 
+23-05-04 10:42:18.243 - INFO: [epoch:  3, iter:  41,500, lr:(1.966e-04,)] l_pix: 1.0570e-01 
+23-05-04 10:44:04.254 - INFO: [epoch:  3, iter:  41,600, lr:(1.966e-04,)] l_pix: 3.5852e-02 
+23-05-04 10:45:49.623 - INFO: [epoch:  3, iter:  41,700, lr:(1.966e-04,)] l_pix: 7.3227e-02 
+23-05-04 10:47:35.670 - INFO: [epoch:  3, iter:  41,800, lr:(1.966e-04,)] l_pix: 4.8766e-02 
+23-05-04 10:49:21.242 - INFO: [epoch:  3, iter:  41,900, lr:(1.966e-04,)] l_pix: 7.5343e-02 
+23-05-04 10:51:06.714 - INFO: [epoch:  3, iter:  42,000, lr:(1.965e-04,)] l_pix: 8.4443e-02 
+23-05-04 10:52:52.410 - INFO: [epoch:  3, iter:  42,100, lr:(1.965e-04,)] l_pix: 7.8801e-02 
+23-05-04 10:54:37.890 - INFO: [epoch:  3, iter:  42,200, lr:(1.965e-04,)] l_pix: 1.1786e-01 
+23-05-04 10:56:23.990 - INFO: [epoch:  3, iter:  42,300, lr:(1.965e-04,)] l_pix: 1.1775e-01 
+23-05-04 10:58:09.652 - INFO: [epoch:  3, iter:  42,400, lr:(1.965e-04,)] l_pix: 9.6910e-02 
+23-05-04 10:59:55.795 - INFO: [epoch:  3, iter:  42,500, lr:(1.965e-04,)] l_pix: 9.2912e-02 
+23-05-04 11:01:41.489 - INFO: [epoch:  3, iter:  42,600, lr:(1.964e-04,)] l_pix: 9.4330e-02 
+23-05-04 11:03:26.968 - INFO: [epoch:  3, iter:  42,700, lr:(1.964e-04,)] l_pix: 9.4372e-03 
+23-05-04 11:05:12.394 - INFO: [epoch:  3, iter:  42,800, lr:(1.964e-04,)] l_pix: 1.3650e-01 
+23-05-04 11:06:57.505 - INFO: [epoch:  3, iter:  42,900, lr:(1.964e-04,)] l_pix: 9.6982e-02 
+23-05-04 11:08:43.395 - INFO: [epoch:  3, iter:  43,000, lr:(1.964e-04,)] l_pix: 8.4319e-02 
+23-05-04 11:10:29.193 - INFO: [epoch:  3, iter:  43,100, lr:(1.964e-04,)] l_pix: 7.7199e-02 
+23-05-04 11:12:14.973 - INFO: [epoch:  3, iter:  43,200, lr:(1.963e-04,)] l_pix: 9.4280e-02 
+23-05-04 11:14:00.209 - INFO: [epoch:  3, iter:  43,300, lr:(1.963e-04,)] l_pix: 1.2411e-01 
+23-05-04 11:15:45.836 - INFO: [epoch:  3, iter:  43,400, lr:(1.963e-04,)] l_pix: 3.6306e-02 
+23-05-04 11:17:30.921 - INFO: [epoch:  3, iter:  43,500, lr:(1.963e-04,)] l_pix: 7.6961e-02 
+23-05-04 11:19:16.384 - INFO: [epoch:  3, iter:  43,600, lr:(1.963e-04,)] l_pix: 7.8434e-02 
+23-05-04 11:21:01.688 - INFO: [epoch:  3, iter:  43,700, lr:(1.963e-04,)] l_pix: 6.0267e-02 
+23-05-04 11:22:47.331 - INFO: [epoch:  3, iter:  43,800, lr:(1.962e-04,)] l_pix: 2.7305e-02 
+23-05-04 11:24:32.782 - INFO: [epoch:  3, iter:  43,900, lr:(1.962e-04,)] l_pix: 1.0085e-01 
+23-05-04 11:26:18.500 - INFO: [epoch:  3, iter:  44,000, lr:(1.962e-04,)] l_pix: 1.1423e-01 
+23-05-04 11:28:03.920 - INFO: [epoch:  3, iter:  44,100, lr:(1.962e-04,)] l_pix: 1.0196e-01 
+23-05-04 11:29:49.570 - INFO: [epoch:  3, iter:  44,200, lr:(1.962e-04,)] l_pix: 8.4627e-02 
+23-05-04 11:31:35.357 - INFO: [epoch:  3, iter:  44,300, lr:(1.962e-04,)] l_pix: 5.1484e-02 
+23-05-04 11:33:21.034 - INFO: [epoch:  3, iter:  44,400, lr:(1.961e-04,)] l_pix: 3.8082e-02 
+23-05-04 11:35:06.386 - INFO: [epoch:  3, iter:  44,500, lr:(1.961e-04,)] l_pix: 6.7260e-02 
+23-05-04 11:36:52.478 - INFO: [epoch:  3, iter:  44,600, lr:(1.961e-04,)] l_pix: 1.2077e-01 
+23-05-04 11:38:38.454 - INFO: [epoch:  3, iter:  44,700, lr:(1.961e-04,)] l_pix: 5.7721e-02 
+23-05-04 11:40:24.187 - INFO: [epoch:  3, iter:  44,800, lr:(1.961e-04,)] l_pix: 2.7679e-02 
+23-05-04 11:42:10.207 - INFO: [epoch:  3, iter:  44,900, lr:(1.960e-04,)] l_pix: 1.4696e-01 
+23-05-04 11:43:55.755 - INFO: [epoch:  3, iter:  45,000, lr:(1.960e-04,)] l_pix: 3.2386e-02 
+23-05-04 11:45:41.198 - INFO: [epoch:  3, iter:  45,100, lr:(1.960e-04,)] l_pix: 1.9751e-01 
+23-05-04 11:47:26.623 - INFO: [epoch:  3, iter:  45,200, lr:(1.960e-04,)] l_pix: 8.2767e-02 
+23-05-04 11:49:12.350 - INFO: [epoch:  3, iter:  45,300, lr:(1.960e-04,)] l_pix: 9.5879e-02 
+23-05-04 11:50:58.326 - INFO: [epoch:  3, iter:  45,400, lr:(1.960e-04,)] l_pix: 9.0210e-02 
+23-05-04 11:52:43.715 - INFO: [epoch:  3, iter:  45,500, lr:(1.959e-04,)] l_pix: 8.6336e-02 
+23-05-04 11:54:28.945 - INFO: [epoch:  3, iter:  45,600, lr:(1.959e-04,)] l_pix: 8.7432e-02 
+23-05-04 11:56:14.448 - INFO: [epoch:  3, iter:  45,700, lr:(1.959e-04,)] l_pix: 8.6912e-02 
+23-05-04 11:57:59.837 - INFO: [epoch:  3, iter:  45,800, lr:(1.959e-04,)] l_pix: 6.6428e-02 
+23-05-04 11:59:45.772 - INFO: [epoch:  3, iter:  45,900, lr:(1.959e-04,)] l_pix: 1.0835e-01 
+23-05-04 12:01:31.462 - INFO: [epoch:  3, iter:  46,000, lr:(1.959e-04,)] l_pix: 8.6324e-02 
+23-05-04 12:03:17.295 - INFO: [epoch:  3, iter:  46,100, lr:(1.958e-04,)] l_pix: 1.5020e-01 
+23-05-04 12:05:03.010 - INFO: [epoch:  3, iter:  46,200, lr:(1.958e-04,)] l_pix: 1.4814e-01 
+23-05-04 12:06:48.200 - INFO: [epoch:  3, iter:  46,300, lr:(1.958e-04,)] l_pix: 6.8830e-02 
+23-05-04 12:08:33.738 - INFO: [epoch:  3, iter:  46,400, lr:(1.958e-04,)] l_pix: 1.2700e-01 
+23-05-04 12:10:19.201 - INFO: [epoch:  3, iter:  46,500, lr:(1.958e-04,)] l_pix: 9.4602e-02 
+23-05-04 12:12:05.101 - INFO: [epoch:  3, iter:  46,600, lr:(1.957e-04,)] l_pix: 1.0808e-01 
+23-05-04 12:13:51.144 - INFO: [epoch:  3, iter:  46,700, lr:(1.957e-04,)] l_pix: 6.7785e-02 
+23-05-04 12:15:36.785 - INFO: [epoch:  3, iter:  46,800, lr:(1.957e-04,)] l_pix: 1.2534e-01 
+23-05-04 12:17:22.611 - INFO: [epoch:  3, iter:  46,900, lr:(1.957e-04,)] l_pix: 1.0161e-01 
+23-05-04 12:19:08.313 - INFO: [epoch:  3, iter:  47,000, lr:(1.957e-04,)] l_pix: 1.9157e-02 
+23-05-04 12:20:53.078 - INFO: [epoch:  3, iter:  47,100, lr:(1.957e-04,)] l_pix: 4.9120e-02 
+23-05-04 12:22:38.463 - INFO: [epoch:  3, iter:  47,200, lr:(1.956e-04,)] l_pix: 5.6749e-02 
+23-05-04 12:24:23.678 - INFO: [epoch:  3, iter:  47,300, lr:(1.956e-04,)] l_pix: 8.1785e-02 
+23-05-04 12:26:08.827 - INFO: [epoch:  3, iter:  47,400, lr:(1.956e-04,)] l_pix: 1.5256e-01 
+23-05-04 12:27:54.502 - INFO: [epoch:  3, iter:  47,500, lr:(1.956e-04,)] l_pix: 1.1683e-01 
+23-05-04 12:29:40.105 - INFO: [epoch:  3, iter:  47,600, lr:(1.956e-04,)] l_pix: 1.0073e-01 
+23-05-04 12:31:25.825 - INFO: [epoch:  3, iter:  47,700, lr:(1.955e-04,)] l_pix: 1.6190e-02 
+23-05-04 12:33:11.485 - INFO: [epoch:  3, iter:  47,800, lr:(1.955e-04,)] l_pix: 1.2994e-01 
+23-05-04 12:34:56.936 - INFO: [epoch:  3, iter:  47,900, lr:(1.955e-04,)] l_pix: 6.6476e-02 
+23-05-04 12:36:42.079 - INFO: [epoch:  3, iter:  48,000, lr:(1.955e-04,)] l_pix: 8.8054e-02 
+23-05-04 12:38:27.635 - INFO: [epoch:  3, iter:  48,100, lr:(1.955e-04,)] l_pix: 5.3679e-02 
+23-05-04 12:40:13.380 - INFO: [epoch:  3, iter:  48,200, lr:(1.955e-04,)] l_pix: 6.2469e-02 
+23-05-04 12:41:59.157 - INFO: [epoch:  3, iter:  48,300, lr:(1.954e-04,)] l_pix: 5.7741e-02 
+23-05-04 12:43:44.900 - INFO: [epoch:  3, iter:  48,400, lr:(1.954e-04,)] l_pix: 8.4841e-02 
+23-05-04 12:45:30.805 - INFO: [epoch:  3, iter:  48,500, lr:(1.954e-04,)] l_pix: 9.7569e-02 
+23-05-04 12:47:16.834 - INFO: [epoch:  3, iter:  48,600, lr:(1.954e-04,)] l_pix: 1.0594e-01 
+23-05-04 12:49:02.735 - INFO: [epoch:  3, iter:  48,700, lr:(1.954e-04,)] l_pix: 1.3053e-01 
+23-05-04 12:50:48.409 - INFO: [epoch:  3, iter:  48,800, lr:(1.953e-04,)] l_pix: 1.2527e-01 
+23-05-04 12:52:34.128 - INFO: [epoch:  3, iter:  48,900, lr:(1.953e-04,)] l_pix: 5.2071e-02 
+23-05-04 12:54:19.951 - INFO: [epoch:  3, iter:  49,000, lr:(1.953e-04,)] l_pix: 1.0465e-01 
+23-05-04 12:56:05.593 - INFO: [epoch:  3, iter:  49,100, lr:(1.953e-04,)] l_pix: 1.5117e-02 
+23-05-04 12:57:50.796 - INFO: [epoch:  3, iter:  49,200, lr:(1.953e-04,)] l_pix: 6.9671e-02 
+23-05-04 12:59:36.457 - INFO: [epoch:  3, iter:  49,300, lr:(1.952e-04,)] l_pix: 4.8575e-02 
+23-05-04 13:01:22.453 - INFO: [epoch:  3, iter:  49,400, lr:(1.952e-04,)] l_pix: 1.3516e-01 
+23-05-04 13:03:08.195 - INFO: [epoch:  4, iter:  49,500, lr:(1.952e-04,)] l_pix: 1.2378e-01 
+23-05-04 13:04:53.570 - INFO: [epoch:  4, iter:  49,600, lr:(1.952e-04,)] l_pix: 4.6172e-02 
+23-05-04 13:06:39.139 - INFO: [epoch:  4, iter:  49,700, lr:(1.952e-04,)] l_pix: 7.3984e-02 
+23-05-04 13:08:24.324 - INFO: [epoch:  4, iter:  49,800, lr:(1.951e-04,)] l_pix: 3.3820e-02 
+23-05-04 13:10:09.685 - INFO: [epoch:  4, iter:  49,900, lr:(1.951e-04,)] l_pix: 1.3520e-01 
+23-05-04 13:11:55.434 - INFO: [epoch:  4, iter:  50,000, lr:(1.951e-04,)] l_pix: 8.1169e-02 
+[                              ] 0/117, elapsed: 0s, ETA:
+Start...
+[2F[J[------------------------------] 1/117, 0.5 task/s, elapsed: 2s, ETA:   244s
+Test 001_bicx2
+[2F[J[------------------------------] 2/117, 0.6 task/s, elapsed: 3s, ETA:   183s
+Test 002_bicx2
+[2F[J[------------------------------] 3/117, 0.7 task/s, elapsed: 4s, ETA:   160s
+Test 003_bicx2
+[2F[J[>-----------------------------] 4/117, 0.8 task/s, elapsed: 5s, ETA:   148s
+Test 004_bicx2
+[2F[J[>-----------------------------] 5/117, 0.8 task/s, elapsed: 6s, ETA:   141s
+Test 005_bicx2
+[2F[J[>-----------------------------] 6/117, 0.8 task/s, elapsed: 7s, ETA:   136s
+Test 006_bicx2
+[2F[J[>-----------------------------] 7/117, 0.8 task/s, elapsed: 8s, ETA:   131s
+Test 007_bicx2
+[2F[J[>>----------------------------] 8/117, 0.9 task/s, elapsed: 9s, ETA:   128s
+Test 008_bicx2
+[2F[J[>>----------------------------] 9/117, 0.9 task/s, elapsed: 10s, ETA:   125s
+Test 009_bicx2
+[2F[J[>>----------------------------] 10/117, 0.9 task/s, elapsed: 11s, ETA:   123s
+Test 010_bicx2
+[2F[J[>>----------------------------] 11/117, 0.9 task/s, elapsed: 13s, ETA:   121s
+Test 011_bicx2
+[2F[J[>>>---------------------------] 12/117, 0.9 task/s, elapsed: 14s, ETA:   118s
+Test 012_bicx2
+[2F[J[>>>---------------------------] 13/117, 0.9 task/s, elapsed: 15s, ETA:   117s
+Test 013_bicx2
+[2F[J[>>>---------------------------] 14/117, 0.9 task/s, elapsed: 16s, ETA:   115s
+Test 014_bicx2
+[2F[J[>>>---------------------------] 15/117, 0.9 task/s, elapsed: 17s, ETA:   113s
+Test 015_bicx2
+[2F[J[>>>>--------------------------] 16/117, 0.9 task/s, elapsed: 18s, ETA:   111s
+Test 016_bicx2
+[2F[J[>>>>--------------------------] 17/117, 0.9 task/s, elapsed: 19s, ETA:   110s
+Test 017_bicx2
+[2F[J[>>>>--------------------------] 18/117, 0.9 task/s, elapsed: 20s, ETA:   109s
+Test 018_bicx2
+[2F[J[>>>>--------------------------] 19/117, 0.9 task/s, elapsed: 21s, ETA:   107s
+Test 019_bicx2
+[2F[J[>>>>>-------------------------] 20/117, 0.9 task/s, elapsed: 22s, ETA:   106s
+Test 020_bicx2
+[2F[J[>>>>>-------------------------] 21/117, 0.9 task/s, elapsed: 23s, ETA:   105s
+Test 021_bicx2
+[2F[J[>>>>>-------------------------] 22/117, 0.9 task/s, elapsed: 24s, ETA:   103s
+Test 022_bicx2
+[2F[J[>>>>>-------------------------] 23/117, 0.9 task/s, elapsed: 25s, ETA:   102s
+Test 023_bicx2
+[2F[J[>>>>>>------------------------] 24/117, 0.9 task/s, elapsed: 26s, ETA:   101s
+Test 024_bicx2
+[2F[J[>>>>>>------------------------] 25/117, 0.9 task/s, elapsed: 27s, ETA:    99s
+Test 025_bicx2
+[2F[J[>>>>>>------------------------] 26/117, 0.9 task/s, elapsed: 28s, ETA:    98s
+Test 026_bicx2
+[2F[J[>>>>>>------------------------] 27/117, 0.9 task/s, elapsed: 29s, ETA:    97s
+Test 027_bicx2
+[2F[J[>>>>>>>-----------------------] 28/117, 0.9 task/s, elapsed: 30s, ETA:    96s
+Test 028_bicx2
+[2F[J[>>>>>>>-----------------------] 29/117, 0.9 task/s, elapsed: 31s, ETA:    95s
+Test 029_bicx2
+[2F[J[>>>>>>>-----------------------] 30/117, 0.9 task/s, elapsed: 32s, ETA:    93s
+Test 030_bicx2
+[2F[J[>>>>>>>-----------------------] 31/117, 0.9 task/s, elapsed: 33s, ETA:    92s
+Test 031_bicx2
+[2F[J[>>>>>>>>----------------------] 32/117, 0.9 task/s, elapsed: 34s, ETA:    91s
+Test 032_bicx2
+[2F[J[>>>>>>>>----------------------] 33/117, 0.9 task/s, elapsed: 35s, ETA:    90s
+Test 033_bicx2
+[2F[J[>>>>>>>>----------------------] 34/117, 0.9 task/s, elapsed: 36s, ETA:    89s
+Test 034_bicx2
+[2F[J[>>>>>>>>----------------------] 35/117, 0.9 task/s, elapsed: 37s, ETA:    87s
+Test 035_bicx2
+[2F[J[>>>>>>>>>---------------------] 36/117, 0.9 task/s, elapsed: 38s, ETA:    86s
+Test 036_bicx2
+[2F[J[>>>>>>>>>---------------------] 37/117, 0.9 task/s, elapsed: 39s, ETA:    85s
+Test 037_bicx2
+[2F[J[>>>>>>>>>---------------------] 38/117, 0.9 task/s, elapsed: 40s, ETA:    84s
+Test 038_bicx2
+[2F[J[>>>>>>>>>>--------------------] 39/117, 0.9 task/s, elapsed: 41s, ETA:    83s
+Test 039_bicx2
+[2F[J[>>>>>>>>>>--------------------] 40/117, 0.9 task/s, elapsed: 42s, ETA:    82s
+Test 040_bicx2
+[2F[J[>>>>>>>>>>--------------------] 41/117, 0.9 task/s, elapsed: 43s, ETA:    81s
+Test 041_bicx2
+[2F[J[>>>>>>>>>>--------------------] 42/117, 0.9 task/s, elapsed: 45s, ETA:    79s
+Test 042_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 43/117, 0.9 task/s, elapsed: 46s, ETA:    78s
+Test 043_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 44/117, 0.9 task/s, elapsed: 47s, ETA:    77s
+Test 044_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 45/117, 0.9 task/s, elapsed: 48s, ETA:    76s
+Test 045_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 46/117, 0.9 task/s, elapsed: 49s, ETA:    75s
+Test 046_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 47/117, 0.9 task/s, elapsed: 50s, ETA:    74s
+Test 047_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 48/117, 0.9 task/s, elapsed: 51s, ETA:    73s
+Test 048_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 49/117, 0.9 task/s, elapsed: 52s, ETA:    72s
+Test 049_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 50/117, 0.9 task/s, elapsed: 53s, ETA:    71s
+Test 050_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 51/117, 0.9 task/s, elapsed: 54s, ETA:    70s
+Test 051_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 52/117, 0.9 task/s, elapsed: 55s, ETA:    69s
+Test 052_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 53/117, 0.9 task/s, elapsed: 56s, ETA:    67s
+Test 053_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 54/117, 0.9 task/s, elapsed: 57s, ETA:    66s
+Test 054_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 55/117, 0.9 task/s, elapsed: 58s, ETA:    65s
+Test 055_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 56/117, 0.9 task/s, elapsed: 59s, ETA:    64s
+Test 056_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 57/117, 1.0 task/s, elapsed: 60s, ETA:    63s
+Test 057_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 58/117, 1.0 task/s, elapsed: 61s, ETA:    62s
+Test 058_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 59/117, 1.0 task/s, elapsed: 62s, ETA:    61s
+Test 059_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 60/117, 1.0 task/s, elapsed: 63s, ETA:    60s
+Test 060_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 61/117, 1.0 task/s, elapsed: 64s, ETA:    59s
+Test 061_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 62/117, 1.0 task/s, elapsed: 65s, ETA:    58s
+Test 062_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 63/117, 1.0 task/s, elapsed: 66s, ETA:    57s
+Test 063_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 64/117, 1.0 task/s, elapsed: 67s, ETA:    56s
+Test 064_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 65/117, 1.0 task/s, elapsed: 68s, ETA:    55s
+Test 065_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 66/117, 1.0 task/s, elapsed: 69s, ETA:    54s
+Test 066_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 67/117, 1.0 task/s, elapsed: 70s, ETA:    52s
+Test 067_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 68/117, 1.0 task/s, elapsed: 71s, ETA:    51s
+Test 068_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 69/117, 1.0 task/s, elapsed: 72s, ETA:    50s
+Test 069_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 70/117, 1.0 task/s, elapsed: 73s, ETA:    49s
+Test 070_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 71/117, 1.0 task/s, elapsed: 74s, ETA:    48s
+Test 071_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 72/117, 1.0 task/s, elapsed: 75s, ETA:    47s
+Test 072_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 73/117, 1.0 task/s, elapsed: 76s, ETA:    46s
+Test 073_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 74/117, 1.0 task/s, elapsed: 78s, ETA:    45s
+Test 074_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 75/117, 1.0 task/s, elapsed: 79s, ETA:    44s
+Test 075_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 76/117, 1.0 task/s, elapsed: 80s, ETA:    43s
+Test 076_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 77/117, 1.0 task/s, elapsed: 81s, ETA:    42s
+Test 077_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 78/117, 1.0 task/s, elapsed: 82s, ETA:    41s
+Test 078_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 79/117, 1.0 task/s, elapsed: 83s, ETA:    40s
+Test 079_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 80/117, 1.0 task/s, elapsed: 84s, ETA:    39s
+Test 080_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 81/117, 1.0 task/s, elapsed: 85s, ETA:    38s
+Test 081_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 82/117, 1.0 task/s, elapsed: 86s, ETA:    37s
+Test 082_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 83/117, 1.0 task/s, elapsed: 87s, ETA:    36s
+Test 083_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 84/117, 1.0 task/s, elapsed: 88s, ETA:    34s
+Test 084_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 85/117, 1.0 task/s, elapsed: 89s, ETA:    33s
+Test 085_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 86/117, 1.0 task/s, elapsed: 90s, ETA:    32s
+Test 086_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 87/117, 1.0 task/s, elapsed: 91s, ETA:    31s
+Test 087_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 88/117, 1.0 task/s, elapsed: 92s, ETA:    30s
+Test 088_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 89/117, 1.0 task/s, elapsed: 93s, ETA:    29s
+Test 089_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 90/117, 1.0 task/s, elapsed: 94s, ETA:    28s
+Test 090_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 91/117, 1.0 task/s, elapsed: 95s, ETA:    27s
+Test 091_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 92/117, 1.0 task/s, elapsed: 96s, ETA:    26s
+Test 092_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 93/117, 1.0 task/s, elapsed: 97s, ETA:    25s
+Test 093_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 94/117, 1.0 task/s, elapsed: 98s, ETA:    24s
+Test 094_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 95/117, 1.0 task/s, elapsed: 99s, ETA:    23s
+Test 095_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 96/117, 1.0 task/s, elapsed: 100s, ETA:    22s
+Test 096_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 97/117, 1.0 task/s, elapsed: 101s, ETA:    21s
+Test 097_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 98/117, 1.0 task/s, elapsed: 102s, ETA:    20s
+Test 098_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 99/117, 1.0 task/s, elapsed: 103s, ETA:    19s
+Test 099_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 100/117, 1.0 task/s, elapsed: 104s, ETA:    18s
+Test 100_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 101/117, 1.0 task/s, elapsed: 105s, ETA:    17s
+Test 101_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 102/117, 1.0 task/s, elapsed: 106s, ETA:    16s
+Test 102_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 103/117, 1.0 task/s, elapsed: 107s, ETA:    15s
+Test 103_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 104/117, 1.0 task/s, elapsed: 108s, ETA:    14s
+Test 104_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 105/117, 1.0 task/s, elapsed: 109s, ETA:    13s
+Test 105_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 106/117, 1.0 task/s, elapsed: 111s, ETA:    11s
+Test 106_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 107/117, 1.0 task/s, elapsed: 112s, ETA:    10s
+Test 107_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 108/117, 1.0 task/s, elapsed: 113s, ETA:     9s
+Test 108_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 109/117, 1.0 task/s, elapsed: 114s, ETA:     8s
+Test 109_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 110/117, 1.0 task/s, elapsed: 115s, ETA:     7s
+Test 110_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 111/117, 1.0 task/s, elapsed: 116s, ETA:     6s
+Test 111_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 112/117, 1.0 task/s, elapsed: 117s, ETA:     5s
+Test 112_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 113/117, 1.0 task/s, elapsed: 118s, ETA:     4s
+Test 113_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 114/117, 1.0 task/s, elapsed: 119s, ETA:     3s
+Test 114_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 115/117, 1.0 task/s, elapsed: 120s, ETA:     2s
+Test 115_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 116/117, 1.0 task/s, elapsed: 121s, ETA:     1s
+Test 116_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>] 117/117, 1.0 task/s, elapsed: 122s, ETA:     0s
+Test 117_bicx2
+23-05-04 13:13:57.507 - INFO: # Validation # PSNR: 1.8788e+01
+23-05-04 13:15:42.362 - INFO: [epoch:  4, iter:  50,100, lr:(1.951e-04,)] l_pix: 5.7949e-02 
+23-05-04 13:17:28.228 - INFO: [epoch:  4, iter:  50,200, lr:(1.951e-04,)] l_pix: 6.1134e-02 
+23-05-04 13:19:13.585 - INFO: [epoch:  4, iter:  50,300, lr:(1.950e-04,)] l_pix: 8.9130e-02 
+23-05-04 13:20:59.755 - INFO: [epoch:  4, iter:  50,400, lr:(1.950e-04,)] l_pix: 7.6688e-02 
+23-05-04 13:22:46.360 - INFO: [epoch:  4, iter:  50,500, lr:(1.950e-04,)] l_pix: 1.2866e-01 
+23-05-04 13:24:32.379 - INFO: [epoch:  4, iter:  50,600, lr:(1.950e-04,)] l_pix: 1.1323e-01 
+23-05-04 13:26:17.794 - INFO: [epoch:  4, iter:  50,700, lr:(1.950e-04,)] l_pix: 8.9546e-02 
+23-05-04 13:28:03.603 - INFO: [epoch:  4, iter:  50,800, lr:(1.950e-04,)] l_pix: 1.1335e-01 
+23-05-04 13:29:48.766 - INFO: [epoch:  4, iter:  50,900, lr:(1.949e-04,)] l_pix: 1.0623e-01 
+23-05-04 13:31:34.093 - INFO: [epoch:  4, iter:  51,000, lr:(1.949e-04,)] l_pix: 9.9201e-02 
+23-05-04 13:33:19.420 - INFO: [epoch:  4, iter:  51,100, lr:(1.949e-04,)] l_pix: 8.0195e-02 
+23-05-04 13:35:05.635 - INFO: [epoch:  4, iter:  51,200, lr:(1.949e-04,)] l_pix: 1.1959e-01 
+23-05-04 13:36:51.128 - INFO: [epoch:  4, iter:  51,300, lr:(1.949e-04,)] l_pix: 1.0733e-01 
+23-05-04 13:38:37.029 - INFO: [epoch:  4, iter:  51,400, lr:(1.948e-04,)] l_pix: 1.0638e-01 
+23-05-04 13:40:22.986 - INFO: [epoch:  4, iter:  51,500, lr:(1.948e-04,)] l_pix: 1.0462e-01 
+23-05-04 13:42:08.676 - INFO: [epoch:  4, iter:  51,600, lr:(1.948e-04,)] l_pix: 7.3176e-02 
+23-05-04 13:43:54.061 - INFO: [epoch:  4, iter:  51,700, lr:(1.948e-04,)] l_pix: 8.1756e-02 
+23-05-04 13:45:39.651 - INFO: [epoch:  4, iter:  51,800, lr:(1.948e-04,)] l_pix: 3.2095e-02 
+23-05-04 13:47:25.182 - INFO: [epoch:  4, iter:  51,900, lr:(1.947e-04,)] l_pix: 9.8670e-02 
+23-05-04 13:49:10.718 - INFO: [epoch:  4, iter:  52,000, lr:(1.947e-04,)] l_pix: 8.0483e-02 
+23-05-04 13:50:55.870 - INFO: [epoch:  4, iter:  52,100, lr:(1.947e-04,)] l_pix: 1.5608e-01 
+23-05-04 13:52:41.277 - INFO: [epoch:  4, iter:  52,200, lr:(1.947e-04,)] l_pix: 5.5996e-02 
+23-05-04 13:54:26.901 - INFO: [epoch:  4, iter:  52,300, lr:(1.947e-04,)] l_pix: 1.0617e-01 
+23-05-04 13:56:12.423 - INFO: [epoch:  4, iter:  52,400, lr:(1.946e-04,)] l_pix: 1.2545e-01 
+23-05-04 13:57:57.743 - INFO: [epoch:  4, iter:  52,500, lr:(1.946e-04,)] l_pix: 8.1337e-02 
+23-05-04 13:59:43.431 - INFO: [epoch:  4, iter:  52,600, lr:(1.946e-04,)] l_pix: 7.6410e-02 
+23-05-04 14:01:29.029 - INFO: [epoch:  4, iter:  52,700, lr:(1.946e-04,)] l_pix: 1.2996e-01 
+23-05-04 14:03:14.362 - INFO: [epoch:  4, iter:  52,800, lr:(1.945e-04,)] l_pix: 1.5955e-01 
+23-05-04 14:04:59.614 - INFO: [epoch:  4, iter:  52,900, lr:(1.945e-04,)] l_pix: 6.4413e-02 
+23-05-04 14:06:45.506 - INFO: [epoch:  4, iter:  53,000, lr:(1.945e-04,)] l_pix: 1.0130e-01 
+23-05-04 14:08:31.328 - INFO: [epoch:  4, iter:  53,100, lr:(1.945e-04,)] l_pix: 6.1833e-02 
+23-05-04 14:10:17.298 - INFO: [epoch:  4, iter:  53,200, lr:(1.945e-04,)] l_pix: 9.1649e-02 
+23-05-04 14:12:03.295 - INFO: [epoch:  4, iter:  53,300, lr:(1.944e-04,)] l_pix: 6.2168e-02 
+23-05-04 14:13:49.604 - INFO: [epoch:  4, iter:  53,400, lr:(1.944e-04,)] l_pix: 6.7915e-02 
+23-05-04 14:15:35.139 - INFO: [epoch:  4, iter:  53,500, lr:(1.944e-04,)] l_pix: 7.2566e-02 
+23-05-04 14:17:21.001 - INFO: [epoch:  4, iter:  53,600, lr:(1.944e-04,)] l_pix: 7.1970e-02 
+23-05-04 14:19:06.938 - INFO: [epoch:  4, iter:  53,700, lr:(1.944e-04,)] l_pix: 1.2293e-01 
+23-05-04 14:20:51.989 - INFO: [epoch:  4, iter:  53,800, lr:(1.943e-04,)] l_pix: 9.0004e-02 
+23-05-04 14:22:37.392 - INFO: [epoch:  4, iter:  53,900, lr:(1.943e-04,)] l_pix: 1.1114e-01 
+23-05-04 14:24:23.005 - INFO: [epoch:  4, iter:  54,000, lr:(1.943e-04,)] l_pix: 1.1122e-01 
+23-05-04 14:26:08.708 - INFO: [epoch:  4, iter:  54,100, lr:(1.943e-04,)] l_pix: 1.0548e-01 
+23-05-04 14:27:54.253 - INFO: [epoch:  4, iter:  54,200, lr:(1.943e-04,)] l_pix: 9.1630e-02 
+23-05-04 14:29:40.337 - INFO: [epoch:  4, iter:  54,300, lr:(1.942e-04,)] l_pix: 9.8886e-02 
+23-05-04 14:31:25.926 - INFO: [epoch:  4, iter:  54,400, lr:(1.942e-04,)] l_pix: 6.3459e-02 
+23-05-04 14:33:11.751 - INFO: [epoch:  4, iter:  54,500, lr:(1.942e-04,)] l_pix: 5.8088e-02 
+23-05-04 14:34:57.790 - INFO: [epoch:  4, iter:  54,600, lr:(1.942e-04,)] l_pix: 6.2937e-02 
+23-05-04 14:36:43.558 - INFO: [epoch:  4, iter:  54,700, lr:(1.942e-04,)] l_pix: 9.3837e-02 
+23-05-04 14:38:29.056 - INFO: [epoch:  4, iter:  54,800, lr:(1.941e-04,)] l_pix: 4.9204e-02 
+23-05-04 14:40:15.134 - INFO: [epoch:  4, iter:  54,900, lr:(1.941e-04,)] l_pix: 8.0579e-02 
+23-05-04 14:42:00.672 - INFO: [epoch:  4, iter:  55,000, lr:(1.941e-04,)] l_pix: 4.8876e-02 
+23-05-04 14:43:46.350 - INFO: [epoch:  4, iter:  55,100, lr:(1.941e-04,)] l_pix: 1.0441e-01 
+23-05-04 14:45:32.024 - INFO: [epoch:  4, iter:  55,200, lr:(1.940e-04,)] l_pix: 8.2709e-02 
+23-05-04 14:47:17.504 - INFO: [epoch:  4, iter:  55,300, lr:(1.940e-04,)] l_pix: 7.4797e-02 
+23-05-04 14:49:03.035 - INFO: [epoch:  4, iter:  55,400, lr:(1.940e-04,)] l_pix: 4.2630e-02 
+23-05-04 14:50:48.794 - INFO: [epoch:  4, iter:  55,500, lr:(1.940e-04,)] l_pix: 4.2623e-02 
+23-05-04 14:52:34.686 - INFO: [epoch:  4, iter:  55,600, lr:(1.940e-04,)] l_pix: 2.2493e-02 
+23-05-04 14:54:20.365 - INFO: [epoch:  4, iter:  55,700, lr:(1.939e-04,)] l_pix: 3.5441e-02 
+23-05-04 14:56:06.343 - INFO: [epoch:  4, iter:  55,800, lr:(1.939e-04,)] l_pix: 1.1164e-01 
+23-05-04 14:57:51.483 - INFO: [epoch:  4, iter:  55,900, lr:(1.939e-04,)] l_pix: 3.0627e-02 
+23-05-04 14:59:37.201 - INFO: [epoch:  4, iter:  56,000, lr:(1.939e-04,)] l_pix: 1.1483e-01 
+23-05-04 15:01:22.980 - INFO: [epoch:  4, iter:  56,100, lr:(1.939e-04,)] l_pix: 5.2302e-02 
+23-05-04 15:03:08.223 - INFO: [epoch:  4, iter:  56,200, lr:(1.938e-04,)] l_pix: 1.1010e-01 
+23-05-04 15:04:53.628 - INFO: [epoch:  4, iter:  56,300, lr:(1.938e-04,)] l_pix: 8.2750e-02 
+23-05-04 15:06:39.442 - INFO: [epoch:  4, iter:  56,400, lr:(1.938e-04,)] l_pix: 8.9502e-02 
+23-05-04 15:08:25.621 - INFO: [epoch:  4, iter:  56,500, lr:(1.938e-04,)] l_pix: 1.2302e-01 
+23-05-04 15:10:11.140 - INFO: [epoch:  4, iter:  56,600, lr:(1.937e-04,)] l_pix: 1.3281e-01 
+23-05-04 15:11:56.929 - INFO: [epoch:  4, iter:  56,700, lr:(1.937e-04,)] l_pix: 1.0220e-01 
+23-05-04 15:13:42.817 - INFO: [epoch:  4, iter:  56,800, lr:(1.937e-04,)] l_pix: 5.4282e-02 
+23-05-04 15:15:28.113 - INFO: [epoch:  4, iter:  56,900, lr:(1.937e-04,)] l_pix: 1.0189e-01 
+23-05-04 15:17:13.895 - INFO: [epoch:  4, iter:  57,000, lr:(1.937e-04,)] l_pix: 1.2302e-01 
+23-05-04 15:18:59.607 - INFO: [epoch:  4, iter:  57,100, lr:(1.936e-04,)] l_pix: 5.4729e-02 
+23-05-04 15:20:45.643 - INFO: [epoch:  4, iter:  57,200, lr:(1.936e-04,)] l_pix: 7.5664e-02 
+23-05-04 15:22:31.656 - INFO: [epoch:  4, iter:  57,300, lr:(1.936e-04,)] l_pix: 1.2253e-01 
+23-05-04 15:24:17.208 - INFO: [epoch:  4, iter:  57,400, lr:(1.936e-04,)] l_pix: 6.9150e-02 
+23-05-04 15:26:03.196 - INFO: [epoch:  4, iter:  57,500, lr:(1.935e-04,)] l_pix: 1.2975e-01 
+23-05-04 15:27:49.106 - INFO: [epoch:  4, iter:  57,600, lr:(1.935e-04,)] l_pix: 6.1958e-02 
+23-05-04 15:29:34.619 - INFO: [epoch:  4, iter:  57,700, lr:(1.935e-04,)] l_pix: 9.1217e-02 
+23-05-04 15:31:20.496 - INFO: [epoch:  4, iter:  57,800, lr:(1.935e-04,)] l_pix: 9.1024e-02 
+23-05-04 15:33:06.239 - INFO: [epoch:  4, iter:  57,900, lr:(1.935e-04,)] l_pix: 3.6588e-02 
+23-05-04 15:34:51.755 - INFO: [epoch:  4, iter:  58,000, lr:(1.934e-04,)] l_pix: 1.3010e-01 
+23-05-04 15:36:37.231 - INFO: [epoch:  4, iter:  58,100, lr:(1.934e-04,)] l_pix: 5.0311e-02 
+23-05-04 15:38:22.638 - INFO: [epoch:  4, iter:  58,200, lr:(1.934e-04,)] l_pix: 9.3962e-02 
+23-05-04 15:40:08.581 - INFO: [epoch:  4, iter:  58,300, lr:(1.934e-04,)] l_pix: 4.7583e-02 
+23-05-04 15:41:54.583 - INFO: [epoch:  4, iter:  58,400, lr:(1.933e-04,)] l_pix: 9.2001e-02 
+23-05-04 15:43:40.444 - INFO: [epoch:  4, iter:  58,500, lr:(1.933e-04,)] l_pix: 1.0126e-01 
+23-05-04 15:45:26.266 - INFO: [epoch:  4, iter:  58,600, lr:(1.933e-04,)] l_pix: 5.4137e-02 
+23-05-04 15:47:12.123 - INFO: [epoch:  4, iter:  58,700, lr:(1.933e-04,)] l_pix: 4.6128e-02 
+23-05-04 15:48:57.561 - INFO: [epoch:  4, iter:  58,800, lr:(1.933e-04,)] l_pix: 8.4750e-02 
+23-05-04 15:50:43.333 - INFO: [epoch:  4, iter:  58,900, lr:(1.932e-04,)] l_pix: 6.9773e-02 
+23-05-04 15:52:28.724 - INFO: [epoch:  4, iter:  59,000, lr:(1.932e-04,)] l_pix: 6.6962e-02 
+23-05-04 15:54:14.279 - INFO: [epoch:  4, iter:  59,100, lr:(1.932e-04,)] l_pix: 1.6666e-01 
+23-05-04 15:55:59.928 - INFO: [epoch:  4, iter:  59,200, lr:(1.932e-04,)] l_pix: 1.1417e-01 
+23-05-04 15:57:45.200 - INFO: [epoch:  4, iter:  59,300, lr:(1.931e-04,)] l_pix: 9.7813e-02 
+23-05-04 15:59:30.884 - INFO: [epoch:  4, iter:  59,400, lr:(1.931e-04,)] l_pix: 1.1491e-01 
+23-05-04 16:01:16.390 - INFO: [epoch:  4, iter:  59,500, lr:(1.931e-04,)] l_pix: 6.8794e-02 
+23-05-04 16:03:01.529 - INFO: [epoch:  4, iter:  59,600, lr:(1.931e-04,)] l_pix: 7.3410e-02 
+23-05-04 16:04:46.673 - INFO: [epoch:  4, iter:  59,700, lr:(1.931e-04,)] l_pix: 4.9211e-02 
+23-05-04 16:06:32.594 - INFO: [epoch:  4, iter:  59,800, lr:(1.930e-04,)] l_pix: 4.7875e-02 
+23-05-04 16:08:18.190 - INFO: [epoch:  4, iter:  59,900, lr:(1.930e-04,)] l_pix: 1.3119e-01 
+23-05-04 16:10:04.257 - INFO: [epoch:  4, iter:  60,000, lr:(1.930e-04,)] l_pix: 9.2118e-02 
+[                              ] 0/117, elapsed: 0s, ETA:
+Start...
+[2F[J[------------------------------] 1/117, 0.5 task/s, elapsed: 2s, ETA:   239s
+Test 001_bicx2
+[2F[J[------------------------------] 2/117, 0.6 task/s, elapsed: 3s, ETA:   180s
+Test 002_bicx2
+[2F[J[------------------------------] 3/117, 0.7 task/s, elapsed: 4s, ETA:   158s
+Test 003_bicx2
+[2F[J[>-----------------------------] 4/117, 0.8 task/s, elapsed: 5s, ETA:   147s
+Test 004_bicx2
+[2F[J[>-----------------------------] 5/117, 0.8 task/s, elapsed: 6s, ETA:   140s
+Test 005_bicx2
+[2F[J[>-----------------------------] 6/117, 0.8 task/s, elapsed: 7s, ETA:   134s
+Test 006_bicx2
+[2F[J[>-----------------------------] 7/117, 0.8 task/s, elapsed: 8s, ETA:   131s
+Test 007_bicx2
+[2F[J[>>----------------------------] 8/117, 0.9 task/s, elapsed: 9s, ETA:   127s
+Test 008_bicx2
+[2F[J[>>----------------------------] 9/117, 0.9 task/s, elapsed: 10s, ETA:   124s
+Test 009_bicx2
+[2F[J[>>----------------------------] 10/117, 0.9 task/s, elapsed: 11s, ETA:   122s
+Test 010_bicx2
+[2F[J[>>----------------------------] 11/117, 0.9 task/s, elapsed: 12s, ETA:   120s
+Test 011_bicx2
+[2F[J[>>>---------------------------] 12/117, 0.9 task/s, elapsed: 13s, ETA:   118s
+Test 012_bicx2
+[2F[J[>>>---------------------------] 13/117, 0.9 task/s, elapsed: 14s, ETA:   116s
+Test 013_bicx2
+[2F[J[>>>---------------------------] 14/117, 0.9 task/s, elapsed: 16s, ETA:   114s
+Test 014_bicx2
+[2F[J[>>>---------------------------] 15/117, 0.9 task/s, elapsed: 17s, ETA:   113s
+Test 015_bicx2
+[2F[J[>>>>--------------------------] 16/117, 0.9 task/s, elapsed: 18s, ETA:   111s
+Test 016_bicx2
+[2F[J[>>>>--------------------------] 17/117, 0.9 task/s, elapsed: 19s, ETA:   110s
+Test 017_bicx2
+[2F[J[>>>>--------------------------] 18/117, 0.9 task/s, elapsed: 20s, ETA:   108s
+Test 018_bicx2
+[2F[J[>>>>--------------------------] 19/117, 0.9 task/s, elapsed: 21s, ETA:   107s
+Test 019_bicx2
+[2F[J[>>>>>-------------------------] 20/117, 0.9 task/s, elapsed: 22s, ETA:   105s
+Test 020_bicx2
+[2F[J[>>>>>-------------------------] 21/117, 0.9 task/s, elapsed: 23s, ETA:   104s
+Test 021_bicx2
+[2F[J[>>>>>-------------------------] 22/117, 0.9 task/s, elapsed: 24s, ETA:   103s
+Test 022_bicx2
+[2F[J[>>>>>-------------------------] 23/117, 0.9 task/s, elapsed: 25s, ETA:   101s
+Test 023_bicx2
+[2F[J[>>>>>>------------------------] 24/117, 0.9 task/s, elapsed: 26s, ETA:   100s
+Test 024_bicx2
+[2F[J[>>>>>>------------------------] 25/117, 0.9 task/s, elapsed: 27s, ETA:    99s
+Test 025_bicx2
+[2F[J[>>>>>>------------------------] 26/117, 0.9 task/s, elapsed: 28s, ETA:    98s
+Test 026_bicx2
+[2F[J[>>>>>>------------------------] 27/117, 0.9 task/s, elapsed: 29s, ETA:    96s
+Test 027_bicx2
+[2F[J[>>>>>>>-----------------------] 28/117, 0.9 task/s, elapsed: 30s, ETA:    95s
+Test 028_bicx2
+[2F[J[>>>>>>>-----------------------] 29/117, 0.9 task/s, elapsed: 31s, ETA:    94s
+Test 029_bicx2
+[2F[J[>>>>>>>-----------------------] 30/117, 0.9 task/s, elapsed: 32s, ETA:    93s
+Test 030_bicx2
+[2F[J[>>>>>>>-----------------------] 31/117, 0.9 task/s, elapsed: 33s, ETA:    92s
+Test 031_bicx2
+[2F[J[>>>>>>>>----------------------] 32/117, 0.9 task/s, elapsed: 34s, ETA:    91s
+Test 032_bicx2
+[2F[J[>>>>>>>>----------------------] 33/117, 0.9 task/s, elapsed: 35s, ETA:    90s
+Test 033_bicx2
+[2F[J[>>>>>>>>----------------------] 34/117, 0.9 task/s, elapsed: 36s, ETA:    88s
+Test 034_bicx2
+[2F[J[>>>>>>>>----------------------] 35/117, 0.9 task/s, elapsed: 37s, ETA:    87s
+Test 035_bicx2
+[2F[J[>>>>>>>>>---------------------] 36/117, 0.9 task/s, elapsed: 38s, ETA:    86s
+Test 036_bicx2
+[2F[J[>>>>>>>>>---------------------] 37/117, 0.9 task/s, elapsed: 39s, ETA:    85s
+Test 037_bicx2
+[2F[J[>>>>>>>>>---------------------] 38/117, 0.9 task/s, elapsed: 40s, ETA:    84s
+Test 038_bicx2
+[2F[J[>>>>>>>>>>--------------------] 39/117, 0.9 task/s, elapsed: 41s, ETA:    83s
+Test 039_bicx2
+[2F[J[>>>>>>>>>>--------------------] 40/117, 0.9 task/s, elapsed: 42s, ETA:    82s
+Test 040_bicx2
+[2F[J[>>>>>>>>>>--------------------] 41/117, 0.9 task/s, elapsed: 43s, ETA:    80s
+Test 041_bicx2
+[2F[J[>>>>>>>>>>--------------------] 42/117, 0.9 task/s, elapsed: 44s, ETA:    79s
+Test 042_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 43/117, 0.9 task/s, elapsed: 45s, ETA:    78s
+Test 043_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 44/117, 0.9 task/s, elapsed: 47s, ETA:    77s
+Test 044_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 45/117, 0.9 task/s, elapsed: 48s, ETA:    76s
+Test 045_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 46/117, 0.9 task/s, elapsed: 49s, ETA:    75s
+Test 046_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 47/117, 0.9 task/s, elapsed: 50s, ETA:    74s
+Test 047_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 48/117, 0.9 task/s, elapsed: 51s, ETA:    73s
+Test 048_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 49/117, 0.9 task/s, elapsed: 52s, ETA:    72s
+Test 049_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 50/117, 0.9 task/s, elapsed: 53s, ETA:    71s
+Test 050_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 51/117, 0.9 task/s, elapsed: 54s, ETA:    70s
+Test 051_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 52/117, 0.9 task/s, elapsed: 55s, ETA:    68s
+Test 052_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 53/117, 1.0 task/s, elapsed: 56s, ETA:    67s
+Test 053_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 54/117, 1.0 task/s, elapsed: 57s, ETA:    66s
+Test 054_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 55/117, 1.0 task/s, elapsed: 58s, ETA:    65s
+Test 055_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 56/117, 1.0 task/s, elapsed: 59s, ETA:    64s
+Test 056_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 57/117, 1.0 task/s, elapsed: 60s, ETA:    63s
+Test 057_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 58/117, 1.0 task/s, elapsed: 61s, ETA:    62s
+Test 058_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 59/117, 1.0 task/s, elapsed: 62s, ETA:    61s
+Test 059_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 60/117, 1.0 task/s, elapsed: 63s, ETA:    60s
+Test 060_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 61/117, 1.0 task/s, elapsed: 64s, ETA:    59s
+Test 061_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 62/117, 1.0 task/s, elapsed: 65s, ETA:    58s
+Test 062_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 63/117, 1.0 task/s, elapsed: 66s, ETA:    57s
+Test 063_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 64/117, 1.0 task/s, elapsed: 67s, ETA:    56s
+Test 064_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 65/117, 1.0 task/s, elapsed: 68s, ETA:    55s
+Test 065_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 66/117, 1.0 task/s, elapsed: 69s, ETA:    54s
+Test 066_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 67/117, 1.0 task/s, elapsed: 70s, ETA:    52s
+Test 067_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 68/117, 1.0 task/s, elapsed: 71s, ETA:    51s
+Test 068_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 69/117, 1.0 task/s, elapsed: 72s, ETA:    50s
+Test 069_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 70/117, 1.0 task/s, elapsed: 73s, ETA:    49s
+Test 070_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 71/117, 1.0 task/s, elapsed: 74s, ETA:    48s
+Test 071_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 72/117, 1.0 task/s, elapsed: 75s, ETA:    47s
+Test 072_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 73/117, 1.0 task/s, elapsed: 76s, ETA:    46s
+Test 073_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 74/117, 1.0 task/s, elapsed: 77s, ETA:    45s
+Test 074_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 75/117, 1.0 task/s, elapsed: 79s, ETA:    44s
+Test 075_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 76/117, 1.0 task/s, elapsed: 80s, ETA:    43s
+Test 076_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 77/117, 1.0 task/s, elapsed: 81s, ETA:    42s
+Test 077_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 78/117, 1.0 task/s, elapsed: 82s, ETA:    41s
+Test 078_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 79/117, 1.0 task/s, elapsed: 83s, ETA:    40s
+Test 079_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 80/117, 1.0 task/s, elapsed: 84s, ETA:    39s
+Test 080_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 81/117, 1.0 task/s, elapsed: 85s, ETA:    38s
+Test 081_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 82/117, 1.0 task/s, elapsed: 86s, ETA:    37s
+Test 082_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 83/117, 1.0 task/s, elapsed: 87s, ETA:    36s
+Test 083_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 84/117, 1.0 task/s, elapsed: 88s, ETA:    35s
+Test 084_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 85/117, 1.0 task/s, elapsed: 89s, ETA:    33s
+Test 085_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 86/117, 1.0 task/s, elapsed: 90s, ETA:    32s
+Test 086_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 87/117, 1.0 task/s, elapsed: 91s, ETA:    31s
+Test 087_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 88/117, 1.0 task/s, elapsed: 92s, ETA:    30s
+Test 088_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 89/117, 1.0 task/s, elapsed: 93s, ETA:    29s
+Test 089_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 90/117, 1.0 task/s, elapsed: 94s, ETA:    28s
+Test 090_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 91/117, 1.0 task/s, elapsed: 95s, ETA:    27s
+Test 091_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 92/117, 1.0 task/s, elapsed: 96s, ETA:    26s
+Test 092_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 93/117, 1.0 task/s, elapsed: 97s, ETA:    25s
+Test 093_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 94/117, 1.0 task/s, elapsed: 98s, ETA:    24s
+Test 094_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 95/117, 1.0 task/s, elapsed: 99s, ETA:    23s
+Test 095_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 96/117, 1.0 task/s, elapsed: 100s, ETA:    22s
+Test 096_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 97/117, 1.0 task/s, elapsed: 101s, ETA:    21s
+Test 097_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 98/117, 1.0 task/s, elapsed: 102s, ETA:    20s
+Test 098_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 99/117, 1.0 task/s, elapsed: 103s, ETA:    19s
+Test 099_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 100/117, 1.0 task/s, elapsed: 104s, ETA:    18s
+Test 100_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 101/117, 1.0 task/s, elapsed: 105s, ETA:    17s
+Test 101_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 102/117, 1.0 task/s, elapsed: 106s, ETA:    16s
+Test 102_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 103/117, 1.0 task/s, elapsed: 107s, ETA:    15s
+Test 103_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 104/117, 1.0 task/s, elapsed: 108s, ETA:    14s
+Test 104_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 105/117, 1.0 task/s, elapsed: 110s, ETA:    13s
+Test 105_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 106/117, 1.0 task/s, elapsed: 111s, ETA:    11s
+Test 106_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 107/117, 1.0 task/s, elapsed: 112s, ETA:    10s
+Test 107_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 108/117, 1.0 task/s, elapsed: 113s, ETA:     9s
+Test 108_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 109/117, 1.0 task/s, elapsed: 114s, ETA:     8s
+Test 109_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 110/117, 1.0 task/s, elapsed: 115s, ETA:     7s
+Test 110_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 111/117, 1.0 task/s, elapsed: 116s, ETA:     6s
+Test 111_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 112/117, 1.0 task/s, elapsed: 117s, ETA:     5s
+Test 112_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 113/117, 1.0 task/s, elapsed: 118s, ETA:     4s
+Test 113_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 114/117, 1.0 task/s, elapsed: 119s, ETA:     3s
+Test 114_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 115/117, 1.0 task/s, elapsed: 120s, ETA:     2s
+Test 115_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 116/117, 1.0 task/s, elapsed: 121s, ETA:     1s
+Test 116_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>] 117/117, 1.0 task/s, elapsed: 122s, ETA:     0s
+Test 117_bicx2
+23-05-04 16:12:06.356 - INFO: # Validation # PSNR: 1.8793e+01
+23-05-04 16:12:06.356 - INFO: Saving models and training states.
+23-05-04 16:13:51.179 - INFO: [epoch:  4, iter:  60,100, lr:(1.930e-04,)] l_pix: 1.1425e-01 
+23-05-04 16:15:36.627 - INFO: [epoch:  4, iter:  60,200, lr:(1.929e-04,)] l_pix: 4.8410e-02 
+23-05-04 16:17:21.923 - INFO: [epoch:  4, iter:  60,300, lr:(1.929e-04,)] l_pix: 4.4848e-02 
+23-05-04 16:19:07.423 - INFO: [epoch:  4, iter:  60,400, lr:(1.929e-04,)] l_pix: 4.6340e-02 
+23-05-04 16:20:53.212 - INFO: [epoch:  4, iter:  60,500, lr:(1.929e-04,)] l_pix: 3.2715e-02 
+23-05-04 16:22:38.666 - INFO: [epoch:  4, iter:  60,600, lr:(1.928e-04,)] l_pix: 1.2533e-01 
+23-05-04 16:24:24.446 - INFO: [epoch:  4, iter:  60,700, lr:(1.928e-04,)] l_pix: 1.1033e-01 
+23-05-04 16:26:10.376 - INFO: [epoch:  4, iter:  60,800, lr:(1.928e-04,)] l_pix: 2.4994e-02 
+23-05-04 16:27:55.677 - INFO: [epoch:  4, iter:  60,900, lr:(1.928e-04,)] l_pix: 1.5257e-01 
+23-05-04 16:29:41.374 - INFO: [epoch:  4, iter:  61,000, lr:(1.927e-04,)] l_pix: 8.2066e-02 
+23-05-04 16:31:27.107 - INFO: [epoch:  4, iter:  61,100, lr:(1.927e-04,)] l_pix: 4.9181e-02 
+23-05-04 16:33:12.428 - INFO: [epoch:  4, iter:  61,200, lr:(1.927e-04,)] l_pix: 7.9198e-02 
+23-05-04 16:34:58.462 - INFO: [epoch:  4, iter:  61,300, lr:(1.927e-04,)] l_pix: 9.7674e-02 
+23-05-04 16:36:44.255 - INFO: [epoch:  4, iter:  61,400, lr:(1.927e-04,)] l_pix: 4.1602e-02 
+23-05-04 16:38:29.908 - INFO: [epoch:  4, iter:  61,500, lr:(1.926e-04,)] l_pix: 1.0394e-01 
+23-05-04 16:40:15.358 - INFO: [epoch:  4, iter:  61,600, lr:(1.926e-04,)] l_pix: 2.3558e-02 
+23-05-04 16:42:00.970 - INFO: [epoch:  4, iter:  61,700, lr:(1.926e-04,)] l_pix: 1.6553e-01 
+23-05-04 16:43:46.266 - INFO: [epoch:  5, iter:  61,800, lr:(1.926e-04,)] l_pix: 7.5277e-02 
+23-05-04 16:45:31.977 - INFO: [epoch:  5, iter:  61,900, lr:(1.925e-04,)] l_pix: 6.0800e-02 
+23-05-04 16:47:17.443 - INFO: [epoch:  5, iter:  62,000, lr:(1.925e-04,)] l_pix: 4.3859e-02 
+23-05-04 16:49:02.931 - INFO: [epoch:  5, iter:  62,100, lr:(1.925e-04,)] l_pix: 4.5076e-02 
+23-05-04 16:50:48.104 - INFO: [epoch:  5, iter:  62,200, lr:(1.925e-04,)] l_pix: 5.3030e-02 
+23-05-04 16:52:33.945 - INFO: [epoch:  5, iter:  62,300, lr:(1.924e-04,)] l_pix: 5.1801e-02 
+23-05-04 16:54:19.192 - INFO: [epoch:  5, iter:  62,400, lr:(1.924e-04,)] l_pix: 1.2423e-01 
+23-05-04 16:56:04.642 - INFO: [epoch:  5, iter:  62,500, lr:(1.924e-04,)] l_pix: 4.4663e-02 
+23-05-04 16:57:50.377 - INFO: [epoch:  5, iter:  62,600, lr:(1.924e-04,)] l_pix: 7.5855e-02 
+23-05-04 16:59:35.291 - INFO: [epoch:  5, iter:  62,700, lr:(1.923e-04,)] l_pix: 1.6646e-01 
+23-05-04 17:01:21.268 - INFO: [epoch:  5, iter:  62,800, lr:(1.923e-04,)] l_pix: 2.1241e-02 
+23-05-04 17:03:06.477 - INFO: [epoch:  5, iter:  62,900, lr:(1.923e-04,)] l_pix: 1.6816e-01 
+23-05-04 17:04:51.610 - INFO: [epoch:  5, iter:  63,000, lr:(1.923e-04,)] l_pix: 5.1902e-02 
+23-05-04 17:06:37.008 - INFO: [epoch:  5, iter:  63,100, lr:(1.922e-04,)] l_pix: 3.1023e-02 
+23-05-04 17:08:22.937 - INFO: [epoch:  5, iter:  63,200, lr:(1.922e-04,)] l_pix: 8.6099e-02 
+23-05-04 17:10:08.353 - INFO: [epoch:  5, iter:  63,300, lr:(1.922e-04,)] l_pix: 9.6461e-02 
+23-05-04 17:11:53.702 - INFO: [epoch:  5, iter:  63,400, lr:(1.922e-04,)] l_pix: 8.7943e-02 
+23-05-04 17:13:39.283 - INFO: [epoch:  5, iter:  63,500, lr:(1.921e-04,)] l_pix: 9.7011e-02 
+23-05-04 17:15:24.665 - INFO: [epoch:  5, iter:  63,600, lr:(1.921e-04,)] l_pix: 6.1633e-02 
+23-05-04 17:17:10.063 - INFO: [epoch:  5, iter:  63,700, lr:(1.921e-04,)] l_pix: 5.8299e-02 
+23-05-04 17:18:54.877 - INFO: [epoch:  5, iter:  63,800, lr:(1.921e-04,)] l_pix: 2.4414e-02 
+23-05-04 17:20:38.207 - INFO: [epoch:  5, iter:  63,900, lr:(1.921e-04,)] l_pix: 1.5545e-01 
+23-05-04 17:22:21.401 - INFO: [epoch:  5, iter:  64,000, lr:(1.920e-04,)] l_pix: 7.1334e-02 
+23-05-04 17:24:04.547 - INFO: [epoch:  5, iter:  64,100, lr:(1.920e-04,)] l_pix: 3.1367e-02 
+23-05-04 17:25:47.144 - INFO: [epoch:  5, iter:  64,200, lr:(1.920e-04,)] l_pix: 1.4425e-01 
+23-05-04 17:27:31.031 - INFO: [epoch:  5, iter:  64,300, lr:(1.920e-04,)] l_pix: 1.0093e-01 
+23-05-04 17:29:13.944 - INFO: [epoch:  5, iter:  64,400, lr:(1.919e-04,)] l_pix: 7.6600e-02 
+23-05-04 17:30:57.311 - INFO: [epoch:  5, iter:  64,500, lr:(1.919e-04,)] l_pix: 4.3290e-02 
+23-05-04 17:32:40.589 - INFO: [epoch:  5, iter:  64,600, lr:(1.919e-04,)] l_pix: 6.3039e-02 
+23-05-04 17:34:23.777 - INFO: [epoch:  5, iter:  64,700, lr:(1.919e-04,)] l_pix: 6.6503e-02 
+23-05-04 17:36:06.653 - INFO: [epoch:  5, iter:  64,800, lr:(1.918e-04,)] l_pix: 1.1180e-01 
+23-05-04 17:37:49.909 - INFO: [epoch:  5, iter:  64,900, lr:(1.918e-04,)] l_pix: 7.3337e-02 
+23-05-04 17:39:32.847 - INFO: [epoch:  5, iter:  65,000, lr:(1.918e-04,)] l_pix: 1.0610e-01 
+23-05-04 17:41:15.645 - INFO: [epoch:  5, iter:  65,100, lr:(1.918e-04,)] l_pix: 9.5463e-02 
+23-05-04 17:42:58.869 - INFO: [epoch:  5, iter:  65,200, lr:(1.917e-04,)] l_pix: 2.5300e-02 
+23-05-04 17:44:42.157 - INFO: [epoch:  5, iter:  65,300, lr:(1.917e-04,)] l_pix: 1.4991e-01 
+23-05-04 17:46:25.006 - INFO: [epoch:  5, iter:  65,400, lr:(1.917e-04,)] l_pix: 1.0190e-01 
+23-05-04 17:48:08.561 - INFO: [epoch:  5, iter:  65,500, lr:(1.917e-04,)] l_pix: 7.6610e-02 
+23-05-04 17:49:52.263 - INFO: [epoch:  5, iter:  65,600, lr:(1.916e-04,)] l_pix: 7.7775e-02 
+23-05-04 17:51:35.790 - INFO: [epoch:  5, iter:  65,700, lr:(1.916e-04,)] l_pix: 5.6705e-02 
+23-05-04 17:53:19.548 - INFO: [epoch:  5, iter:  65,800, lr:(1.916e-04,)] l_pix: 8.9353e-02 
+23-05-04 17:55:03.772 - INFO: [epoch:  5, iter:  65,900, lr:(1.916e-04,)] l_pix: 4.2337e-02 
+23-05-04 17:56:47.345 - INFO: [epoch:  5, iter:  66,000, lr:(1.915e-04,)] l_pix: 3.7006e-02 
+23-05-04 17:58:31.675 - INFO: [epoch:  5, iter:  66,100, lr:(1.915e-04,)] l_pix: 5.6849e-02 
+23-05-04 18:00:15.460 - INFO: [epoch:  5, iter:  66,200, lr:(1.915e-04,)] l_pix: 1.1705e-01 
+23-05-04 18:01:59.206 - INFO: [epoch:  5, iter:  66,300, lr:(1.915e-04,)] l_pix: 7.1519e-02 
+23-05-04 18:03:42.839 - INFO: [epoch:  5, iter:  66,400, lr:(1.914e-04,)] l_pix: 7.3507e-02 
+23-05-04 18:05:26.101 - INFO: [epoch:  5, iter:  66,500, lr:(1.914e-04,)] l_pix: 3.0899e-02 
+23-05-04 18:07:10.431 - INFO: [epoch:  5, iter:  66,600, lr:(1.914e-04,)] l_pix: 1.5312e-01 
+23-05-04 18:08:54.195 - INFO: [epoch:  5, iter:  66,700, lr:(1.914e-04,)] l_pix: 1.0122e-01 
+23-05-04 18:10:37.974 - INFO: [epoch:  5, iter:  66,800, lr:(1.913e-04,)] l_pix: 9.2408e-02 
+23-05-04 18:12:21.175 - INFO: [epoch:  5, iter:  66,900, lr:(1.913e-04,)] l_pix: 1.2174e-01 
+23-05-04 18:14:04.737 - INFO: [epoch:  5, iter:  67,000, lr:(1.913e-04,)] l_pix: 3.7718e-02 
+23-05-04 18:15:48.750 - INFO: [epoch:  5, iter:  67,100, lr:(1.912e-04,)] l_pix: 9.7756e-02 
+23-05-04 18:17:32.731 - INFO: [epoch:  5, iter:  67,200, lr:(1.912e-04,)] l_pix: 7.3593e-02 
+23-05-04 18:19:17.227 - INFO: [epoch:  5, iter:  67,300, lr:(1.912e-04,)] l_pix: 1.1753e-01 
+23-05-04 18:21:01.561 - INFO: [epoch:  5, iter:  67,400, lr:(1.912e-04,)] l_pix: 1.2951e-01 
+23-05-04 18:22:45.367 - INFO: [epoch:  5, iter:  67,500, lr:(1.911e-04,)] l_pix: 4.3486e-02 
+23-05-04 18:24:30.078 - INFO: [epoch:  5, iter:  67,600, lr:(1.911e-04,)] l_pix: 1.0809e-01 
+23-05-04 18:26:13.232 - INFO: [epoch:  5, iter:  67,700, lr:(1.911e-04,)] l_pix: 8.0862e-02 
+23-05-04 18:27:57.604 - INFO: [epoch:  5, iter:  67,800, lr:(1.911e-04,)] l_pix: 7.2988e-02 
+23-05-04 18:29:41.415 - INFO: [epoch:  5, iter:  67,900, lr:(1.910e-04,)] l_pix: 2.0565e-02 
+23-05-04 18:31:25.511 - INFO: [epoch:  5, iter:  68,000, lr:(1.910e-04,)] l_pix: 6.8770e-02 
+23-05-04 18:33:09.468 - INFO: [epoch:  5, iter:  68,100, lr:(1.910e-04,)] l_pix: 1.5818e-01 
+23-05-04 18:34:53.635 - INFO: [epoch:  5, iter:  68,200, lr:(1.910e-04,)] l_pix: 1.8052e-01 
+23-05-04 18:36:37.828 - INFO: [epoch:  5, iter:  68,300, lr:(1.909e-04,)] l_pix: 1.2618e-01 
+23-05-04 18:38:21.598 - INFO: [epoch:  5, iter:  68,400, lr:(1.909e-04,)] l_pix: 5.6762e-02 
+23-05-04 18:40:05.198 - INFO: [epoch:  5, iter:  68,500, lr:(1.909e-04,)] l_pix: 1.5082e-01 
+23-05-04 18:41:49.576 - INFO: [epoch:  5, iter:  68,600, lr:(1.909e-04,)] l_pix: 6.3914e-02 
+23-05-04 18:43:33.658 - INFO: [epoch:  5, iter:  68,700, lr:(1.908e-04,)] l_pix: 7.1832e-02 
+23-05-04 18:45:17.485 - INFO: [epoch:  5, iter:  68,800, lr:(1.908e-04,)] l_pix: 9.1932e-02 
+23-05-04 18:47:02.085 - INFO: [epoch:  5, iter:  68,900, lr:(1.908e-04,)] l_pix: 1.1591e-01 
+23-05-04 18:48:45.766 - INFO: [epoch:  5, iter:  69,000, lr:(1.908e-04,)] l_pix: 1.1205e-01 
+23-05-04 18:50:30.095 - INFO: [epoch:  5, iter:  69,100, lr:(1.907e-04,)] l_pix: 5.8767e-02 
+23-05-04 18:52:14.341 - INFO: [epoch:  5, iter:  69,200, lr:(1.907e-04,)] l_pix: 1.2338e-01 
+23-05-04 18:53:57.552 - INFO: [epoch:  5, iter:  69,300, lr:(1.907e-04,)] l_pix: 1.3742e-01 
+23-05-04 18:55:41.332 - INFO: [epoch:  5, iter:  69,400, lr:(1.906e-04,)] l_pix: 7.7173e-02 
+23-05-04 18:57:24.910 - INFO: [epoch:  5, iter:  69,500, lr:(1.906e-04,)] l_pix: 1.0732e-01 
+23-05-04 18:59:08.042 - INFO: [epoch:  5, iter:  69,600, lr:(1.906e-04,)] l_pix: 1.1034e-01 
+23-05-04 19:00:51.296 - INFO: [epoch:  5, iter:  69,700, lr:(1.906e-04,)] l_pix: 7.2276e-02 
+23-05-04 19:02:34.724 - INFO: [epoch:  5, iter:  69,800, lr:(1.905e-04,)] l_pix: 1.0131e-01 
+23-05-04 19:04:17.950 - INFO: [epoch:  5, iter:  69,900, lr:(1.905e-04,)] l_pix: 7.5024e-02 
+23-05-04 19:06:01.455 - INFO: [epoch:  5, iter:  70,000, lr:(1.905e-04,)] l_pix: 9.3248e-02 
+[                              ] 0/117, elapsed: 0s, ETA:
+Start...
+[2F[J[------------------------------] 1/117, 0.4 task/s, elapsed: 2s, ETA:   271s
+Test 001_bicx2
+[2F[J[------------------------------] 2/117, 0.6 task/s, elapsed: 3s, ETA:   196s
+Test 002_bicx2
+[2F[J[------------------------------] 3/117, 0.7 task/s, elapsed: 4s, ETA:   171s
+Test 003_bicx2
+[2F[J[>-----------------------------] 4/117, 0.7 task/s, elapsed: 6s, ETA:   159s
+Test 004_bicx2
+[2F[J[>-----------------------------] 5/117, 0.8 task/s, elapsed: 7s, ETA:   149s
+Test 005_bicx2
+[2F[J[>-----------------------------] 6/117, 0.8 task/s, elapsed: 8s, ETA:   142s
+Test 006_bicx2
+[2F[J[>-----------------------------] 7/117, 0.8 task/s, elapsed: 9s, ETA:   136s
+Test 007_bicx2
+[2F[J[>>----------------------------] 8/117, 0.8 task/s, elapsed: 10s, ETA:   132s
+Test 008_bicx2
+[2F[J[>>----------------------------] 9/117, 0.8 task/s, elapsed: 11s, ETA:   128s
+Test 009_bicx2
+[2F[J[>>----------------------------] 10/117, 0.9 task/s, elapsed: 12s, ETA:   125s
+Test 010_bicx2
+[2F[J[>>----------------------------] 11/117, 0.9 task/s, elapsed: 13s, ETA:   123s
+Test 011_bicx2
+[2F[J[>>>---------------------------] 12/117, 0.9 task/s, elapsed: 14s, ETA:   121s
+Test 012_bicx2
+[2F[J[>>>---------------------------] 13/117, 0.9 task/s, elapsed: 15s, ETA:   119s
+Test 013_bicx2
+[2F[J[>>>---------------------------] 14/117, 0.9 task/s, elapsed: 16s, ETA:   117s
+Test 014_bicx2
+[2F[J[>>>---------------------------] 15/117, 0.9 task/s, elapsed: 17s, ETA:   115s
+Test 015_bicx2
+[2F[J[>>>>--------------------------] 16/117, 0.9 task/s, elapsed: 18s, ETA:   113s
+Test 016_bicx2
+[2F[J[>>>>--------------------------] 17/117, 0.9 task/s, elapsed: 19s, ETA:   111s
+Test 017_bicx2
+[2F[J[>>>>--------------------------] 18/117, 0.9 task/s, elapsed: 20s, ETA:   110s
+Test 018_bicx2
+[2F[J[>>>>--------------------------] 19/117, 0.9 task/s, elapsed: 21s, ETA:   108s
+Test 019_bicx2
+[2F[J[>>>>>-------------------------] 20/117, 0.9 task/s, elapsed: 22s, ETA:   107s
+Test 020_bicx2
+[2F[J[>>>>>-------------------------] 21/117, 0.9 task/s, elapsed: 23s, ETA:   105s
+Test 021_bicx2
+[2F[J[>>>>>-------------------------] 22/117, 0.9 task/s, elapsed: 24s, ETA:   104s
+Test 022_bicx2
+[2F[J[>>>>>-------------------------] 23/117, 0.9 task/s, elapsed: 25s, ETA:   102s
+Test 023_bicx2
+[2F[J[>>>>>>------------------------] 24/117, 0.9 task/s, elapsed: 26s, ETA:   101s
+Test 024_bicx2
+[2F[J[>>>>>>------------------------] 25/117, 0.9 task/s, elapsed: 27s, ETA:   100s
+Test 025_bicx2
+[2F[J[>>>>>>------------------------] 26/117, 0.9 task/s, elapsed: 28s, ETA:    98s
+Test 026_bicx2
+[2F[J[>>>>>>------------------------] 27/117, 0.9 task/s, elapsed: 29s, ETA:    97s
+Test 027_bicx2
+[2F[J[>>>>>>>-----------------------] 28/117, 0.9 task/s, elapsed: 30s, ETA:    96s
+Test 028_bicx2
+[2F[J[>>>>>>>-----------------------] 29/117, 0.9 task/s, elapsed: 31s, ETA:    94s
+Test 029_bicx2
+[2F[J[>>>>>>>-----------------------] 30/117, 0.9 task/s, elapsed: 32s, ETA:    93s
+Test 030_bicx2
+[2F[J[>>>>>>>-----------------------] 31/117, 0.9 task/s, elapsed: 33s, ETA:    92s
+Test 031_bicx2
+[2F[J[>>>>>>>>----------------------] 32/117, 0.9 task/s, elapsed: 34s, ETA:    91s
+Test 032_bicx2
+[2F[J[>>>>>>>>----------------------] 33/117, 0.9 task/s, elapsed: 35s, ETA:    89s
+Test 033_bicx2
+[2F[J[>>>>>>>>----------------------] 34/117, 0.9 task/s, elapsed: 36s, ETA:    88s
+Test 034_bicx2
+[2F[J[>>>>>>>>----------------------] 35/117, 0.9 task/s, elapsed: 37s, ETA:    87s
+Test 035_bicx2
+[2F[J[>>>>>>>>>---------------------] 36/117, 0.9 task/s, elapsed: 38s, ETA:    86s
+Test 036_bicx2
+[2F[J[>>>>>>>>>---------------------] 37/117, 0.9 task/s, elapsed: 39s, ETA:    85s
+Test 037_bicx2
+[2F[J[>>>>>>>>>---------------------] 38/117, 0.9 task/s, elapsed: 40s, ETA:    84s
+Test 038_bicx2
+[2F[J[>>>>>>>>>>--------------------] 39/117, 0.9 task/s, elapsed: 41s, ETA:    82s
+Test 039_bicx2
+[2F[J[>>>>>>>>>>--------------------] 40/117, 0.9 task/s, elapsed: 42s, ETA:    81s
+Test 040_bicx2
+[2F[J[>>>>>>>>>>--------------------] 41/117, 0.9 task/s, elapsed: 43s, ETA:    80s
+Test 041_bicx2
+[2F[J[>>>>>>>>>>--------------------] 42/117, 0.9 task/s, elapsed: 44s, ETA:    79s
+Test 042_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 43/117, 1.0 task/s, elapsed: 45s, ETA:    78s
+Test 043_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 44/117, 1.0 task/s, elapsed: 46s, ETA:    77s
+Test 044_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 45/117, 1.0 task/s, elapsed: 47s, ETA:    76s
+Test 045_bicx2
+[2F[J[>>>>>>>>>>>-------------------] 46/117, 1.0 task/s, elapsed: 48s, ETA:    75s
+Test 046_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 47/117, 1.0 task/s, elapsed: 49s, ETA:    73s
+Test 047_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 48/117, 1.0 task/s, elapsed: 50s, ETA:    72s
+Test 048_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 49/117, 1.0 task/s, elapsed: 51s, ETA:    71s
+Test 049_bicx2
+[2F[J[>>>>>>>>>>>>------------------] 50/117, 1.0 task/s, elapsed: 52s, ETA:    70s
+Test 050_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 51/117, 1.0 task/s, elapsed: 53s, ETA:    69s
+Test 051_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 52/117, 1.0 task/s, elapsed: 54s, ETA:    68s
+Test 052_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 53/117, 1.0 task/s, elapsed: 55s, ETA:    67s
+Test 053_bicx2
+[2F[J[>>>>>>>>>>>>>-----------------] 54/117, 1.0 task/s, elapsed: 56s, ETA:    66s
+Test 054_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 55/117, 1.0 task/s, elapsed: 57s, ETA:    65s
+Test 055_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 56/117, 1.0 task/s, elapsed: 58s, ETA:    64s
+Test 056_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 57/117, 1.0 task/s, elapsed: 59s, ETA:    63s
+Test 057_bicx2
+[2F[J[>>>>>>>>>>>>>>----------------] 58/117, 1.0 task/s, elapsed: 60s, ETA:    61s
+Test 058_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 59/117, 1.0 task/s, elapsed: 61s, ETA:    60s
+Test 059_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 60/117, 1.0 task/s, elapsed: 62s, ETA:    59s
+Test 060_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 61/117, 1.0 task/s, elapsed: 63s, ETA:    58s
+Test 061_bicx2
+[2F[J[>>>>>>>>>>>>>>>---------------] 62/117, 1.0 task/s, elapsed: 64s, ETA:    57s
+Test 062_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 63/117, 1.0 task/s, elapsed: 65s, ETA:    56s
+Test 063_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 64/117, 1.0 task/s, elapsed: 66s, ETA:    55s
+Test 064_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 65/117, 1.0 task/s, elapsed: 67s, ETA:    54s
+Test 065_bicx2
+[2F[J[>>>>>>>>>>>>>>>>--------------] 66/117, 1.0 task/s, elapsed: 68s, ETA:    53s
+Test 066_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 67/117, 1.0 task/s, elapsed: 70s, ETA:    52s
+Test 067_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 68/117, 1.0 task/s, elapsed: 71s, ETA:    51s
+Test 068_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 69/117, 1.0 task/s, elapsed: 72s, ETA:    50s
+Test 069_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>-------------] 70/117, 1.0 task/s, elapsed: 73s, ETA:    49s
+Test 070_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 71/117, 1.0 task/s, elapsed: 74s, ETA:    48s
+Test 071_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 72/117, 1.0 task/s, elapsed: 75s, ETA:    47s
+Test 072_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 73/117, 1.0 task/s, elapsed: 76s, ETA:    46s
+Test 073_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>------------] 74/117, 1.0 task/s, elapsed: 77s, ETA:    44s
+Test 074_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 75/117, 1.0 task/s, elapsed: 78s, ETA:    43s
+Test 075_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 76/117, 1.0 task/s, elapsed: 79s, ETA:    42s
+Test 076_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>-----------] 77/117, 1.0 task/s, elapsed: 80s, ETA:    41s
+Test 077_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 78/117, 1.0 task/s, elapsed: 81s, ETA:    40s
+Test 078_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 79/117, 1.0 task/s, elapsed: 82s, ETA:    39s
+Test 079_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 80/117, 1.0 task/s, elapsed: 83s, ETA:    38s
+Test 080_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>----------] 81/117, 1.0 task/s, elapsed: 84s, ETA:    37s
+Test 081_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 82/117, 1.0 task/s, elapsed: 85s, ETA:    36s
+Test 082_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 83/117, 1.0 task/s, elapsed: 86s, ETA:    35s
+Test 083_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 84/117, 1.0 task/s, elapsed: 87s, ETA:    34s
+Test 084_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>---------] 85/117, 1.0 task/s, elapsed: 88s, ETA:    33s
+Test 085_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 86/117, 1.0 task/s, elapsed: 89s, ETA:    32s
+Test 086_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 87/117, 1.0 task/s, elapsed: 90s, ETA:    31s
+Test 087_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 88/117, 1.0 task/s, elapsed: 91s, ETA:    30s
+Test 088_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>--------] 89/117, 1.0 task/s, elapsed: 92s, ETA:    29s
+Test 089_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 90/117, 1.0 task/s, elapsed: 93s, ETA:    28s
+Test 090_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 91/117, 1.0 task/s, elapsed: 94s, ETA:    27s
+Test 091_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 92/117, 1.0 task/s, elapsed: 95s, ETA:    26s
+Test 092_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>-------] 93/117, 1.0 task/s, elapsed: 96s, ETA:    25s
+Test 093_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 94/117, 1.0 task/s, elapsed: 97s, ETA:    24s
+Test 094_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 95/117, 1.0 task/s, elapsed: 98s, ETA:    23s
+Test 095_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 96/117, 1.0 task/s, elapsed: 99s, ETA:    22s
+Test 096_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>------] 97/117, 1.0 task/s, elapsed: 100s, ETA:    21s
+Test 097_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 98/117, 1.0 task/s, elapsed: 101s, ETA:    20s
+Test 098_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 99/117, 1.0 task/s, elapsed: 102s, ETA:    19s
+Test 099_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 100/117, 1.0 task/s, elapsed: 103s, ETA:    18s
+Test 100_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>-----] 101/117, 1.0 task/s, elapsed: 104s, ETA:    16s
+Test 101_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 102/117, 1.0 task/s, elapsed: 105s, ETA:    15s
+Test 102_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 103/117, 1.0 task/s, elapsed: 106s, ETA:    14s
+Test 103_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 104/117, 1.0 task/s, elapsed: 107s, ETA:    13s
+Test 104_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>----] 105/117, 1.0 task/s, elapsed: 108s, ETA:    12s
+Test 105_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 106/117, 1.0 task/s, elapsed: 109s, ETA:    11s
+Test 106_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 107/117, 1.0 task/s, elapsed: 110s, ETA:    10s
+Test 107_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 108/117, 1.0 task/s, elapsed: 111s, ETA:     9s
+Test 108_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>---] 109/117, 1.0 task/s, elapsed: 112s, ETA:     8s
+Test 109_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 110/117, 1.0 task/s, elapsed: 113s, ETA:     7s
+Test 110_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 111/117, 1.0 task/s, elapsed: 114s, ETA:     6s
+Test 111_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 112/117, 1.0 task/s, elapsed: 115s, ETA:     5s
+Test 112_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>--] 113/117, 1.0 task/s, elapsed: 116s, ETA:     4s
+Test 113_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 114/117, 1.0 task/s, elapsed: 117s, ETA:     3s
+Test 114_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 115/117, 1.0 task/s, elapsed: 118s, ETA:     2s
+Test 115_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-] 116/117, 1.0 task/s, elapsed: 119s, ETA:     1s
+Test 116_bicx2
+[2F[J[>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>] 117/117, 1.0 task/s, elapsed: 120s, ETA:     0s
+Test 117_bicx2
+23-05-04 19:08:01.862 - INFO: # Validation # PSNR: 1.8788e+01
+23-05-04 19:09:44.745 - INFO: [epoch:  5, iter:  70,100, lr:(1.905e-04,)] l_pix: 4.8814e-02 
+23-05-04 19:11:29.016 - INFO: [epoch:  5, iter:  70,200, lr:(1.904e-04,)] l_pix: 1.0622e-01 
+23-05-04 19:13:13.467 - INFO: [epoch:  5, iter:  70,300, lr:(1.904e-04,)] l_pix: 1.1464e-01 
+23-05-04 19:14:57.972 - INFO: [epoch:  5, iter:  70,400, lr:(1.904e-04,)] l_pix: 6.4021e-02 

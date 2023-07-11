@@ -1,0 +1,381 @@
+WARNING: OMP_NUM_THREADS set to 14, not 1. The computation speed will not be optimized if you use data parallel. It will fail if this PaddlePaddle binary is compiled with OpenBlas since OpenBlas does not support multi-threads.
+PLEASE USE OMP_NUM_THREADS WISELY.
+23-04-26 20:40:31.286 - INFO:   name: deep_sritm_base_v1
+  use_tb_logger: True
+  model: sr
+  distortion: sr
+  scale: 1
+  gpu_ids: [0]
+  network_G:[
+    which_model_G: deep_sritm_base
+    channels: 64
+    scale: 1
+  ]
+  datasets:[
+    train:[
+      name: HDRTV1K_train
+      mode: LQGT_rcan
+      dataroot_GT: ../hyconditm-master/datasets/HDRTV1K/train/train_hdr_sub
+      dataroot_LQ: ../hyconditm-master/datasets/HDRTV1K/train/train_sdr_sub
+      dataroot_cond: ../hyconditm-master/datasets/HDRTV1K/train_cond
+      cond_scale: 4
+      use_shuffle: True
+      n_workers: 0
+      batch_size: 4
+      GT_size: False
+      use_flip: False
+      use_rot: False
+      color: RGB
+      phase: train
+      scale: 1
+      data_type: img
+    ]
+    val:[
+      name: HDRTV1K_test
+      mode: LQGT_rcan
+      dataroot_GT: /root/autodl-tmp/hyconditm-master/datasets/HDRTV1K/test/test_hdr_1080p
+      dataroot_LQ: /root/autodl-tmp/hyconditm-master/datasets/HDRTV1K/test/test_sdr_1080p
+      dataroot_cond: ../hyconditm-master/datasets/HDRTV1K/cond
+      use_shared_memory: False
+      cond_scale: 4
+      phase: val
+      scale: 1
+      data_type: img
+    ]
+  ]
+  path:[
+    pretrain_model_G: None
+    strict_load: True
+    resume_state: None
+    root: /root/autodl-tmp/ClassSR_paddle-main
+    experiments_root: /root/autodl-tmp/ClassSR_paddle-main/experiments/deep_sritm_base_v1
+    models: /root/autodl-tmp/ClassSR_paddle-main/experiments/deep_sritm_base_v1/models
+    training_state: /root/autodl-tmp/ClassSR_paddle-main/experiments/deep_sritm_base_v1/training_state
+    log: /root/autodl-tmp/ClassSR_paddle-main/experiments/deep_sritm_base_v1
+    val_images: /root/autodl-tmp/ClassSR_paddle-main/experiments/deep_sritm_base_v1/val_images
+  ]
+  train:[
+    lr_G: 0.0002
+    weight_decay_G: 0.0005
+    lr_scheme: CosineAnnealingLR_Restart
+    beta1: 0.9
+    beta2: 0.99
+    niter: 600000
+    warmup_iter: -1
+    T_period: [500000]
+    restarts: [500000]
+    restart_weights: [1]
+    eta_min: 1e-07
+    lr_gamma: 0.5
+    clear_state: 1000000
+    pixel_criterion: l1
+    pixel_weight: 1.0
+    manual_seed: 10
+    val_freq: 10000
+  ]
+  logger:[
+    print_freq: 100
+    save_checkpoint_freq: 20000
+  ]
+  is_train: True
+  dist: False
+
+23-04-26 20:40:31.441 - INFO: Random seed: 10
+23-04-26 20:40:32.222 - INFO: Dataset [LQGTDataset_rcan - HDRTV1K_train] is created.
+23-04-26 20:40:32.223 - INFO: Number of train images: 49,400, iters: 12,350
+23-04-26 20:40:32.224 - INFO: Total epochs needed: 49 for iters 600,000
+23-04-26 20:40:32.226 - INFO: Dataset [LQGTDataset_rcan - HDRTV1K_test] is created.
+23-04-26 20:40:32.226 - INFO: Number of val images in [HDRTV1K_test]: 117
+W0426 20:40:32.759145 46954 gpu_resources.cc:61] Please NOTE: device: 0, GPU Compute Capability: 8.6, Driver API Version: 11.6, Runtime API Version: 11.6
+W0426 20:40:32.766124 46954 gpu_resources.cc:91] device: 0, cuDNN Version: 8.4.
+23-04-26 20:40:34.023 - INFO: Network G structure: SR_ITM_base_net, with parameters: 1,793,923
+23-04-26 20:40:34.023 - INFO: SR_ITM_base_net(
+  (conv_base_1): Conv2D(6, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (conv_detail_1): Conv2D(6, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (relu): ReLU()
+  (rb_base_1): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_base_2): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_base_3): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_base_4): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_base_5): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_base_6): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_detail_1): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rsb_detail_1): ResSkipBlock(
+    (skipblock): SkipBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+      (dr): Conv2D(128, 64, kernel_size=[1, 1], data_format=NCHW)
+    )
+  )
+  (rsb_detail_2): ResSkipBlock(
+    (skipblock): SkipBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+      (dr): Conv2D(128, 64, kernel_size=[1, 1], data_format=NCHW)
+    )
+  )
+  (rsb_detail_3): ResSkipBlock(
+    (skipblock): SkipBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+      (dr): Conv2D(128, 64, kernel_size=[1, 1], data_format=NCHW)
+    )
+  )
+  (rsb_detail_4): ResSkipBlock(
+    (skipblock): SkipBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+      (dr): Conv2D(128, 64, kernel_size=[1, 1], data_format=NCHW)
+    )
+  )
+  (rsb_detail_5): ResSkipBlock(
+    (skipblock): SkipBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+      (dr): Conv2D(128, 64, kernel_size=[1, 1], data_format=NCHW)
+    )
+  )
+  (dr1): Conv2D(128, 64, kernel_size=[1, 1], data_format=NCHW)
+  (conv_fusion_1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (rb_fusion_1): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_2): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_3): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_4): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_5): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_6): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_7): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_8): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_9): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (rb_fusion_10): ResBlock(
+    (baseblock): BaseBlock(
+      (conv1): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (conv2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+      (relu): ReLU()
+    )
+  )
+  (conv_fusion_2): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (conv_fusion_3): Conv2D(64, 64, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (ps): PixelShuffle(upscale_factor=1)
+  (conv_fusion_4): Conv2D(64, 3, kernel_size=[3, 3], padding=1, data_format=NCHW)
+  (bicubic): Upsample(scale_factor=1, mode=bicubic, align_corners=False, align_mode=0, data_format=NCHW)
+)
+23-04-26 20:40:34.025 - INFO: Model [SRModel] is created.
+23-04-26 20:40:34.026 - INFO: Start training from epoch: 0, iter: 0
+23-04-26 20:42:09.227 - INFO: [epoch:  0, iter:     100, lr:(2.000e-04,)] l_pix: 1.8685e-01 
+23-04-26 20:43:40.446 - INFO: [epoch:  0, iter:     200, lr:(2.000e-04,)] l_pix: 5.6383e-02 
+23-04-26 20:45:11.349 - INFO: [epoch:  0, iter:     300, lr:(2.000e-04,)] l_pix: 3.7891e-02 
+23-04-26 20:46:41.833 - INFO: [epoch:  0, iter:     400, lr:(2.000e-04,)] l_pix: 6.3549e-02 
+23-04-26 20:48:12.553 - INFO: [epoch:  0, iter:     500, lr:(2.000e-04,)] l_pix: 4.2266e-02 
+23-04-26 20:49:42.289 - INFO: [epoch:  0, iter:     600, lr:(2.000e-04,)] l_pix: 7.1419e-02 
+23-04-26 20:51:11.928 - INFO: [epoch:  0, iter:     700, lr:(2.000e-04,)] l_pix: 5.6264e-02 
+23-04-26 20:52:41.709 - INFO: [epoch:  0, iter:     800, lr:(2.000e-04,)] l_pix: 3.6590e-02 
+23-04-26 20:54:10.840 - INFO: [epoch:  0, iter:     900, lr:(2.000e-04,)] l_pix: 4.5398e-02 
+23-04-26 20:55:40.077 - INFO: [epoch:  0, iter:   1,000, lr:(2.000e-04,)] l_pix: 7.9856e-02 
+23-04-26 20:57:09.807 - INFO: [epoch:  0, iter:   1,100, lr:(2.000e-04,)] l_pix: 2.9123e-02 
+23-04-26 20:58:38.851 - INFO: [epoch:  0, iter:   1,200, lr:(2.000e-04,)] l_pix: 2.9797e-02 
+23-04-26 21:00:08.094 - INFO: [epoch:  0, iter:   1,300, lr:(2.000e-04,)] l_pix: 5.4242e-02 
+23-04-26 21:01:37.713 - INFO: [epoch:  0, iter:   1,400, lr:(2.000e-04,)] l_pix: 1.5447e-02 
+23-04-26 21:03:07.176 - INFO: [epoch:  0, iter:   1,500, lr:(2.000e-04,)] l_pix: 2.3407e-02 
+23-04-26 21:04:36.536 - INFO: [epoch:  0, iter:   1,600, lr:(2.000e-04,)] l_pix: 7.2721e-02 
+23-04-26 21:06:05.811 - INFO: [epoch:  0, iter:   1,700, lr:(2.000e-04,)] l_pix: 3.6531e-02 
+23-04-26 21:07:35.063 - INFO: [epoch:  0, iter:   1,800, lr:(2.000e-04,)] l_pix: 3.3961e-02 
+23-04-26 21:09:04.160 - INFO: [epoch:  0, iter:   1,900, lr:(2.000e-04,)] l_pix: 1.4203e-02 
+23-04-26 21:10:33.425 - INFO: [epoch:  0, iter:   2,000, lr:(2.000e-04,)] l_pix: 3.2016e-02 
+23-04-26 21:12:02.648 - INFO: [epoch:  0, iter:   2,100, lr:(2.000e-04,)] l_pix: 2.6538e-02 
+23-04-26 21:13:31.480 - INFO: [epoch:  0, iter:   2,200, lr:(2.000e-04,)] l_pix: 4.7576e-02 
+23-04-26 21:15:00.089 - INFO: [epoch:  0, iter:   2,300, lr:(2.000e-04,)] l_pix: 4.1289e-02 
+23-04-26 21:16:28.863 - INFO: [epoch:  0, iter:   2,400, lr:(2.000e-04,)] l_pix: 2.8534e-02 
+23-04-26 21:17:57.641 - INFO: [epoch:  0, iter:   2,500, lr:(2.000e-04,)] l_pix: 2.4061e-02 
+23-04-26 21:19:26.862 - INFO: [epoch:  0, iter:   2,600, lr:(2.000e-04,)] l_pix: 5.8866e-02 
+23-04-26 21:20:56.462 - INFO: [epoch:  0, iter:   2,700, lr:(2.000e-04,)] l_pix: 3.1931e-02 
+23-04-26 21:22:25.682 - INFO: [epoch:  0, iter:   2,800, lr:(2.000e-04,)] l_pix: 5.6995e-02 
+23-04-26 21:23:55.186 - INFO: [epoch:  0, iter:   2,900, lr:(2.000e-04,)] l_pix: 1.2930e-02 
+23-04-26 21:25:23.737 - INFO: [epoch:  0, iter:   3,000, lr:(2.000e-04,)] l_pix: 1.0591e-02 
+23-04-26 21:26:52.578 - INFO: [epoch:  0, iter:   3,100, lr:(2.000e-04,)] l_pix: 2.0609e-02 
+23-04-26 21:28:21.334 - INFO: [epoch:  0, iter:   3,200, lr:(2.000e-04,)] l_pix: 3.9639e-02 
+23-04-26 21:29:50.675 - INFO: [epoch:  0, iter:   3,300, lr:(2.000e-04,)] l_pix: 1.7362e-02 
+23-04-26 21:31:19.890 - INFO: [epoch:  0, iter:   3,400, lr:(2.000e-04,)] l_pix: 2.1557e-02 
+23-04-26 21:32:49.121 - INFO: [epoch:  0, iter:   3,500, lr:(2.000e-04,)] l_pix: 3.0227e-02 
+23-04-26 21:34:18.101 - INFO: [epoch:  0, iter:   3,600, lr:(2.000e-04,)] l_pix: 1.5416e-02 
+23-04-26 21:35:47.274 - INFO: [epoch:  0, iter:   3,700, lr:(2.000e-04,)] l_pix: 4.3915e-03 
+23-04-26 21:37:16.802 - INFO: [epoch:  0, iter:   3,800, lr:(2.000e-04,)] l_pix: 2.1564e-02 
+23-04-26 21:38:46.178 - INFO: [epoch:  0, iter:   3,900, lr:(2.000e-04,)] l_pix: 4.0356e-02 
+23-04-26 21:40:15.535 - INFO: [epoch:  0, iter:   4,000, lr:(2.000e-04,)] l_pix: 2.4603e-02 
+23-04-26 21:41:44.277 - INFO: [epoch:  0, iter:   4,100, lr:(2.000e-04,)] l_pix: 2.0394e-02 
+23-04-26 21:43:12.939 - INFO: [epoch:  0, iter:   4,200, lr:(2.000e-04,)] l_pix: 2.0430e-02 
+23-04-26 21:44:41.612 - INFO: [epoch:  0, iter:   4,300, lr:(2.000e-04,)] l_pix: 1.4913e-02 
+23-04-26 21:46:10.247 - INFO: [epoch:  0, iter:   4,400, lr:(2.000e-04,)] l_pix: 2.1441e-02 
+23-04-26 21:47:39.494 - INFO: [epoch:  0, iter:   4,500, lr:(2.000e-04,)] l_pix: 1.7536e-02 
+23-04-26 21:49:08.743 - INFO: [epoch:  0, iter:   4,600, lr:(2.000e-04,)] l_pix: 2.3525e-02 
+23-04-26 21:50:37.817 - INFO: [epoch:  0, iter:   4,700, lr:(2.000e-04,)] l_pix: 1.1266e-02 
+23-04-26 21:52:07.204 - INFO: [epoch:  0, iter:   4,800, lr:(2.000e-04,)] l_pix: 1.6788e-02 
+23-04-26 21:53:36.617 - INFO: [epoch:  0, iter:   4,900, lr:(2.000e-04,)] l_pix: 1.5209e-02 
+23-04-26 21:55:05.750 - INFO: [epoch:  0, iter:   5,000, lr:(2.000e-04,)] l_pix: 8.7963e-03 
+23-04-26 21:56:34.960 - INFO: [epoch:  0, iter:   5,100, lr:(1.999e-04,)] l_pix: 1.6802e-02 
+23-04-26 21:58:04.081 - INFO: [epoch:  0, iter:   5,200, lr:(1.999e-04,)] l_pix: 1.4681e-02 
+23-04-26 21:59:33.266 - INFO: [epoch:  0, iter:   5,300, lr:(1.999e-04,)] l_pix: 1.8199e-02 
+23-04-26 22:01:02.148 - INFO: [epoch:  0, iter:   5,400, lr:(1.999e-04,)] l_pix: 1.1953e-02 
+23-04-26 22:02:31.051 - INFO: [epoch:  0, iter:   5,500, lr:(1.999e-04,)] l_pix: 2.4823e-02 
+23-04-26 22:04:00.442 - INFO: [epoch:  0, iter:   5,600, lr:(1.999e-04,)] l_pix: 2.9783e-02 
+23-04-26 22:05:28.989 - INFO: [epoch:  0, iter:   5,700, lr:(1.999e-04,)] l_pix: 1.2497e-02 
+23-04-26 22:06:58.697 - INFO: [epoch:  0, iter:   5,800, lr:(1.999e-04,)] l_pix: 1.8544e-02 
+23-04-26 22:08:27.479 - INFO: [epoch:  0, iter:   5,900, lr:(1.999e-04,)] l_pix: 1.4438e-02 
+23-04-26 22:09:56.242 - INFO: [epoch:  0, iter:   6,000, lr:(1.999e-04,)] l_pix: 1.2004e-02 
+23-04-26 22:11:25.349 - INFO: [epoch:  0, iter:   6,100, lr:(1.999e-04,)] l_pix: 1.3229e-02 
+23-04-26 22:12:54.489 - INFO: [epoch:  0, iter:   6,200, lr:(1.999e-04,)] l_pix: 2.9500e-02 
+23-04-26 22:14:23.633 - INFO: [epoch:  0, iter:   6,300, lr:(1.999e-04,)] l_pix: 1.4795e-02 
+23-04-26 22:15:52.738 - INFO: [epoch:  0, iter:   6,400, lr:(1.999e-04,)] l_pix: 1.2986e-02 
+23-04-26 22:17:21.847 - INFO: [epoch:  0, iter:   6,500, lr:(1.999e-04,)] l_pix: 1.3185e-02 
+23-04-26 22:18:50.905 - INFO: [epoch:  0, iter:   6,600, lr:(1.999e-04,)] l_pix: 1.3985e-02 
+23-04-26 22:20:19.410 - INFO: [epoch:  0, iter:   6,700, lr:(1.999e-04,)] l_pix: 9.3506e-03 
+23-04-26 22:21:48.640 - INFO: [epoch:  0, iter:   6,800, lr:(1.999e-04,)] l_pix: 1.2588e-02 
+23-04-26 22:23:17.543 - INFO: [epoch:  0, iter:   6,900, lr:(1.999e-04,)] l_pix: 1.1665e-02 
+23-04-26 22:24:46.961 - INFO: [epoch:  0, iter:   7,000, lr:(1.999e-04,)] l_pix: 1.1745e-02 
+23-04-26 22:26:16.176 - INFO: [epoch:  0, iter:   7,100, lr:(1.999e-04,)] l_pix: 9.4094e-03 
+23-04-26 22:27:45.834 - INFO: [epoch:  0, iter:   7,200, lr:(1.999e-04,)] l_pix: 2.3398e-02 
+23-04-26 22:29:15.323 - INFO: [epoch:  0, iter:   7,300, lr:(1.999e-04,)] l_pix: 3.4364e-02 
+23-04-26 22:30:44.581 - INFO: [epoch:  0, iter:   7,400, lr:(1.999e-04,)] l_pix: 9.7465e-03 
+23-04-26 22:32:13.912 - INFO: [epoch:  0, iter:   7,500, lr:(1.999e-04,)] l_pix: 1.2684e-02 
+23-04-26 22:33:42.949 - INFO: [epoch:  0, iter:   7,600, lr:(1.999e-04,)] l_pix: 2.4635e-02 
+23-04-26 22:35:12.034 - INFO: [epoch:  0, iter:   7,700, lr:(1.999e-04,)] l_pix: 1.4649e-02 
+23-04-26 22:36:41.143 - INFO: [epoch:  0, iter:   7,800, lr:(1.999e-04,)] l_pix: 7.8089e-03 
+23-04-26 22:38:10.757 - INFO: [epoch:  0, iter:   7,900, lr:(1.999e-04,)] l_pix: 1.8545e-02 
+23-04-26 22:39:40.553 - INFO: [epoch:  0, iter:   8,000, lr:(1.999e-04,)] l_pix: 1.2898e-02 
+23-04-26 22:41:09.904 - INFO: [epoch:  0, iter:   8,100, lr:(1.999e-04,)] l_pix: 2.2476e-02 
+23-04-26 22:42:39.123 - INFO: [epoch:  0, iter:   8,200, lr:(1.999e-04,)] l_pix: 1.3805e-02 
+23-04-26 22:44:08.445 - INFO: [epoch:  0, iter:   8,300, lr:(1.999e-04,)] l_pix: 2.4229e-02 
+23-04-26 22:45:37.855 - INFO: [epoch:  0, iter:   8,400, lr:(1.999e-04,)] l_pix: 2.4540e-02 
+23-04-26 22:47:07.438 - INFO: [epoch:  0, iter:   8,500, lr:(1.999e-04,)] l_pix: 2.2289e-02 
+23-04-26 22:48:36.605 - INFO: [epoch:  0, iter:   8,600, lr:(1.999e-04,)] l_pix: 8.0989e-03 
+23-04-26 22:50:05.856 - INFO: [epoch:  0, iter:   8,700, lr:(1.999e-04,)] l_pix: 2.5869e-02 
+23-04-26 22:51:35.630 - INFO: [epoch:  0, iter:   8,800, lr:(1.998e-04,)] l_pix: 8.7211e-03 
+23-04-26 22:53:04.753 - INFO: [epoch:  0, iter:   8,900, lr:(1.998e-04,)] l_pix: 2.0868e-02 
+23-04-26 22:54:34.207 - INFO: [epoch:  0, iter:   9,000, lr:(1.998e-04,)] l_pix: 1.4180e-02 
+23-04-26 22:56:03.574 - INFO: [epoch:  0, iter:   9,100, lr:(1.998e-04,)] l_pix: 6.3405e-03 
+23-04-26 22:57:32.660 - INFO: [epoch:  0, iter:   9,200, lr:(1.998e-04,)] l_pix: 9.1113e-03 
+23-04-26 22:59:01.315 - INFO: [epoch:  0, iter:   9,300, lr:(1.998e-04,)] l_pix: 1.5128e-02 
+23-04-26 23:00:30.204 - INFO: [epoch:  0, iter:   9,400, lr:(1.998e-04,)] l_pix: 1.0831e-02 
+23-04-26 23:01:59.150 - INFO: [epoch:  0, iter:   9,500, lr:(1.998e-04,)] l_pix: 5.8083e-03 
+23-04-26 23:03:28.182 - INFO: [epoch:  0, iter:   9,600, lr:(1.998e-04,)] l_pix: 1.1916e-02 
+23-04-26 23:04:57.340 - INFO: [epoch:  0, iter:   9,700, lr:(1.998e-04,)] l_pix: 1.4765e-02 
+23-04-26 23:06:26.328 - INFO: [epoch:  0, iter:   9,800, lr:(1.998e-04,)] l_pix: 2.0006e-02 
+23-04-26 23:07:55.073 - INFO: [epoch:  0, iter:   9,900, lr:(1.998e-04,)] l_pix: 2.8638e-02 
+23-04-26 23:09:24.753 - INFO: [epoch:  0, iter:  10,000, lr:(1.998e-04,)] l_pix: 4.3674e-02 
+export CUDA_VISIBLE_DEVICES=0
+Disabled distributed training.
+Path already exists. Rename it to [/root/autodl-tmp/ClassSR_paddle-main/experiments/deep_sritm_base_v1_archived_230426-204031]
+[                              ] 0/117, elapsed: 0s, ETA:
+Start...
+Traceback (most recent call last):
+  File "train.py", line 225, in <module>
+    main()
+  File "train.py", line 181, in main
+    model.test()
+  File "/root/autodl-tmp/ClassSR_paddle-main/models/SR_model.py", line 135, in test
+    self.fake_H = self.netG(self.var_L)
+  File "/root/miniconda3/lib/python3.8/site-packages/paddle/fluid/dygraph/layers.py", line 930, in __call__
+    return self._dygraph_call_func(*inputs, **kwargs)
+  File "/root/miniconda3/lib/python3.8/site-packages/paddle/fluid/dygraph/layers.py", line 915, in _dygraph_call_func
+    outputs = self.forward(*inputs, **kwargs)
+TypeError: forward() missing 1 required positional argument: 'im_base'
